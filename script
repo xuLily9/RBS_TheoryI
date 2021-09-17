@@ -1,7 +1,11 @@
 Scenario #1:
 
-Computer: Mary and Karl can meet indoors are true. Do you agree? 
-user: No / Yes 
+Computer : Mary and Karl can meet indoors is true. Please select a question:
+1. Why?
+2. Why not?
+3. Do you agree?
+
+user: 1 / 2/ 3
 computer: Mary and Karl can meet is deduced by rule 1 from initial fact A1: mary lives in Manchester and A2: Karl lives in manchester and new fact A4: Manchester allows indoor meetings. 
 computer: Do you agree or disagree with the system?
 user: No / Yes 
