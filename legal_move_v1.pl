@@ -1,9 +1,10 @@
-:-dynamic node/4.
+:- [readin].
+:-dynamic node/4, information/1.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, 'Why?').
+question(1, 'Why it is true?').
 question(2, 'Why not?').
 question(3, 'Do you agree?').
 
@@ -24,7 +25,7 @@ deduce(Q, node(ID, Q, R, DAG)):-
 
  
 countNumbers(Numbers) :-
-  aggregate(count, Module, ID^node(ID, Module,_,_), Numbers).
+  aggregate_all(count, node(_,_,_,_), Numbers).
 
  
 check_antecedants([],[]).
@@ -38,7 +39,7 @@ why(F):-
     write("It is an initial fact").
 why(F):-
     node(_N, F, R, NL), !,
-    rule(R, A, F),
+    rule(R, _A, F),
     write("Fact "),
     write(F),
     write(" is deduced using rule "),
@@ -94,9 +95,10 @@ read_question(QName) :-
     repeat,
     write('Please select a question:'), nl,
     write_question_list,
+    print_prompt(user),
     read(Number),
     (   question(Number, QName)
-    ->  write('You selected: '), write(QName), nl, !
+    ->  write('You selected question: '), write(Number), write('. '),write(QName), nl, !
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -105,6 +107,64 @@ write_question_list :-
     write(N), write('. '), write(Name), nl,
     fail.
 write_question_list.
+
+
+write_node_list :-
+    node(N, Fact, initial_fact, []),
+    write(N), write('. '), write(Fact), write(' is an initial fact'),nl,
+    fail.
+write_node_list.
+
+
+write_rule_list :-
+    rule(N, Antecedants, C),
+    write(N), write('. If '), write(Antecedants), write(' are satisfied then '), write(C), write(' is true'), nl,
+    fail.
+write_rule_list.
+
+
+
+chat:-
+		write_node_list,!,
+        print_welcome,
+        conversations.
+
+print_welcome:-
+        print_prompt(bot),
+        write('Mary and Karl can meet indoors is true.'),nl,
+        flush_output.
+
+conversations:-
+        repeat,
+        read_question(Q),
+        print_prompt(bot).
+
+ 
+
+print_prompt(bot):-
+        my_icon(X), write(X), write(': '), flush_output.
+print_prompt(user):-
+        user_icon(X), write(X), write(': '), flush_output.
+my_icon('Computer ').
+user_icon('User').
+
+
+	
+gen_reply(Q, R):-
+        is_question(Q),
+        assert(information(Q,R)),
+        why(Q).
+
+gen_reply(S, _):-
+        is_quit(S), !,
+        write("Bye"),nl,
+        flush_output.
+
+is_question(S):-
+        member('Why it is true', S).
+
+is_quit(S):-
+        subset([bye], S).
 
 
 
