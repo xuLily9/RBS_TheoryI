@@ -1,10 +1,10 @@
-:- [readin].
+% :- [readin].
 :-dynamic node/4, information/1.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, 'Why it is true?').
+question(1, 'Why?').
 question(2, 'Why not?').
 question(3, 'Do you agree?').
 
@@ -12,17 +12,16 @@ rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_mee
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
 
 
-deduce(Q, node(ID, Q, R, DAG)):-
-   node(ID, Q, R ,DAG).
-deduce(Q, node(ID, Q, R, DAG)):-
+deduce(Q, node(ID, Q, R , DAG)):-
+   node(ID, Q, R , DAG).
+deduce(Q, node(ID, Q, R , DAG)):-
    rule(ID_r, A, B),
    check_antecedants(A, NodeList),
-   countNumbers(Numbers),
+   \+ node(_ID, B, _ID_r, _NodeList),!,
+    countNumbers(Numbers),
     ID_n is Numbers +1,
-   \+ node(ID_n, B, ID_r, _NodeList),!,
     assert(node(ID_n,B,ID_r,NodeList)),
     deduce(Q, node(ID, Q, R, DAG)).
-
  
 countNumbers(Numbers) :-
   aggregate_all(count, node(_,_,_,_), Numbers).
@@ -77,7 +76,7 @@ whynot(F):-
 % leagel move 8. 
 whynot(F):-
 	rule(R, A, F),
-    check(A, N),
+    	check(A, N),
 	write(N), write(" cannot be deduced."), nl.
 
 
@@ -95,7 +94,7 @@ read_question(QName) :-
     repeat,
     write('Please select a question:'), nl,
     write_question_list,
-    print_prompt(user),
+    print_prompt(user_icon),
     read(Number),
     (   question(Number, QName)
     ->  write('You selected question: '), write(Number), write('. '),write(QName), nl, !
@@ -125,19 +124,23 @@ write_rule_list.
 
 
 chat:-
-		write_node_list,!,
-        print_welcome,
-        conversations.
+	write_node_list,!,
+        print_welcome.
 
 print_welcome:-
         print_prompt(bot),
-        write('Mary and Karl can meet indoors is true.'),nl,
+        read(F),nl,
+        deduce(F,node(ID, F, R, DAG)),
+        write(F), write(' is true.'),nl,
+        read_question(Q),
+        print_prompt(bot),
+        why(F),
         flush_output.
 
 conversations:-
-        repeat,
         read_question(Q),
-        print_prompt(bot).
+        print_prompt(bot),
+        why(F).
 
  
 
@@ -165,17 +168,5 @@ is_question(S):-
 
 is_quit(S):-
         subset([bye], S).
-
-
-
-
-
-
-
-
-
-
-
-
 
 
