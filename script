@@ -2,26 +2,38 @@ Scenario #1:
 
 case1: 
 
--? chat. 
+?- chat.
 FACT:
 1. residence(mary,manchester) is an initial fact
 2. residence(karl,manchester) is an initial fact
 3. tier1(manchester) is an initial fact
 RULE:
-1. If [residence(_4272,_4274),residence(_4284,_4286),indoor_meetings_allowed(_4274),indoor_meetings_allowed(_4286)] are satisfied then can_meet_indoors(_4272,_4284) is true
-2. If [tier1(_4272)] are satisfied then indoor_meetings_allowed(_4272) is true
+1. If [residence(_13658,_13660),residence(_13670,_13672),indoor_meetings_allowed(_13660),indoor_meetings_allowed(_13672)] are satisfied then can_meet_indoors(_13658,_13670) is true
+2. If [tier1(_13658)] are satisfied then indoor_meetings_allowed(_13658) is true
 Computer : tier1(manchester).
 
 Computer : tier1(manchester) is true.
-Please select a question:
-1. Why?
-2. Why not?
+Please select a question or exit:
+1. Why do you beleive?
+2. Why don't you beleive?
+3. Do you agree?
+4. Exit
 User: 1.
-You selected question: 1. Why?
-Enter the fact related to this question: tier1(manchester).
+You selected question: 1. Why do you beleive?
+Computer : Please enter the fact related to this question: 
+User: tier1(manchester).
 
 Computer : Because it is an initial fact
-true .
+
+Please select a question or exit:
+1. Why do you beleive?
+2. Why don't you beleive?
+3. Do you agree?
+4. Exit
+User: 4.
+You selected question: 4. Exit
+Computer : Bye
+true.
 
 
 
