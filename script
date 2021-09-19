@@ -1,7 +1,8 @@
 Scenario #1:
+
+case1: 
+
 -? chat. 
-
-
 FACT:
 1. residence(mary,manchester) is an initial fact
 2. residence(karl,manchester) is an initial fact
@@ -21,6 +22,45 @@ Enter the fact related to this question: tier1(manchester).
 
 Computer : Because it is an initial fact
 true .
+
+
+
+
+case 2: 
+
+?- chat.
+FACT:
+1. residence(mary,manchester) is an initial fact
+2. residence(karl,manchester) is an initial fact
+3. tier1(manchester) is an initial fact
+RULE:
+1. If [residence(_12964,_12966),residence(_12976,_12978),indoor_meetings_allowed(_12966),indoor_meetings_allowed(_12978)] are satisfied then can_meet_indoors(_12964,_12976) is true
+2. If [tier1(_12964)] are satisfied then indoor_meetings_allowed(_12964) is true
+tier1(liverpool).
+
+Computer : tier1(liverpool) is not true.
+Please select a question or exit:
+1. Why do you beleive?
+2. Why don't you beleive?
+3. Do you agree?
+4. Exit
+User: 1.
+You selected question: 1. Why do you beleive?
+Computer : Please enter the fact related to this question: 
+User: tier1(liverpool).
+
+Computer : tier1(liverpool) is not an initial fact
+
+Please select a question or exit:
+1. Why do you beleive?
+2. Why don't you beleive?
+3. Do you agree?
+4. Exit
+User: 4.
+You selected question: 4. Exit
+Computer : Bye
+true.
+
 
 computer: Mary and Karl can meet is deduced by rule 1 from initial fact A1: mary lives in Manchester and A2: Karl lives in manchester and new fact A4: Manchester allows indoor meetings. 
 computer: Do you agree or disagree with the system?
