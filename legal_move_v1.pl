@@ -4,9 +4,9 @@ node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, 'Why?').
-question(2, 'Why not?').
-question(3, 'Do you agree?').
+question(1, "Why?").
+question(2, "Why not?").
+question(3, "Do you agree?").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -35,7 +35,7 @@ check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
 
 why(F):-
     node(_N, F, initial_fact, _NL), !,
-    write("It is an initial fact").
+    write("Because it is an initial fact").
 why(F):-
     node(_N, F, R, NL), !,
     rule(R, _A, F),
@@ -76,7 +76,7 @@ whynot(F):-
 % leagel move 8. 
 whynot(F):-
 	rule(R, A, F),
-    	check(A, N),
+    check(A, N),
 	write(N), write(" cannot be deduced."), nl.
 
 
@@ -89,15 +89,16 @@ check([H|T], N):-
     check(T,N).
 
 
-
-read_question(QName) :-
+read_question(Number,Fact) :-
     repeat,
     write('Please select a question:'), nl,
     write_question_list,
-    print_prompt(user_icon),
+    print_prompt(user),
+    prompt(_, ''),
     read(Number),
     (   question(Number, QName)
-    ->  write('You selected question: '), write(Number), write('. '),write(QName), nl, !
+    ->  write('You selected question: '), write(Number), write('. '), write(QName),nl,
+        write('Enter the fact related to this question: '), read(Fact),nl, !
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -109,6 +110,7 @@ write_question_list.
 
 
 write_node_list :-
+    write('FACT:'),nl,
     node(N, Fact, initial_fact, []),
     write(N), write('. '), write(Fact), write(' is an initial fact'),nl,
     fail.
@@ -116,6 +118,7 @@ write_node_list.
 
 
 write_rule_list :-
+    write('RULE:'),nl,
     rule(N, Antecedants, C),
     write(N), write('. If '), write(Antecedants), write(' are satisfied then '), write(C), write(' is true'), nl,
     fail.
@@ -125,22 +128,25 @@ write_rule_list.
 
 chat:-
 	write_node_list,!,
-        print_welcome.
+        write_rule_list,!,
+        print_welcome,
+        conversations.
 
 print_welcome:-
+      %  write('Please enter the fact that you want to check'),nl,
+      %  print_prompt(user),
         print_prompt(bot),
         read(F),nl,
         deduce(F,node(ID, F, R, DAG)),
-        write(F), write(' is true.'),nl,
-        read_question(Q),
         print_prompt(bot),
-        why(F),
+        write(F), write(' is true.'),nl,
         flush_output.
 
 conversations:-
-        read_question(Q),
+        read_question(Number,Fact),
         print_prompt(bot),
-        why(F).
+        % why(Fact).
+        gen_reply(Number, Fact).
 
  
 
@@ -151,22 +157,19 @@ print_prompt(user):-
 my_icon('Computer ').
 user_icon('User').
 
-
-	
-gen_reply(Q, R):-
-        is_question(Q),
-        assert(information(Q,R)),
-        why(Q).
+gen_reply(1, Fact):-
+        why(Fact).
 
 gen_reply(S, _):-
         is_quit(S), !,
         write("Bye"),nl,
         flush_output.
 
-is_question(S):-
-        member('Why it is true', S).
 
 is_quit(S):-
         subset([bye], S).
 
-
+subset([], _).
+subset([H|T], L2):-
+        member(H, L2),
+        subset(T, L2).
