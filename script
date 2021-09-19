@@ -1,15 +1,26 @@
 Scenario #1:
+-? chat. 
 
+
+FACT:
 1. residence(mary,manchester) is an initial fact
 2. residence(karl,manchester) is an initial fact
 3. tier1(manchester) is an initial fact
-Computer : Mary and Karl can meet indoors is true.
+RULE:
+1. If [residence(_4272,_4274),residence(_4284,_4286),indoor_meetings_allowed(_4274),indoor_meetings_allowed(_4286)] are satisfied then can_meet_indoors(_4272,_4284) is true
+2. If [tier1(_4272)] are satisfied then indoor_meetings_allowed(_4272) is true
+Computer : tier1(manchester).
+
+Computer : tier1(manchester) is true.
 Please select a question:
-1. Why it is true?
+1. Why?
 2. Why not?
-3. Do you agree?
-User: 1. (User could choose 1-3, in here, it is a example that user choose 1）
-You selected question: 1. Why it is true?
+User: 1.
+You selected question: 1. Why?
+Enter the fact related to this question: tier1(manchester).
+
+Computer : Because it is an initial fact
+true .
 
 computer: Mary and Karl can meet is deduced by rule 1 from initial fact A1: mary lives in Manchester and A2: Karl lives in manchester and new fact A4: Manchester allows indoor meetings. 
 computer: Do you agree or disagree with the system?
