@@ -7,6 +7,7 @@ node(3, tier1(manchester), initial_fact, []).
 question(1, "Why?").
 question(2, "Why not?").
 question(3, "Do you agree?").
+question(4, "Exit").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -35,7 +36,7 @@ check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
 
 why(F):-
     node(_N, F, initial_fact, _NL), !,
-    write("Because it is an initial fact").
+    write("Because it is an initial fact"), nl.
 why(F):-
     node(_N, F, R, NL), !,
     rule(R, _A, F),
@@ -44,7 +45,7 @@ why(F):-
     write(" is deduced using rule "),
     write(R),
     write(" from "),
-    write(NL).
+    write(NL),nl.
 
 
 % Legal move 4. 
@@ -65,7 +66,7 @@ whynot(F):-
 whynot(F):-
 	\+ node(_N, F, initial_fact, _NL), !,
 	write(F),
-	write(" is not an initial fact").
+	write(" is not an initial fact"),nl.
 
 % leagal move 7. 
 whynot(F):-
@@ -89,16 +90,17 @@ check([H|T], N):-
     check(T,N).
 
 
-read_question(Number,Fact) :-
+
+read_question(Number) :-
     repeat,
-    write('Please select a question:'), nl,
+    write('Please select a question or exit:'), nl,
     write_question_list,
     print_prompt(user),
     prompt(_, ''),
     read(Number),
     (   question(Number, QName)
-    ->  write('You selected question: '), write(Number), write('. '), write(QName),nl,
-        write('Enter the fact related to this question: '), read(Fact),nl, !
+    ->  write('You selected question: '), write(Number), write('. '), write(QName),nl, !
+       % write('Enter the fact related to this question: '), read(Fact),nl, !
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -143,11 +145,13 @@ print_welcome:-
         flush_output.
 
 conversations:-
-        read_question(Number,Fact),
+        repeat,
+        read_question(Number),
         print_prompt(bot),
         % why(Fact).
-        gen_reply(Number, Fact).
-
+        gen_reply(Number),
+        (Number = 4, !; fail
+        ).
  
 
 print_prompt(bot):-
@@ -157,17 +161,18 @@ print_prompt(user):-
 my_icon('Computer ').
 user_icon('User').
 
-gen_reply(1, Fact):-
-        why(Fact).
 
-gen_reply(S, _):-
-        is_quit(S), !,
+gen_reply(1):-
+        write('Please enter the fact related to this question: '), nl,
+        print_prompt(user),
+        read(Fact),nl, !,
+        print_prompt(bot),
+        why(Fact),nl.
+
+gen_reply(4):-
         write("Bye"),nl,
         flush_output.
 
-
-is_quit(S):-
-        subset([bye], S).
 
 subset([], _).
 subset([H|T], L2):-
