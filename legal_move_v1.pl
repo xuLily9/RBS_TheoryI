@@ -4,8 +4,8 @@ node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, "Why?").
-question(2, "Why not?").
+question(1, "Why do you beleive?").
+question(2, "Why don't you beleive?").
 question(3, "Do you agree?").
 question(4, "Exit").
 
@@ -36,49 +36,51 @@ check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
 
 why(F):-
     node(_N, F, initial_fact, _NL), !,
+    print_prompt(bot),
     write("Because it is an initial fact"), nl.
+
 why(F):-
     node(_N, F, R, NL), !,
     rule(R, _A, F),
-    write("Fact "),
+    print_prompt(bot),
+    write("Because "),
     write(F),
     write(" is deduced using rule "),
     write(R),
     write(" from "),
-    write(NL),nl.
+    write(NL), nl.
+
+why(F):-
+    \+ node(_N, F, initial_fact, _NL), !,
+    \+ deduce(F,node(_ID, F, _R, _DAG)), !,
+    print_prompt(bot),
+    write(F), write(' is false.'),nl,
+    write("Because "),
+    write(F),
+    write(" is not an initial fact and it cannot be deduced"), nl.
+
+% leagel move 8. 
+why(F):-
+    rule(R, A, F),
+    check(A, N),
+    print_prompt(bot),
+    write(N), write(" cannot be deduced by rule "), write(R), nl.
 
 
 % Legal move 4. 
-whynot(F):-
-	deduce(F,_DAG), !,
-	node(_N, F, _, _), !,
-	write("user: Why not "), 
-	write(F),
-	write(" ?"),nl,
-	why(F).
+% f can be deduced by the computer 
+% the user does notbelieve it ask 
+% whynot(F):-
+%    write("Why do you beleive it is ture?"), nl,
+%    print_prompt(user),
+%    read(T),nl,
+%	\+ deduce(T,node(_ID, T, _R, _DAG)), !,
+%    print_prompt(bot),
+%    write(T), write(' is not true.'),nl,
+%	write("user: Why not "), 
+%	why(T).
 
-% legal move 5. 
-whynot(F):-
-	deduce(F,_DAG), !,
-	why(F).
 
-% legal move 6. 
-whynot(F):-
-	\+ node(_N, F, initial_fact, _NL), !,
-	write(F),
-	write(" is not an initial fact"),nl.
-
-% leagal move 7. 
-whynot(F):-
-	node(_N, F, initial_fact, _NL), !,
-	write(F),
-	write(" is an initial fact").
-
-% leagel move 8. 
-whynot(F):-
-	rule(R, A, F),
-    check(A, N),
-	write(N), write(" cannot be deduced."), nl.
 
 
 check([],[]).
@@ -129,7 +131,7 @@ write_rule_list.
 
 
 chat:-
-	write_node_list,!,
+		write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
@@ -139,10 +141,9 @@ print_welcome:-
       %  print_prompt(user),
         print_prompt(bot),
         read(F),nl,
-        deduce(F,node(ID, F, R, DAG)),
-        print_prompt(bot),
-        write(F), write(' is true.'),nl,
-        flush_output.
+        (deduce(F,node(_ID, F, _R, _DAG))
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ;
+           print_prompt(bot),write(F), write(' is false.'), nl, flush_output ).
 
 conversations:-
         repeat,
@@ -166,8 +167,17 @@ gen_reply(1):-
         write('Please enter the fact related to this question: '), nl,
         print_prompt(user),
         read(Fact),nl, !,
+       % print_prompt(bot),
+        why(Fact),nl.
+
+gen_reply(2):-
+        print_prompt(bot),
+        write("Why do you beleive it is ture?"), nl,
+        print_prompt(user),
+        read(Fact),nl, !,
         print_prompt(bot),
         why(Fact),nl.
+
 
 gen_reply(4):-
         write("Bye"),nl,
