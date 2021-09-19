@@ -46,11 +46,11 @@ FACT:
 2. residence(karl,manchester) is an initial fact
 3. tier1(manchester) is an initial fact
 RULE:
-1. If [residence(_12964,_12966),residence(_12976,_12978),indoor_meetings_allowed(_12966),indoor_meetings_allowed(_12978)] are satisfied then can_meet_indoors(_12964,_12976) is true
-2. If [tier1(_12964)] are satisfied then indoor_meetings_allowed(_12964) is true
-tier1(liverpool).
+1. If [residence(_18752,_18754),residence(_18764,_18766),indoor_meetings_allowed(_18754),indoor_meetings_allowed(_18766)] are satisfied then can_meet_indoors(_18752,_18764) is true
+2. If [tier1(_18752)] are satisfied then indoor_meetings_allowed(_18752) is true
+Computer : tier1(liverpool).
 
-Computer : tier1(liverpool) is not true.
+Computer : tier1(liverpool) is false.
 Please select a question or exit:
 1. Why do you beleive?
 2. Why don't you beleive?
@@ -61,7 +61,8 @@ You selected question: 1. Why do you beleive?
 Computer : Please enter the fact related to this question: 
 User: tier1(liverpool).
 
-Computer : tier1(liverpool) is not an initial fact
+Computer : tier1(liverpool) is false.
+Because tier1(liverpool) is not an initial fact and it cannot be deduced
 
 Please select a question or exit:
 1. Why do you beleive?
