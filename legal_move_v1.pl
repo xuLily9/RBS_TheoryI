@@ -4,9 +4,9 @@ node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, "Why do you beleive?").
-question(2, "Why don't you beleive?").
-question(3, "Do you agree?").
+question(1, "Why do you beleive it is true?").
+question(2, "Why don't you beleive it is true?").
+question(3, "I want to enter my reason:").
 question(4, "Exit").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
@@ -54,7 +54,7 @@ why(F):-
     \+ node(_N, F, initial_fact, _NL), !,
     \+ deduce(F,node(_ID, F, _R, _DAG)), !,
     print_prompt(bot),
-    write(F), write(' is false.'),nl,
+   % write(F), write(' is false.'),nl,
     write("Because "),
     write(F),
     write(" is not an initial fact and it cannot be deduced"), nl.
@@ -131,7 +131,7 @@ write_rule_list.
 
 
 chat:-
-		write_node_list,!,
+	write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
@@ -171,12 +171,18 @@ gen_reply(1):-
         why(Fact),nl.
 
 gen_reply(2):-
-        print_prompt(bot),
-        write("Why do you beleive it is ture?"), nl,
+        write('Please enter the fact related to this question: '), nl,
         print_prompt(user),
         read(Fact),nl, !,
-        print_prompt(bot),
+       % print_prompt(bot),
         why(Fact),nl.
+
+        % print_prompt(bot),
+        % write("Why do you beleive it is ture?"), nl,
+        % print_prompt(user),
+        % read(Fact),nl, !,
+        % print_prompt(bot),
+        % why(Fact),nl.
 
 
 gen_reply(4):-
