@@ -56,23 +56,12 @@ Please select a question or exit:
 2. Why don't you beleive?
 3. Do you agree?
 4. Exit
-User: 1.
-You selected question: 1. Why do you beleive?
+User: 2.
+You selected question: 2. Why don't you beleive?
 Computer : Please enter the fact related to this question: 
 User: tier1(liverpool).
 
-Computer : tier1(liverpool) is false.
-Because tier1(liverpool) is not an initial fact and it cannot be deduced
-
-Please select a question or exit:
-1. Why do you beleive?
-2. Why don't you beleive?
-3. Do you agree?
-4. Exit
-User: 4.
-You selected question: 4. Exit
-Computer : Bye
-true.
+Computer : Because tier1(liverpool) is not an initial fact and it cannot be deduced
 
 
 
