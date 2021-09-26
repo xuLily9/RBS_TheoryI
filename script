@@ -12,29 +12,35 @@ RULE:
 2. If [tier1(_13658)] are satisfied then indoor_meetings_allowed(_13658) is true
 Computer : tier1(manchester).
 
+Computer : tier1(manchester).
+
 Computer : tier1(manchester) is true.
-Please select a question or exit:
-1. Why do you beleive?
-2. Why don't you beleive?
-3. Do you agree?
+Computer : Do you agree with me?
+1. Yes, I agree
+2. No, I disagree
+User: 1.
+1. Yes, I agree
+Computer : Please select a question or exit:
+1. Why do you beleive it is true?
+2. Why don't you beleive it is true?
+3. I want to enter my reason:
 4. Exit
 User: 1.
-You selected question: 1. Why do you beleive?
+You selected question: 1. Why do you beleive it is true?
 Computer : Please enter the fact related to this question: 
 User: tier1(manchester).
 
 Computer : Because it is an initial fact
 
-Please select a question or exit:
-1. Why do you beleive?
-2. Why don't you beleive?
-3. Do you agree?
+Computer : Please select a question or exit:
+1. Why do you beleive it is true?
+2. Why don't you beleive it is true?
+3. I want to enter my reason:
 4. Exit
 User: 4.
 You selected question: 4. Exit
 Computer : Bye
 true.
-
 
 
 
