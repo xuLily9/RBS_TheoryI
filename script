@@ -87,3 +87,61 @@ Computer : Bye
 
 
 
+
+# case 3. 
+
+?- chat.
+FACT:
+1. residence(mary,manchester) is an initial fact
+2. residence(karl,manchester) is an initial fact
+3. tier1(manchester) is an initial fact
+RULE:
+1. If [residence(_35590,_35592),residence(_35602,_35604),indoor_meetings_allowed(_35592),indoor_meetings_allowed(_35604)] are satisfied then can_meet_indoors(_35590,_35602) is true
+2. If [tier1(_35590)] are satisfied then indoor_meetings_allowed(_35590) is true
+Computer : tier1(liverpool).
+
+Computer : tier1(liverpool) is false.
+Computer : Do you agree with me?
+1. Yes, I agree
+2. No, I disagree
+User: 2.
+2. No, I disagree
+Computer : Do you have any questions?
+1. Yes
+2. No, exit
+User: 1.
+Computer : Okay, let us move on.
+
+Computer : Please select a question or exit:
+1. Why do you beleive it?
+2. Why don't you beleive it?
+3. I have my a difference reason.
+4. Exit
+User: 2.
+You selected question: 2. Why don't you beleive it?
+
+Computer : Please enter the fact related to this question: 
+User: tier1(liverpool).
+
+Computer : Because tier1(liverpool) is not an initial fact and it cannot be deduced
+
+Computer : Do you have any questions?
+1. Yes
+2. No, exit
+User: 1.
+Computer : Okay, let us move on.
+
+Computer : Please select a question or exit:
+1. Why do you beleive it?
+2. Why don't you beleive it?
+3. I have my a difference reason.
+4. Exit
+User: 3.
+You selected question: 3. I have my a difference reason.
+
+Computer : Computer : Please select your reason: 
+1. Because of the system's rule
+2. Because of fact
+User: 2.
+User: Enter a fact: tier1(manchester).
+
