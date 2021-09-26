@@ -2,16 +2,15 @@ Scenario #1:
 
 case1: 
 
+
 ?- chat.
 FACT:
 1. residence(mary,manchester) is an initial fact
 2. residence(karl,manchester) is an initial fact
 3. tier1(manchester) is an initial fact
 RULE:
-1. If [residence(_13658,_13660),residence(_13670,_13672),indoor_meetings_allowed(_13660),indoor_meetings_allowed(_13672)] are satisfied then can_meet_indoors(_13658,_13670) is true
-2. If [tier1(_13658)] are satisfied then indoor_meetings_allowed(_13658) is true
-Computer : tier1(manchester).
-
+1. If [residence(_18722,_18724),residence(_18734,_18736),indoor_meetings_allowed(_18724),indoor_meetings_allowed(_18736)] are satisfied then can_meet_indoors(_18722,_18734) is true
+2. If [tier1(_18722)] are satisfied then indoor_meetings_allowed(_18722) is true
 Computer : tier1(manchester).
 
 Computer : tier1(manchester) is true.
@@ -20,27 +19,28 @@ Computer : Do you agree with me?
 2. No, I disagree
 User: 1.
 1. Yes, I agree
+Computer : Do you have any questions?
+1. Yes
+2. No, exit
+User: 1.
+Computer : Okay, let us move on.
 Computer : Please select a question or exit:
-1. Why do you beleive it is true?
-2. Why don't you beleive it is true?
-3. I want to enter my reason:
+1. Why do you beleive it?
+2. Why don't you beleive it?
+3. I have my a difference reason.
 4. Exit
 User: 1.
-You selected question: 1. Why do you beleive it is true?
+You selected question: 1. Why do you beleive it?
 Computer : Please enter the fact related to this question: 
 User: tier1(manchester).
 
 Computer : Because it is an initial fact
 
-Computer : Please select a question or exit:
-1. Why do you beleive it is true?
-2. Why don't you beleive it is true?
-3. I want to enter my reason:
-4. Exit
-User: 4.
-You selected question: 4. Exit
+Computer : Do you have any questions?
+1. Yes
+2. No, exit
+User: 2.
 Computer : Bye
-true.
 
 
 
