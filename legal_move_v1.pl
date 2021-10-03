@@ -4,10 +4,9 @@ node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
 
-question(1, "Why do you beleive it?").
-question(2, "Why don't you beleive it?").
-question(3, "I have my a difference reason.").
-question(4, "Exit").
+question(1, "Why do you beleive?").
+question(2, "Why don't you beleive?").
+question(3, "Exit").
 
 choice(1, "Yes, I agree").
 choice(2, "No, I disagree").
@@ -17,7 +16,6 @@ answer(1, "Yes").
 answer(2, "No, exit").
 
 reason(1, "Because of the system's rule").
-% reason(2, "Because of my rule").
 reason(2, "Because of fact").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
@@ -70,7 +68,6 @@ why(F):-
     write(F),
     write(" is not an initial fact and it cannot be deduced"), nl.
 
-% leagel move 8. 
 why_rule(R):-
     rule(R, A, _F),
     check(A, N),
@@ -98,6 +95,42 @@ check([H|T], N):-
     check(T,N).
 
 
+why_question(Number) :-  % If the conclusion is true
+    repeat,
+    print_prompt(bot),
+    write('Please select a question or exit:'), nl,
+    write_why_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Number),
+    (   Number =:= 1
+    ->  write('You selected question: '), write("Why do you beleive?"),nl, !,
+        write('Enter the fact related to this question: '), read(Fact),nl, !, 
+        why(Fact), ! 
+    ;   Number =:= 2
+    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ;   write('Not a valid choice, try again...'), nl, fail
+    ).
+
+
+                            
+whynot_question(Number) :- % If the conlusion is false
+    repeat,
+    print_prompt(bot),
+    write('Please select a question or exit:'), nl,
+    write_whynot_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Number),
+    (   Number =:= 1
+    ->  write('You selected question: '), write("Why don't you beleive?"),nl, !,
+        write('Enter the fact related to this question: '), read(Fact),nl, !
+    ;   Number =:= 2
+    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ;   write('Not a valid choice, try again...'), nl, fail
+    ).
+
+
 read_question(Number) :-
     repeat,
     print_prompt(bot),
@@ -112,35 +145,16 @@ read_question(Number) :-
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
-read_choice(NChoice) :-
-    repeat,
-    print_prompt(bot),
-    write('Do you agree with me?'), nl,
-    write_choice_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(NChoice),
-    (   choice(NChoice,Choice)
-       -> write(NChoice), write('. '), write(Choice),nl, !
-        ;   write('Not a valid choice, try again...'), nl, fail
-        ).
-
-% ask_question :-
- %   print_prompt(bot),
-  %  write('Do you have any questions?'),nl,
-   % read_answer(Nanswer).
-
-
 read_answer(Nanswer) :-
     write_answer_list,
     print_prompt(user),
     prompt(_, ''),
     read(Nanswer),
     (   Nanswer =:= 2
-        -> print_prompt(bot), write('Bye'),nl,!, halt
-        ;  Nanswer =:= 1
-        -> print_prompt(bot), write('Okay, let us move on.'),nl,!
-        ;write('Not a valid choice, try again...'), nl
+    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ;   Nanswer =:= 1
+    ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
+    ;   write('Not a valid choice, try again...'), nl
     ).
 
 
@@ -160,11 +174,21 @@ read_reason(Number) :-
 
 
 
+write_why_list :-
+    write(1), write('. '), write("Why do you beleive?"),nl,
+    write(2), write('. '), write("Exit"),nl.
+
+
+write_whynot_list :-
+    write(1), write('. '), write("Why not do you beleive?"),nl,
+    write(2), write('. '), write("Exit"),nl.
+
 write_question_list :-
     question(N, Name),
     write(N), write('. '), write(Name), nl,
     fail.
 write_question_list.
+
 
 write_choice_list :-
     choice(N, Name),
@@ -209,25 +233,22 @@ chat:-
         conversations.
 
 print_welcome:-
-      %  write('Please enter the fact that you want to check'),nl,
-      %  print_prompt(user),
         print_prompt(bot),
         read(F),nl,
         (deduce(F,node(_ID, F, _R, _DAG))
-            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ;
-           print_prompt(bot),write(F), write(' is false.'), nl, flush_output ),
-        read_choice(_NChoice).
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+            why_question(Number),!;
+           print_prompt(bot),write(F), write(' is false.'), nl,!,
+           whynot_question(Number),!).
 
 conversations:-
         repeat,
         print_prompt(bot),
         write('Do you have any questions?'),nl,
         read_answer(_Nanswer),nl,
-        read_question(Number), nl,
-        print_prompt(bot),
+        read_question(Number),
         gen_reply(Number),
-        (Number = 4, !; fail
-        ).
+        (Number = 3, !; fail).
  
 
 print_prompt(bot):-
@@ -254,9 +275,6 @@ gen_reply(2):-
 
 
 gen_reply(3):-
-        read_reason(_Fact),nl .
-
-gen_reply(4):-
         write("Bye"),nl,
         flush_output.
 
