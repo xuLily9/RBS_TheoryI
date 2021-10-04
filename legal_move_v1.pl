@@ -1,5 +1,5 @@
 % :- [readin].
-:-dynamic node/4, information/1.
+:-dynamic node/4, user_fact/2, not_believe/1, believe/1.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
@@ -7,6 +7,10 @@ node(3, tier1(manchester), initial_fact, []).
 question(1, "Why do you beleive?").
 question(2, "Why don't you beleive?").
 question(3, "Exit").
+
+fact(1, "Yes").
+fact(2, "No, I want to get some explanations about this fact").
+
 
 choice(1, "Yes, I agree").
 choice(2, "No, I disagree").
@@ -43,13 +47,18 @@ check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
     check_antecedants(T, NodeList).
 
 
-why(F):-
+why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
     node(_N, F, initial_fact, _NL), !,
     print_prompt(bot),
     write("Because it is an initial fact"), nl.
 
-why(F):-
-    node(_N, F, R, NL), !,
+why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
+    user_fact(F, initial_fact), !,
+    print_prompt(bot),
+    write("Because it is an initial fact"), nl.
+
+why(F):-                                % Ifs=why(t)andt̸∈Fi thenforsomenoden=⟨t,l⟩∈Gi 
+    node(_N, F, R, NL), !,               % A→t where A are the terms for n parent nodes.
     rule(R, _A, F),
     print_prompt(bot),
     write("Because "),
@@ -59,11 +68,10 @@ why(F):-
     write(" from "),
     write(NL), nl.
 
-why(F):-
+whynot(F):-
     \+ node(_N, F, initial_fact, _NL), !,
     \+ deduce(F,node(_ID, F, _R, _DAG)), !,
     print_prompt(bot),
-   % write(F), write(' is false.'),nl,
     write("Because "),
     write(F),
     write(" is not an initial fact and it cannot be deduced"), nl.
@@ -106,9 +114,10 @@ why_question(Number) :-  % If the conclusion is true
     (   Number =:= 1
     ->  write('You selected question: '), write("Why do you beleive?"),nl, !,
         write('Enter the fact related to this question: '), read(Fact),nl, !, 
+        assert(not_believe(Fact)), !,
         why(Fact), ! 
     ;   Number =:= 2
-    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(X, Y)), !, halt
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -124,9 +133,10 @@ whynot_question(Number) :- % If the conlusion is false
     read(Number),
     (   Number =:= 1
     ->  write('You selected question: '), write("Why don't you beleive?"),nl, !,
-        write('Enter the fact related to this question: '), read(Fact),nl, !
+        write('Enter the fact related to this question: '), read(Fact),nl, !,
+        assert(believe(Fact)), !
     ;   Number =:= 2
-    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(X, Y)), !, halt
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -144,6 +154,27 @@ read_question(Number) :-
        % write('Enter the fact related to this question: '), read(Fact),nl, !
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
+
+
+
+read_fact(NFact,F) :-
+    write_fact_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(NFact),
+    (   NFact =:= 1
+    ->  write("computer: I add "), write(F), write(" to user initial facts."),nl,
+        assert(user_fact(F,initial_fact)), !
+     ;   NFact =:= 2
+    ->  write("computer: Here are more details about "), write(Fact), nl,
+     (deduce(F,node(_ID, F, _R, _DAG))
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+            why_question(Number),!;
+           print_prompt(bot),write(F), write(' is false.'), nl,!,
+           whynot_question(Number),!)
+    ;   write('Not a valid choice, try again...'), nl
+    ).
+
 
 read_answer(Nanswer) :-
     write_answer_list,
@@ -176,12 +207,12 @@ read_reason(Number) :-
 
 write_why_list :-
     write(1), write('. '), write("Why do you beleive?"),nl,
-    write(2), write('. '), write("Exit"),nl.
+    write(2), write('. '), write("Exit"),retract(user_fact(X, Y)), nl.
 
 
 write_whynot_list :-
     write(1), write('. '), write("Why not do you beleive?"),nl,
-    write(2), write('. '), write("Exit"),nl.
+    write(2), write('. '), write("Exit"), retract(user_fact(X, Y)), nl.
 
 write_question_list :-
     question(N, Name),
@@ -225,9 +256,23 @@ write_rule_list :-
 write_rule_list.
 
 
+write_fact_list :-
+    fact(N, Name),
+    write(N), write('. '), write(Name), nl,
+    fail.
+write_fact_list.
+
+
+initial(F):-
+      \+ user_fact(F, initial_fact), !,
+      print_prompt(bot),
+      write("I was not told "), write(F),write("."), write(" Is this an initial fact?"),nl,
+      read_fact(NFact, F).                        %  state updates1: If s = initial(t) then Pi adds t to Yij and Fij
+
+
 
 chat:-
-	write_node_list,!,
+		write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
@@ -235,11 +280,7 @@ chat:-
 print_welcome:-
         print_prompt(bot),
         read(F),nl,
-        (deduce(F,node(_ID, F, _R, _DAG))
-            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(Number),!;
-           print_prompt(bot),write(F), write(' is false.'), nl,!,
-           whynot_question(Number),!).
+        initial(F).
 
 conversations:-
         repeat,
@@ -263,7 +304,6 @@ gen_reply(1):-
         write('Please enter the fact related to this question: '), nl,
         print_prompt(user),
         read(Fact),nl, !,
-       % print_prompt(bot),
         why(Fact),nl.
 
 gen_reply(2):-
@@ -277,6 +317,7 @@ gen_reply(2):-
 gen_reply(3):-
         write("Bye"),nl,
         flush_output.
+
 
 
 subset([], _).
