@@ -145,3 +145,28 @@ Computer : Computer : Please select your reason:
 User: 2.
 User: Enter a fact: tier1(manchester).
 
+
+
+
+
+
+
+Computer : I was not told tier1(liverpool). Is this an initial fact?
+1. Yes
+2. No, I want to get some explanations about this fact
+User: 2.
+computer: Here are more details about tier1(liverpool)
+Computer : tier1(liverpool) is false.
+Computer : Please select a question or exit:
+1. Why not do you beleive?
+2. Exit
+User: 1.
+You selected question: Why don't you beleive?
+Enter the fact related to this question: tier1(liverpool).
+
+Computer : tier1(liverpool) is not an initial fact and it cannot be deduced
+computer: Why do you believe tier1(liverpool) ?
+Computer : Do you have any questions?
+1. Yes
+2. No, exit
+User: .
