@@ -8,7 +8,7 @@ question(1, "Why do you beleive?").
 question(2, "Why don't you beleive?").
 question(3, "Exit").
 
-fact(1, "Yes").
+fact(1, "Yes, it is a initial fact").
 fact(2, "No, I want to get some explanations about this fact").
 
 
@@ -19,8 +19,8 @@ choice(2, "No, I disagree").
 answer(1, "Yes").
 answer(2, "No, exit").
 
-reason(1, "Because of the system's rule").
-reason(2, "Because of fact").
+reason(1, "Because of rule ").
+reason(2, "Because of fact ").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -68,18 +68,30 @@ why(F):-                                % Ifs=why(t)andt̸∈Fi thenforsomenoden
     write(" from "),
     write(NL), nl.
 
-whynot(F):-
-    \+ node(_N, F, initial_fact, _NL), !,
-    \+ deduce(F,node(_ID, F, _R, _DAG)), !,
-    print_prompt(bot), write(F),write(" is not an initial fact and it cannot be deduced"), nl,
-    write("computer: Why do you believe "), write(F), write(" ?"),nl.
 
-why_rule(R):-
-    rule(R, A, _F),
+whynot(F):-
+    write("computer: Why do you believe "), write(F), write(" ?"),nl,
+    read_reason(F).
+
+% print_prompt(user),
+ %   prompt(_, ''),
+ %   read(Reason),
+ %   (   user_fact(Reason, initial_fact), !,   % statement 6. If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
+ %     \+ node(_, Reason, initial_fact, []),!
+ %   ->  write("Computer: We have different fact. "), write(Reason),write(" is a user's initial fact, but not a system's initial fact"),nl, !
+ %   ;  \+ user_fact(Reason, initial_fact), !,
+ %       node(_, Reason, initial_fact, []),!
+  %  ->  write("Computer: We have different fact. "), write(Reason),write(" is a system's initial fact, but not a user initial fact"),nl, !
+ %   ; write('Not a valid choice, try again...'), nl, fail ).
+
+
+why_rule(F):-
+    write("user: Please enter rule number: "), 
+    read(R),
+    rule(R, A, F),
     check(A, N),
     print_prompt(bot),
-    write("In the rule "), write(R), write(N), write(" cannot be deduced by rule "), write(R), nl.
-
+    write("I cannot deduce "),  write(N), nl.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -101,7 +113,7 @@ check([H|T], N):-
     check(T,N).
 
 
-why_question(Number) :-  % If the conclusion is true
+why_question(Fact) :-  % If the conclusion is true
     repeat,
     print_prompt(bot),
     write('Please select a question or exit:'), nl, !,
@@ -110,8 +122,7 @@ why_question(Number) :-  % If the conclusion is true
     prompt(_, ''),
     read(Number),
     (   Number =:= 1
-    ->  write('You selected question: '), write("Why do you beleive?"),nl, !,
-        write('Enter the fact related to this question: '), read(Fact),nl, !, 
+    ->  write('You selected question: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
         assert(not_believe(Fact)), !,
         why(Fact), ! 
     ;   Number =:= 2
@@ -121,7 +132,7 @@ why_question(Number) :-  % If the conclusion is true
 
 
                             
-whynot_question(Number) :- % If the conlusion is false
+whynot_question(Fact) :- % If the conlusion is false
     repeat,
     print_prompt(bot),
     write('Please select a question or exit:'), nl, !,
@@ -130,8 +141,7 @@ whynot_question(Number) :- % If the conlusion is false
     prompt(_, ''),
     read(Number),
     (   Number =:= 1
-    ->  write('You selected question: '), write("Why don't you beleive?"),nl, !,
-        write('Enter the fact related to this question: '), read(Fact),nl, !,
+    ->  write('You selected question: '), write("Why don't you beleive "), write(Fact), write("?"), nl, !,        
         assert(believe(Fact)), !, 
         whynot(Fact), !
     ;   Number =:= 2
@@ -168,9 +178,9 @@ read_fact(NFact,F) :-
     ->  write("computer: Here are more details about "), write(F), nl,
      (deduce(F,node(_ID, F, _R, _DAG))
             -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(_Number),!;
+            why_question(F),!;
            print_prompt(bot),write(F), write(' is false.'), nl,!,
-           whynot_question(_Number),!)
+           whynot_question(F),!)
     ;   write('Not a valid choice, try again...'), nl
     ).
 
@@ -188,17 +198,26 @@ read_answer(Nanswer) :-
     ).
 
 
-read_reason(Number) :-
-    print_prompt(bot),
-    write('Please select your reason: '), nl,
+read_reason(F) :-
+   print_prompt(bot),
+   write('Select your reason: '), nl,
     write_reason_list,
     print_prompt(user),
     prompt(_, ''),
     read(Number),
-    (   Number =:= 1
-    ->  print_prompt(user), write('Enter a rule number: '), read(Rule), why_rule(Rule), nl, !
-    ;  Number  =:= 2
-    -> print_prompt(user), write('Enter a fact: '), read(Fact), why_fact(Fact),nl, !
+    (  Number =:= 1
+    -> why_rule(F), nl, !
+    ;   Number  =:= 2
+    -> write("user: Please enter a fact:"), 
+        read(Fact),
+       (
+          user_fact(Fact, initial_fact), !,   % statement 6. If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
+          \+ node(_, Fact, initial_fact, []),!
+            ->  write("Computer: We have different fact. "), write(Fact),write(" is a user's initial fact, but not a system's initial fact"),nl, !
+        ;  \+ user_fact(Fact, initial_fact), !,
+            node(_, Fact, initial_fact, []),!
+            ->  write("Computer: We have different fact. "), write(Fact),write(" is a system's initial fact, but not a user initial fact"),nl, !
+        )
     ; write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -210,7 +229,7 @@ write_why_list :-
 
 
 write_whynot_list :-
-    write(1), write('. '), write("Why not do you beleive?"),nl,
+    write(1), write('. '), write("Why don't you beleive?"),nl,
     write(2), write('. '), write("Exit"), nl.
 
 write_question_list :-
@@ -263,7 +282,7 @@ write_fact_list.
 
 
 initial(F):-
-       \+ node(_N, F, initial_fact, _NL), !,
+      \+ node(_N, F, initial_fact, _NL), !,
       \+ user_fact(F, initial_fact), !,
       print_prompt(bot),
       write("I was not told "), write(F),write("."), write(" Is this an initial fact?"),nl,
@@ -275,7 +294,7 @@ initial(F):-
             -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
             why_question(_Number),!;
            print_prompt(bot),write(F), write(' is false.'), nl,!,
-           whynot_question(_Number),!).
+           whynot_question(F),!).
 
 chat:-
 	write_node_list,!,
@@ -316,7 +335,6 @@ gen_reply(2):-
         write('Please enter the fact related to this question: '), nl,
         print_prompt(user),
         read(Fact),nl, !,
-       % print_prompt(bot),
         why(Fact),nl.
 
 
@@ -325,8 +343,3 @@ gen_reply(3):-
         flush_output.
 
 
-
-subset([], _).
-subset([H|T], L2):-
-        member(H, L2),
-        subset(T, L2).
