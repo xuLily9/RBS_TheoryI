@@ -9,7 +9,7 @@ question(2, "Why don't you beleive?").
 question(3, "Exit").
 
 fact(1, "Yes, it is a initial fact").
-fact(2, "No, I want to get some explanations about this fact").
+fact(2, "No, I need some explanations about this fact").
 
 
 choice(1, "Yes, I agree").
@@ -19,8 +19,8 @@ choice(2, "No, I disagree").
 answer(1, "Yes").
 answer(2, "No, exit").
 
-reason(1, "Because of rule ").
-reason(2, "Because of fact ").
+reason(1, "Because of a rule ").
+reason(2, "Because of a fact ").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -91,7 +91,8 @@ why_rule(F):-
     rule(R, A, F),
     check(A, N),
     print_prompt(bot),
-    write("I cannot deduce "),  write(N), nl.
+    write("I cannot deduce "),  write(N), nl,
+    write("computer: we have a different rule"),nl.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -160,13 +161,12 @@ read_question(Number) :-
     read(Number),
     (   question(Number, QName)
     ->  write('You selected question: '), write(Number), write('. '), write(QName),nl, !
-       % write('Enter the fact related to this question: '), read(Fact),nl, !
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
 
 
-read_fact(NFact,F) :-
+read_fact(F) :-
     write_fact_list,
     print_prompt(user),
     prompt(_, ''),
@@ -175,12 +175,8 @@ read_fact(NFact,F) :-
     ->  write("computer: I add "), write(F), write(" to user initial facts."),nl,
         assert(user_fact(F,initial_fact)), !
      ;   NFact =:= 2
-    ->  write("computer: Here are more details about "), write(F), nl,
-     (deduce(F,node(_ID, F, _R, _DAG))
-            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(F),!;
-           print_prompt(bot),write(F), write(' is false.'), nl,!,
-           whynot_question(F),!)
+    -> 
+        whynot_question(F)
     ;   write('Not a valid choice, try again...'), nl
     ).
 
@@ -286,7 +282,7 @@ initial(F):-
       \+ user_fact(F, initial_fact), !,
       print_prompt(bot),
       write("I was not told "), write(F),write("."), write(" Is this an initial fact?"),nl,
-      read_fact(_NFact, F).                        %  state updates1: If s = initial(t) then Pi adds t to Yij and Fij
+      read_fact(F).                        %  state updates1: If s = initial(t) then Pi adds t to Yij and Fij
 
 
 initial(F):-
@@ -297,7 +293,7 @@ initial(F):-
            whynot_question(F),!).
 
 chat:-
-	write_node_list,!,
+		write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
@@ -305,7 +301,11 @@ chat:-
 print_welcome:-
         print_prompt(bot),
         read(F),nl,
-        initial(F).
+        (deduce(F,node(_ID, F, _R, _DAG))
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+            why_question(_Number),!;
+           print_prompt(bot),write(F), write(' is false.'), nl,!,
+           initial(F),!).
 
 conversations:-
         repeat,
