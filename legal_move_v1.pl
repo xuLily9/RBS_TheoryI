@@ -1,5 +1,5 @@
 % :- [readin].
-:-dynamic node/4, user_fact/2, not_believe/1, believe/1.
+:-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
@@ -43,8 +43,13 @@ countNumbers(Numbers) :-
  
 check_antecedants([],[]).
 check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
-    node(ID, H, R , DAG),
+    (   node(ID, H, R , DAG)
+    -> assert(believe(H)), !                    % statement 2. Ifs=l:a→tandl∈Ri
+    ;
+       assert(not_believe(H)),!
+    ),
     check_antecedants(T, NodeList).
+
 
 
 why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
@@ -57,8 +62,8 @@ why(F):-                                              % legal move 1: If s = why
     print_prompt(bot),
     write("Because it is an initial fact"), nl.
 
-why(F):-                                % Ifs=why(t)andt̸∈Fi thenforsomenoden=⟨t,l⟩∈Gi 
-    node(_N, F, R, NL), !,               % A→t where A are the terms for n parent nodes.
+why(F):-                                             % legal move 2: Ifs=why(t) and t∈Fi thenforsomenoden=⟨t,l⟩∈Gi 
+    node(_N, F, R, NL), !,                           % A→t where A are the terms for n parent nodes.
     rule(R, _A, F),
     print_prompt(bot),
     write("Because "),
@@ -70,29 +75,43 @@ why(F):-                                % Ifs=why(t)andt̸∈Fi thenforsomenoden
 
 
 whynot(F):-
-    write("Computer: Why do you believe "), write(F), write(" ?"),nl,
+    write("Computer: Why do you believe "), write(F), write(" ?"),nl,    % legal move 3: If s = whynot(t) then answer why(t).
     read_reason(F).
 
-% print_prompt(user),
- %   prompt(_, ''),
- %   read(Reason),
- %   (   user_fact(Reason, initial_fact), !,   % statement 6. If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
- %     \+ node(_, Reason, initial_fact, []),!
- %   ->  write("Computer: We have different fact. "), write(Reason),write(" is a user's initial fact, but not a system's initial fact"),nl, !
- %   ;  \+ user_fact(Reason, initial_fact), !,
- %       node(_, Reason, initial_fact, []),!
-  %  ->  write("Computer: We have different fact. "), write(Reason),write(" is a system's initial fact, but not a user initial fact"),nl, !
- %   ; write('Not a valid choice, try again...'), nl, fail ).
+
+read_reason(F) :-
+   print_prompt(bot),
+   write('Select your reason: '), nl,
+    write_reason_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Number),
+    (  Number =:= 1
+    -> why_rule(F), nl, !
+    ;   Number  =:= 2
+    -> write("user: Please enter a fact:"), 
+        read(Fact),
+       (
+          user_fact(Fact, initial_fact), !,          % legal move 6: If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
+          \+ node(_, Fact, initial_fact, []),!
+            ->  write("Computer: We have different fact. "), write(Fact),write(" is a user's initial fact, but not a system's initial fact"),nl, !, halt
+        ;  \+ user_fact(Fact, initial_fact), !,
+            node(_, Fact, initial_fact, []),!
+            ->  write("Computer: We have different fact. "), write(Fact),write(" is a system's initial fact, but not a user initial fact"),nl, !, halt
+        )
+    ; write('Not a valid choice, try again...'), nl, fail
+    ).
+
 
 
 why_rule(F):-
     write("User: Please enter rule number: "), 
     read(R),
-    rule(R, A, F),
+    rule(R, A, F),                                 % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
-    write("Computer: we have a different rule"),nl.
+    write("Computer: we have a different rule"),nl, halt.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -194,28 +213,6 @@ read_answer(Nanswer) :-
     ).
 
 
-read_reason(F) :-
-   print_prompt(bot),
-   write('Select your reason: '), nl,
-    write_reason_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(Number),
-    (  Number =:= 1
-    -> why_rule(F), nl, !
-    ;   Number  =:= 2
-    -> write("user: Please enter a fact:"), 
-        read(Fact),
-       (
-          user_fact(Fact, initial_fact), !,   % statement 6. If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
-          \+ node(_, Fact, initial_fact, []),!
-            ->  write("Computer: We have different fact. "), write(Fact),write(" is a user's initial fact, but not a system's initial fact"),nl, !
-        ;  \+ user_fact(Fact, initial_fact), !,
-            node(_, Fact, initial_fact, []),!
-            ->  write("Computer: We have different fact. "), write(Fact),write(" is a system's initial fact, but not a user initial fact"),nl, !
-        )
-    ; write('Not a valid choice, try again...'), nl, fail
-    ).
 
 
 
@@ -287,8 +284,8 @@ initial(F):-
 
 initial(F):-
         (deduce(F,node(_ID, F, _R, _DAG))
-            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(_Number),!;
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,  
+            why_question(_Number),!;                                % legal move 5: some t ∈ Yij\Gi the player may ask why(t).
            print_prompt(bot),write(F), write(' is false.'), nl,!,
            whynot_question(F),!).
 
@@ -299,11 +296,11 @@ chat:-
         conversations.
 
 print_welcome:-
-        print_prompt(bot),
+        print_prompt(user),
         read(F),nl,
         (deduce(F,node(_ID, F, _R, _DAG))
             -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(_Number),!;
+            why_question(_Number),!;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
            print_prompt(bot),write(F), write(' is false.'), nl,!,
            initial(F),!).
 
