@@ -70,7 +70,7 @@ why(F):-                                % Ifs=why(t)andt̸∈Fi thenforsomenoden
 
 
 whynot(F):-
-    write("computer: Why do you believe "), write(F), write(" ?"),nl,
+    write("Computer: Why do you believe "), write(F), write(" ?"),nl,
     read_reason(F).
 
 % print_prompt(user),
@@ -86,13 +86,13 @@ whynot(F):-
 
 
 why_rule(F):-
-    write("user: Please enter rule number: "), 
+    write("User: Please enter rule number: "), 
     read(R),
     rule(R, A, F),
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
-    write("computer: we have a different rule"),nl.
+    write("Computer: we have a different rule"),nl.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -172,7 +172,7 @@ read_fact(F) :-
     prompt(_, ''),
     read(NFact),
     (   NFact =:= 1
-    ->  write("computer: I add "), write(F), write(" to user initial facts."),nl,
+    ->  write("Computer: I add "), write(F), write(" to user initial facts."),nl,
         assert(user_fact(F,initial_fact)), !
      ;   NFact =:= 2
     -> 
@@ -293,7 +293,7 @@ initial(F):-
            whynot_question(F),!).
 
 chat:-
-		write_node_list,!,
+	write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
