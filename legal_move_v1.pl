@@ -19,8 +19,8 @@ choice(2, "No, I need more explanations.").
 answer(1, "Yes").
 answer(2, "No, exit").
 
-reason(1, "Because of a rule ").
-reason(2, "Because of a fact ").
+reason(1, "Because of a rule.").
+reason(2, "It's an initial fact.").
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -54,13 +54,15 @@ check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
 
 why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
     node(_N, F, initial_fact, _NL), !,
-    print_prompt(bot),
-    write("Because it is an initial fact"), nl.
+    print_prompt(bot),                              % legal move 6:
+    write("Because it is an initial fact"), nl,
+     \+ user_fact(F, initial_fact),
+    write("Computer: I have identify the disagreement. "), write(F),write(" is a system's initial fact, not a user initial fact"),nl, !, halt.
 
 why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
     user_fact(F, initial_fact), !,
     print_prompt(bot),
-    write("Because it is an initial fact"), nl.
+    write("Because it is a user initial fact"), nl.
 
 why(F):-                                             % legal move 2: Ifs=why(t) and t∈Fi thenforsomenoden=⟨t,l⟩∈Gi 
     node(_N, F, R, NL), !,                           % A→t where A are the terms for n parent nodes.
@@ -72,56 +74,6 @@ why(F):-                                             % legal move 2: Ifs=why(t) 
     write(R),
     write(" from "),
     write(NL), nl.
-
-
-whynot(F):-
-    write("Computer: Why do you believe "), write(F), write(" ?"),nl,    % legal move 3: If s = whynot(t) then answer why(t).
-    read_reason(F).
-
-
-read_reason(F) :-
-   print_prompt(bot),
-   write('Select your reason: '), nl,
-    write_reason_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(Number),
-    (  Number =:= 1
-    -> why_rule(F), nl, !
-    ;   Number  =:= 2
-    -> write("user: Please enter a fact:"), 
-        read(Fact),
-       (
-          user_fact(Fact, initial_fact), !,          % legal move 6: If s ̸= why(t) and s ̸= whynot(t) For some t ∈ Fij where t ̸∈ Fi the player may state different fact(t,j,i). Player i has identified that t was an initial fact for Player j but not for Player i.
-          \+ node(_, Fact, initial_fact, []),!
-            ->  write("Computer: We have different fact. "), write(Fact),write(" is a user's initial fact, but not a system's initial fact"),nl, !, halt
-        ;  \+ user_fact(Fact, initial_fact), !,
-            node(_, Fact, initial_fact, []),!
-            ->  write("Computer: We have different fact. "), write(Fact),write(" is a system's initial fact, but not a user initial fact"),nl, !, halt
-        )
-    ; write('Not a valid choice, try again...'), nl, fail
-    ).
-
-
-
-why_rule(F):-
-    write("User: Please enter rule number: "), 
-    read(R),
-    rule(R, A, F),                                 % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
-    check(A, N),
-    print_prompt(bot),
-    write("I cannot deduce "),  write(N), nl,
-    write("Computer: we have a different rule"),nl.
-
-why_fact(Fact):-
-     \+ node(_N, Fact, initial_fact, []), !,
-    write("bot: I was not told "), write(Fact), write(" is that a fact?"),nl,
-    write("user: "), read_answer(Nanswer) , nl,
-    Nanswer =:= 1 ->
-    write("bot: Added "), write(Fact), nl,
-    countNumbers(Numbers),
-    N is Numbers +1,
-    assert(node(N, Fact, initial_fact, [])), nl.
 
 
 check([],[]).
@@ -161,13 +113,57 @@ whynot_question(Fact) :- % If the conlusion is false
     prompt(_, ''),
     read(Number),
     (   Number =:= 1
-    ->  write('You selected question: '), write("Why don't you beleive "), write(Fact), write("?"), nl, !,        
+    ->  write("User: Why don't you beleive "), write(Fact), write("?"), nl, !,        
         assert(believe(Fact)), !, 
         whynot(Fact), !
     ;   Number =:= 2
     ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(_X, _Y)), !, halt
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
+
+
+whynot(F):-
+    repeat,
+    write("Computer: Why do you believe "), write(F), write(" ?"),nl,    % legal move 3: If s = whynot(t) then answer why(t).
+    print_prompt(bot),
+    write('Select your reason: '), nl,
+    write_reason_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Number),
+    (  Number =:= 1
+    -> why_rule(F), nl, !
+    ;   Number  =:= 2
+    -> write("User: It's an initial fact."),nl,                   % legal move 6
+    \+ node(_N, F, initial_fact, []), !,
+    \+ user_fact(F,initial_fact), !,
+    assert(user_fact(F,initial_fact)), !,
+    write("Computer: I have identify the disagreement. "), write(F),write(" is a user's initial fact, not a system's initial fact"),nl, !, halt
+    ; write('Not a valid choice, try again...'), nl, fail
+    ).
+
+
+
+why_rule(F):-
+    write("User: Please enter rule number: "), 
+    read(R),
+    rule(R, A, F),                                 % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
+    check(A, N),
+    print_prompt(bot),
+    write("I cannot deduce "),  write(N), nl,
+    write("Computer: we have a different rule"),nl.
+
+why_fact(Fact):-
+     \+ node(_N, Fact, initial_fact, []), !,
+    write("bot: I was not told "), write(Fact), write(" is that a fact?"),nl,
+    write("user: "), read_answer(Nanswer) , nl,
+    Nanswer =:= 1 ->
+    write("bot: Added "), write(Fact), nl,
+    countNumbers(Numbers),
+    N is Numbers +1,
+    assert(node(N, Fact, initial_fact, [])), nl.
+
+
 
 
 read_question(Number) :-
@@ -316,7 +312,7 @@ print_welcome:-
             why_question(F),!;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
            print_prompt(bot),write(F), write(' is false.'), nl,!,
            read_agree(_), !,
-           initial(F),!).
+           whynot_question(F),!).
 
 conversations:-
         repeat,
