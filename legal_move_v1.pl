@@ -12,8 +12,8 @@ fact(1, "Yes, it is a initial fact").
 fact(2, "No, I need some explanations about this fact").
 
 
-choice(1, "Yes, I agree").
-choice(2, "No, I disagree").
+choice(1, "Yes, I am satisfied. Exit.").
+choice(2, "No, I need more explanations.").
 
 
 answer(1, "Yes").
@@ -111,7 +111,7 @@ why_rule(F):-
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
-    write("Computer: we have a different rule"),nl, halt.
+    write("Computer: we have a different rule"),nl.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -200,6 +200,19 @@ read_fact(F) :-
     ).
 
 
+read_agree(Nanswer) :-
+    write("Computer: Are you satisfied with the results? or you require additional explanations"),nl,
+    write_choice_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Nanswer),
+    (   Nanswer =:= 1
+    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ;   Nanswer =:= 2
+    ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
+    ;   write('Not a valid choice, try again...'), nl
+    ).
+
 read_answer(Nanswer) :-
     write_answer_list,
     print_prompt(user),
@@ -211,8 +224,6 @@ read_answer(Nanswer) :-
     ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
     ;   write('Not a valid choice, try again...'), nl
     ).
-
-
 
 
 
@@ -290,18 +301,21 @@ initial(F):-
            whynot_question(F),!).
 
 chat:-
-	write_node_list,!,
+		write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
 
 print_welcome:-
+        write("Computer: What do you want to know?"), nl,
         print_prompt(user),
         read(F),nl,
         (deduce(F,node(_ID, F, _R, _DAG))
             -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-            why_question(_Number),!;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
+            read_agree(_), !,
+            why_question(F),!;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
            print_prompt(bot),write(F), write(' is false.'), nl,!,
+           read_agree(_), !,
            initial(F),!).
 
 conversations:-
