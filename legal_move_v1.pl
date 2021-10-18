@@ -1,5 +1,5 @@
 % :- [readin].
-:-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3.
+:-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
 node(3, tier1(manchester), initial_fact, []).
@@ -43,11 +43,7 @@ countNumbers(Numbers) :-
  
 check_antecedants([],[]).
 check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
-    (   node(ID, H, R , DAG)
-    -> assert(believe(H)), !                    % statement 2. Ifs=l:a→tandl∈Ri
-    ;
-       assert(not_believe(H)),!
-    ),
+    node(ID, H, R , DAG), 
     check_antecedants(T, NodeList).
 
 
@@ -57,7 +53,14 @@ why(F):-                                              % legal move 1: If s = why
     print_prompt(bot),                              % legal move 6:
     write("Because it is an initial fact"), nl,
      \+ user_fact(F, initial_fact),
-    write("Computer: I have identify the disagreement. "), write(F),write(" is a system's initial fact, not a user initial fact"),nl, !, halt.
+    write("Computer: I have identify the disagreement. "), write(F),write(" is a system's initial fact, not a user initial fact"),nl, 
+    assert(different(F)),!, halt.
+
+% why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
+   % node(_N, F, initial_fact, _NL), !,
+   % print_prompt(bot),                             
+   % write("Because it is an initial fact"), nl.
+  
 
 why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
     user_fact(F, initial_fact), !,
@@ -138,7 +141,8 @@ whynot(F):-
     \+ node(_N, F, initial_fact, []), !,
     \+ user_fact(F,initial_fact), !,
     assert(user_fact(F,initial_fact)), !,
-    write("Computer: I have identify the disagreement. "), write(F),write(" is a user's initial fact, not a system's initial fact"),nl, !, halt
+    write("Computer: I have identify the disagreement. "), write(F),write(" is a user's initial fact, not a system's initial fact"),nl, 
+    assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -151,7 +155,8 @@ why_rule(F):-
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
-    write("Computer: we have a different rule"),nl.
+    write("Computer: I have identified the disagreement. We have a different rule."),nl,
+    assert(different(F)),!,halt.
 
 why_fact(Fact):-
      \+ node(_N, Fact, initial_fact, []), !,
@@ -297,7 +302,7 @@ initial(F):-
            whynot_question(F),!).
 
 chat:-
-		write_node_list,!,
+	write_node_list,!,
         write_rule_list,!,
         print_welcome,
         conversations.
@@ -306,22 +311,26 @@ print_welcome:-
         write("Computer: What do you want to know?"), nl,
         print_prompt(user),
         read(F),nl,
-        (deduce(F,node(_ID, F, _R, _DAG))
+        (
+            deduce(F,node(_ID, F, _R, _DAG))
             -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
             read_agree(_), !,
-            why_question(F),!;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
+            why_question(F),!
+        ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
            print_prompt(bot),write(F), write(' is false.'), nl,!,
            read_agree(_), !,
-           whynot_question(F),!).
+           whynot_question(F),!
+           ).
 
 conversations:-
         repeat,
-        print_prompt(bot),
-        write('Do you have any questions?'),nl,
-        read_answer(_Nanswer),nl,
+        read_agree(_),  
+        write("Computer: What do you want to know?"), nl,
+        print_prompt(user),
+        read(F),
         read_question(Number),
-        gen_reply(Number),
-        (Number = 3, !; fail).
+        gen_reply(Number, F),
+        (\+ different(_), !,fail).
  
 
 print_prompt(bot):-
@@ -332,21 +341,17 @@ my_icon('Computer ').
 user_icon('User').
 
 
-gen_reply(1):-
-        write('Please enter the fact related to this question: '), nl,
-        print_prompt(user),
-        read(Fact),nl, !,
-        why(Fact),nl.
+gen_reply(1, Fact):-
+        write('You selected question: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
+        assert(not_believe(Fact)), !,
+        why(Fact), ! .
 
-gen_reply(2):-
-        write('Please enter the fact related to this question: '), nl,
-        print_prompt(user),
-        read(Fact),nl, !,
-        why(Fact),nl.
-
+gen_reply(2, Fact):-
+        write("User: Why don't you beleive "), write(Fact), write("?"), nl, !,        
+        assert(believe(Fact)), !, 
+        whynot(Fact), !.
 
 gen_reply(3):-
-        write("Bye"),nl,
-        flush_output.
+        write("Bye"),nl,!, halt.
 
 
