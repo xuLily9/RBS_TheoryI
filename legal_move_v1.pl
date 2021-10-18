@@ -55,11 +55,6 @@ why(F):-                                              % legal move 1: If s = why
      \+ user_fact(F, initial_fact),
     write("Computer: I have identify the disagreement. "), write(F),write(" is a system's initial fact, not a user initial fact"),nl, 
     assert(different(F)),!, halt.
-
-% why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
-   % node(_N, F, initial_fact, _NL), !,
-   % print_prompt(bot),                             
-   % write("Because it is an initial fact"), nl.
   
 
 why(F):-                                              % legal move 1: If s = why(t) and t ∈ Fi then initial(t)
@@ -76,7 +71,8 @@ why(F):-                                             % legal move 2: Ifs=why(t) 
     write(" is deduced using rule "),
     write(R),
     write(" from "),
-    write(NL), nl.
+    write(NL), nl,
+    read_agree(_).
 
 
 check([],[]).
@@ -328,9 +324,17 @@ conversations:-
         write("Computer: What do you want to know?"), nl,
         print_prompt(user),
         read(F),
-        read_question(Number),
-        gen_reply(Number, F),
-        (\+ different(_), !,fail).
+        (
+            deduce(F,node(_ID, F, _R, _DAG))
+            -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+            read_agree(_), !,
+            why_question(F),!
+        ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
+           print_prompt(bot),write(F), write(' is false.'), nl,!,
+           read_agree(_), !,
+           whynot_question(F),!
+           ),
+        different(_),!,halt.
  
 
 print_prompt(bot):-
