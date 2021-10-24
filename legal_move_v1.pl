@@ -71,8 +71,7 @@ why(F):-                                             % legal move 2: Ifs=why(t) 
     write(" is deduced using rule "),
     write(R),
     write(" from "),
-    write(NL), nl,
-    read_agree(_).
+    write(NL), nl.
 
 
 check([],[]).
