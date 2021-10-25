@@ -12,6 +12,10 @@ choice(2, "No, I need more explanations.").
 reason(1, "Because of a rule.").
 reason(2, "It's an initial fact.").
 
+answer(1, "An antecedant").
+answer(2, "A conclusion").
+answer(3, "Exit").
+
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
 
@@ -31,30 +35,19 @@ print_welcome:-
     (
         deduce(F,node(_ID, F, _R, _DAG))
         -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-        read_agree(_), !,
+        read_agree, !,
         why_question(F)
     ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
        print_prompt(bot),write(F), write(' is false.'), nl,!,
-       read_agree(_), !,
+       read_agree, !,
        whynot_question(F),!
        ).
 
 conversations:-
     repeat,
-    read_agree(_),  
+    read_agree,  
     write("Computer: What do you want to know?"), nl,
-    print_prompt(user),
-    read(F),
-    (
-        deduce(F,node(_ID, F, _R, _DAG))
-        -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-        read_agree(_), !,
-        why_question(F),!
-    ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
-       print_prompt(bot),write(F), write(' is false.'), nl,!,
-       read_agree(_), !,
-       whynot_question(F),!
-       ),
+    read_answer(_N),
     different(_),!,halt.
  
 print_prompt(bot):-
@@ -213,7 +206,7 @@ read_fact(F) :-
     ).
 
 
-read_agree(Nanswer) :-
+read_agree :-
     write("Computer: Are you satisfied with the results? or you require additional explanations"),nl,
     write_choice_list,
     print_prompt(user),
@@ -225,6 +218,33 @@ read_agree(Nanswer) :-
     ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
     ;   write('Not a valid choice, try again...'), nl
     ).
+
+
+read_answer(Nanswer) :-
+    write_answer_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(Nanswer),
+    (   Nanswer =:= 3
+    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ;    Nanswer =:= 2
+    ->  print_prompt(bot), write("Please enter the conclusion: "),nl,!
+     ;   Nanswer =:= 1
+    ->  print_prompt(bot), write("Please enter the antecedant: "),nl,!
+    ;   write('Not a valid choice, try again...'), nl
+    ),
+    print_prompt(user),
+    read(F),
+    (
+        deduce(F,node(_ID, F, _R, _DAG))
+        -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+        read_agree, !,
+        why_question(F),!
+    ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
+       print_prompt(bot),write(F), write(' is false.'), nl,!,
+       read_agree, !,
+       whynot_question(F),!
+       ).
 
 
 write_why_list :-
@@ -273,6 +293,10 @@ write_fact_list :-
 write_fact_list.
 
 
-
+write_answer_list :-
+    answer(N, Name),
+    write(N), write('. '), write(Name), nl,
+    fail.
+write_answer_list.
 
 
