@@ -300,3 +300,33 @@ write_answer_list :-
 write_answer_list.
 
 
+
+% For a non-empty list: flatten the head and flatten the tail and
+flat_list([],[]).
+flat_list([Head|InTail], [Head|OutTail]) :-
+    Head \= [],
+    Head \= [_|_],
+    flat_list(InTail,OutTail).
+flat_list([Head|InTail],Out):-
+    flat_list(Head,FlatHead),
+    flat_list(InTail,OutTail),
+    append(FlatHead,OutTail,Out).
+
+
+% flat_list = [item for sublist in t for item in sublist]
+% flat_list = []
+% for sublist in t:
+%    for item in sublist:
+%        flat_list.append(item)
+
+flat_list([],[]).
+
+flat_list([Head|InTail],[Head|N]):-
+    \+ is_list(Head),!,
+    flat_list(InTail,N).
+
+    
+len([],0).
+len([_|T],L):-
+    len(T,LT),
+    L is LT+1.
