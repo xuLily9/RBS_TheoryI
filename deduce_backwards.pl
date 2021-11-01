@@ -1,4 +1,4 @@
-:-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
+:-dynamic node/4.
 
 deduce_backwards(Q, node(ID, Q, R , DAG)):-
    node(ID, Q, R , DAG).
