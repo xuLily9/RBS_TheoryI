@@ -40,5 +40,21 @@ why(F):-                                             % legal move 2: Ifs=why(t) 
     write(F),
     write(" is deduced using rule "),
     write(R),
-    write(" from "),
-    write(NL), nl.
+    write(" from facts:"),
+    pretty_print_node_list(NL,Pretty),
+    write(Pretty).
+
+
+pretty_print_node_list([],[]).
+pretty_print_node_list([Head|Tail],_Out):-
+    print_top_level(Head,_HeadPretty),
+    pretty_print_node_list(Tail,_TailPretty).
+
+print_top_level(node(_ID,Fact,_Rule,_NL),Pretty):-
+    pretty_fact(Fact,Pretty).
+
+pretty_fact(Fact,Fact):-
+    write(Fact),nl.
+
+
+
