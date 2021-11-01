@@ -1,4 +1,4 @@
-:- [deduce_backwards].
+:- [deduce_backwards],[why_question],[whynot_question].
 :-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
