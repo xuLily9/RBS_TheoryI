@@ -53,8 +53,8 @@ why_rule(F):-
 
 check([],[]).
 check([H|T], [H|N]):-
-    \+ deduce(H, _DAG),!, 
+    \+ deduce_backwards(H, _DAG),!, 
     check(T, N).
 check([H|T], N):-
-    deduce(H,_DAG),!,
+    deduce_backwards(H,_DAG),!,
     check(T,N).
