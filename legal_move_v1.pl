@@ -125,8 +125,9 @@ why(F):-                                             % legal move 2: Ifs=why(t) 
     write(F),
     write(" is deduced using rule "),
     write(R),
-    write(" from "),
-    write(NL), nl.
+    write(" from facts:"),
+    pretty_print_node_list(NL,Pretty),
+    write(Pretty), nl.
 
 
 
@@ -302,32 +303,17 @@ write_answer_list.
 
 
 
-% For a non-empty list: flatten the head and flatten the tail and
-flat_list([],[]).
-flat_list([Head|InTail], [Head|OutTail]) :-
-    Head \= [],
-    Head \= [_|_],
-    flat_list(InTail,OutTail).
-flat_list([Head|InTail],Out):-
-    flat_list(Head,FlatHead),
-    flat_list(InTail,OutTail),
-    append(FlatHead,OutTail,Out).
+pretty_print_node_list([],[]).
+pretty_print_node_list([Head|Tail],Out):-
+    print_top_level(Head,HeadPretty),
+    pretty_print_node_list(Tail,TailPretty).
+
+print_top_level(node(_ID,Fact,_Rule,_NL),Pretty):-
+    pretty_fact(Fact,Pretty).
+
+pretty_fact(Fact,Fact):-
+    write(Fact),nl.
 
 
-% flat_list = [item for sublist in t for item in sublist]
-% flat_list = []
-% for sublist in t:
-%    for item in sublist:
-%        flat_list.append(item)
 
-flat_list([],[]).
 
-flat_list([Head|InTail],[Head|N]):-
-    \+ is_list(Head),!,
-    flat_list(InTail,N).
-
-    
-len([],0).
-len([_|T],L):-
-    len(T,LT),
-    L is LT+1.
