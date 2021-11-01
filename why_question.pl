@@ -1,7 +1,4 @@
-:- [legal_move_v1].
 :-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
-
-
 
 % why question section 
 why_question(Fact) :-  % If the conclusion is true
