@@ -1,8 +1,6 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
 :-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
-node(1, residence(mary, manchester), initial_fact,[]).
-node(2, residence(karl, manchester), initial_fact,[]).
-node(3, tier1(manchester), initial_fact, []).
+
 
 fact(1, "Yes, it is a initial fact").
 fact(2, "No, I need some explanations about this fact").
@@ -13,12 +11,9 @@ choice(2, "No, I need more explanations.").
 reason(1, "Because of a rule.").
 reason(2, "It's an initial fact.").
 
-answer(1, "An antecedant").
-answer(2, "A conclusion").
-answer(3, "Exit").
 
-rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B)],can_meet_indoors(X, A)).
-rule(2,[tier1(X)], indoor_meetings_allowed(X)).
+answer(1, "A fact").
+answer(3, "Exit").
 
 % start the conversations
 
