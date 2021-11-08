@@ -80,7 +80,8 @@ read_answer(Nanswer) :-
     (   Nanswer =:= 2
     ->  print_prompt(bot), write('Bye'),nl,!, halt 
      ;   Nanswer =:= 1
-    ->  print_prompt(bot), write("Please enter a fact"),nl,!,
+    ->   print_prompt(bot), write("Please enter a fact on the list"),nl,
+        write_ask_list,
         read_question(_F),!
     ;   write('Not a valid choice, try again...'), nl,fail
     ).
@@ -90,7 +91,8 @@ read_answer(Nanswer) :-
 read_question(Fact):-
     repeat,
     print_prompt(user),
-    read(Fact),
+    read(N),
+    node(N, Fact, _, _),
     (  
     user_question(Fact),!
     ->  write("Computer: You have already asked this fact. Please enter a different fact."),nl,fail
