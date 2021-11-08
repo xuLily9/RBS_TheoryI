@@ -51,3 +51,10 @@ write_answer_list :-
     write(N), write('. '), write(Name), nl,
     fail.
 write_answer_list.
+
+
+write_ask_list:-
+    node(N, Fact, _, _),
+    write(N), write('. '),  write(Fact), nl,
+    fail.
+write_ask_list.
