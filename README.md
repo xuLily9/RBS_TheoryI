@@ -7,4 +7,4 @@
 `[legal_move_v1]`
 
 2. In the example louise1.pl, here is the screenshot. 
-![alt text](image.jpg) 
+![screenshot](image.png) 
