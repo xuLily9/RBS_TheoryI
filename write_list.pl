@@ -60,6 +60,7 @@ write_answer_list.
 %% It should also allow the user to ask "why not" for everything in N_user_computer (facts the
 %% user (should) think the computer doesn't know) and which the users hasn't asked before.
 write_ask_list:-
+    %% LOUISE: What if the node was labelled unprovable?
     node(N, Fact, _, _),
     write(N), write('. '),  write(Fact), nl,
     fail.
