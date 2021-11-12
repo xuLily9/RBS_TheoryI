@@ -24,6 +24,9 @@ chat:-
 
 
 print_welcome:-
+    %% LOUISE:  You should replace these four lines with the question you have picked.
+    %% The question can be coded into the example file  then the computer should start with
+    %% deducing backwards and announce its conclusion and then ask "Do you agree?"
     write("Computer: What do you want to know?"), nl,
     print_prompt(user),
     read(F),
@@ -32,10 +35,12 @@ print_welcome:-
         deduce_backwards(F,node(_ID, F, _R, _DAG))
         -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
         read_agree, !,
+        %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
         why_question(F)
     ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
        print_prompt(bot),write(F), write(' is false.'), nl,!,
        read_agree, !,
+       %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
        whynot_question(F),!
        ).
 
@@ -50,7 +55,11 @@ print_prompt(bot):-
         my_icon(X), write(X), write(': '), flush_output.
 print_prompt(user):-
         user_icon(X), write(X), write(': '), flush_output.
+
+%% LOUISE: I recommend giving your program a name - e.g., "Covid Advice System" and using that instead of "Computer"
 my_icon('Computer ').
+
+%% LOUISE: I might use "User Response" or "Your Response" here instead of "User"
 user_icon('User').
 
 
@@ -93,6 +102,8 @@ read_question(Fact):-
     print_prompt(user),
     read(N),
     node(N, Fact, _, _),
+    %% LOUISE:  It's inelegant that this is repeated from the start, can you only do this once?
+    %% LOUISE:  We are missing a cases for when the computer has responded to the user with a why not question.
     (  
     user_question(Fact),!
     ->  write("Computer: You have already asked this fact. Please enter a different fact."),nl,fail
@@ -101,10 +112,12 @@ read_question(Fact):-
         (deduce_backwards(Fact,node(_ID, Fact, _R, _DAG))
         -> print_prompt(bot),write(Fact), write(' is true.'), nl, ! ,
         read_agree, !,
+        %% LOUISE: At this point the computer should add Fact to N_computer_user and Y_user_computer
         why_question(Fact),!
         ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
         print_prompt(bot),write(Fact), write(' is false.'), nl,!,
         read_agree, !,
+        %% LOUISE: At this point the computer should add Fact to Y_computer_user and N_user_computer
         whynot_question(Fact),!
        )
      ).

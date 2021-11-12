@@ -40,15 +40,25 @@ whynot(F):-
     ; write('Not a valid choice, try again...'), nl, fail
     ).
 
-
+%% LOUISE: Case where rule is missing is missting.
+%% IN this case the computer
 why_rule(F):-
-    write("User: Please enter rule number: "), 
+    write("User: Please enter rule number: "),
+    %% LOUISE: R should be added to YR_computer_user
     read(R),
     rule(R, A, F),                                 % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
+    %% LOUISE: Computer adds all positive literals in A to Y_computer_user
+    %% LOUISE: Computer adds all negative literals in a to N_computer user
+    %% LOUISE: Computer then selects a fact that is in Y_computer_user and is not a node and asks
+    %% why the user believes that fact.
+    %% OR the computer picks a fact that is in N_computer_user and is a node and asks why the user
+    %% does not believe that fact.
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
     write("Computer: I have identified the disagreement. We have a different rule."),nl,
+    %% LOUISE: !!!!!! But you don't have a different rule here.  The computer has the rule R but
+    %% doesn't agree about the antecedants A !!!
     assert(different(F)),!,halt.
 
 check([],[]).
