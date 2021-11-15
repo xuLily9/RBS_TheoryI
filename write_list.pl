@@ -1,6 +1,54 @@
 
 %% LOUISE:  both write_why_list and write_why_not_list feel a bit redundant to me.
 %% The user has already said they want an explanation.
+
+
+%% Pretty print the facts with nature language
+fact_description(residence(X,Y)):-
+     write(X), write(" lives in "), write(Y).
+
+fact_description(tier1(X)):-
+     write(X), write(" is in tier1"), nl.
+
+fact_description(indoor_meetings_allowed(Y)):-
+     write(Y), write(" allows indoor meetings").
+
+fact_description(can_meet_indoors(X, A)):-
+    write(X), write(" and "), write(A),write(" can meet indoors").
+ 
+print_fact(Fact):-
+    fact_description(Fact).
+
+write_fact_list :-
+    write("FACT: "),nl,
+     node(_N, Fact, initial_fact, []),
+     print_fact(Fact),nl,
+     fail.
+write_fact_list.
+
+
+%% Pretty print the rules 
+rule_description(rule(1,_,_)):-
+    write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors."),nl.
+
+rule_description(rule(2,_,_)):-
+    write("2. If there is a city in tier1 then this city allow indoor meetings"),nl.
+
+print_rule(Rule):-
+    rule_description(Rule).
+
+write_rule_list :-
+    write('RULE: '),nl,
+    rule(N, Antecedants, C),
+    rule_description(rule(N, Antecedants, C)),
+    fail.
+write_rule_list.
+
+
+
+
+
+
 write_why_list :-
     write(1), write('. '), write("Why do you beleive?"),nl,
     write(2), write('. '), write("Exit"), nl.
@@ -24,29 +72,6 @@ write_reason_list :-
 write_reason_list.
 
 
-write_node_list :-
-    write('FACT:'),nl,
-    node(N, Fact, initial_fact, []),
-    write(N), write('. '), write(Fact), write(' is an initial fact'),nl,
-    fail.
-write_node_list.
-
-
-write_rule_list :-
-    write('RULE:'),nl,
-    rule(N, Antecedants, C),
-    write(N), write('. If '), write(Antecedants), write(' are satisfied then '), write(C), write(' is true'), nl,
-    fail.
-write_rule_list.
-
-
-write_fact_list :-
-    fact(N, Name),
-    write(N), write('. '), write(Name), nl,
-    fail.
-write_fact_list.
-
-
 write_answer_list :-
     answer(N, Name),
     write(N), write('. '), write(Name), nl,
@@ -65,3 +90,5 @@ write_ask_list:-
     write(N), write('. '),  write(Fact), nl,
     fail.
 write_ask_list.
+
+
