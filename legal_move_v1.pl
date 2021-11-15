@@ -15,9 +15,11 @@ reason(2, "It's an initial fact.").
 answer(1, "A fact").
 answer(2, "Exit").
 
+question(1,"Can Karl and mary can meet?").
+
 % start the conversations
 chat:-
-    write_node_list,!,
+    write_fact_list,!,
     write_rule_list,!,
     print_welcome,
     conversations.
@@ -27,22 +29,32 @@ print_welcome:-
     %% LOUISE:  You should replace these four lines with the question you have picked.
     %% The question can be coded into the example file  then the computer should start with
     %% deducing backwards and announce its conclusion and then ask "Do you agree?"
-    write("Computer: What do you want to know?"), nl,
-    print_prompt(user),
-    read(F),
-    assert(user_question(F)),!,
-    (
-        deduce_backwards(F,node(_ID, F, _R, _DAG))
-        -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
-        read_agree, !,
+    initial_question(N,Q,Pretty),
+    write("Question: "), write(Pretty),nl,
+    conclusion(Q).
+    %%print_prompt(user),
+   %% read(F).
+   %% assert(user_question(F)),!,
+   %% (
+   %%     deduce_backwards(F,node(_ID, F, _R, _DAG))
+   %%     -> print_prompt(bot),write(F), write(' is true.'), nl, ! ,
+   %%     read_agree, !,
         %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
-        why_question(F)
-    ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
-       print_prompt(bot),write(F), write(' is false.'), nl,!,
-       read_agree, !,
+   %%     why_question(F)
+   %% ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
+   %%    print_prompt(bot),write(F), write(' is false.'), nl,!,
+   %%    read_agree, !,
        %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
-       whynot_question(F),!
-       ).
+   %%    whynot_question(F),!
+    %%   ).
+
+conclusion(F):-
+    deduce_backwards(F,node(_ID, F, _R, _DAG))
+    -> print_prompt(bot),print_fact(F), write(' is true.'), write("Do you agree?"),nl, !;
+    print_prompt(bot),write(F), write(' is false.'),write("Do you agree?"), nl,!.
+
+
+
 
 conversations:-
     repeat,
@@ -57,10 +69,10 @@ print_prompt(user):-
         user_icon(X), write(X), write(': '), flush_output.
 
 %% LOUISE: I recommend giving your program a name - e.g., "Covid Advice System" and using that instead of "Computer"
-my_icon('Computer ').
+my_icon("Covid Advice System").
 
 %% LOUISE: I might use "User Response" or "Your Response" here instead of "User"
-user_icon('User').
+user_icon("Your Response").
 
 
 
