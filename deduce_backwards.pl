@@ -18,6 +18,7 @@ check_antecedants([],[]).
 check_antecedants([H|T], [node(ID, H, R, DAG)|NodeList]):-
     deduce_backwards(H, node(ID, H, R, DAG)),
     check_antecedants(T, NodeList).
+
 check_antecedants([not(H)|T], [node(ID_n,not(H),unprovable,[])|NodeList]):-
     \+ deduce_backwards(H, _DAG), !,
     countNumbers(Numbers),
