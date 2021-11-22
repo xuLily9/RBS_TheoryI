@@ -1,4 +1,4 @@
-:-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
+% :-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
 
 % why not question section                         
 whynot_question(Fact) :- % If the conlusion is false
@@ -17,6 +17,7 @@ whynot_question(Fact) :- % If the conlusion is false
     ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(_X, _Y)), !, halt
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
+
 
 
 whynot(F):-
@@ -40,19 +41,25 @@ whynot(F):-
     ; write('Not a valid choice, try again...'), nl, fail
     ).
 
+
+
+    
+
 %% LOUISE: Case where rule is missing is missting.
 %% IN this case the computer
 why_rule(F):-
     write("User: Please enter rule number: "),
     %% LOUISE: R should be added to YR_computer_user
     read(R),
-    rule(R, A, F),                                 % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
+    rule(R, A, F),      
+                              % legal move 8: For some rule label, l ∈ Y Rij then the player may state different rule(l, j, i).
     %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
     %% LOUISE: Computer then selects a fact that is in Y_computer_user and is not a node and asks
     %% why the user believes that fact.
     %% OR the computer picks a fact that is in N_computer_user and is a node and asks why the user
     %% does not believe that fact.
+
     check(A, N),
     print_prompt(bot),
     write("I cannot deduce "),  write(N), nl,
@@ -64,7 +71,9 @@ why_rule(F):-
 check([],[]).
 check([H|T], [H|N]):-
     \+ deduce_backwards(H, _DAG),!, 
+    assert(n_computer_user(H)),!,
     check(T, N).
 check([H|T], N):-
     deduce_backwards(H,_DAG),!,
+    assert(Y_computer_user(H)),!,
     check(T,N).
