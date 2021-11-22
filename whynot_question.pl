@@ -1,4 +1,4 @@
-% :-dynamic node/4, user_fact/2, not_believe/1, believe/1, user_rule/3, different/1.
+
 
 % why not question section                         
 whynot_question(Fact) :- % If the conlusion is false
@@ -14,7 +14,7 @@ whynot_question(Fact) :- % If the conlusion is false
         assert(believe(Fact)), !, 
         whynot(Fact), !
     ;   Number =:= 2
-    ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(_X, _Y)), !, halt
+    ->  print_prompt(bot), write('Bye'),nl, retract(user_fact(_X, _Y,_,_)), !, halt
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
@@ -34,8 +34,8 @@ whynot(F):-
     ;   Number  =:= 2
     -> write("User: It's an initial fact."),nl,                   % legal move 6
     \+ node(_N, F, initial_fact, []), !,
-    \+ user_fact(F,initial_fact), !,
-    assert(user_fact(F,initial_fact)), !,
+    \+ user_fact(_,F,initial_fact,_), !,
+    assert(user_fact(_,F,initial_fact,_)), !,
     write("Computer: I have identify the disagreement. "), write(F),write(" is a user's initial fact, not a system's initial fact"),nl, 
     assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
@@ -71,9 +71,9 @@ why_rule(F):-
 check([],[]).
 check([H|T], [H|N]):-
     \+ deduce_backwards(H, _DAG),!, 
-    assert(n_computer_user(H)),!,
+    assert(n_computer_user(H)),
     check(T, N).
 check([H|T], N):-
     deduce_backwards(H,_DAG),!,
-    assert(Y_computer_user(H)),!,
+    assert(y_computer_user(H)),!,
     check(T,N).
