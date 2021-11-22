@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/1,y_user_computer/1,n_user_computer/1,yr_user_computer/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/1,y_user_computer/1,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -8,6 +8,8 @@ option(1,"Computer use a rule that I didn't know").
 option(2,"Ask why about any fact in Y_user_computer that I haven't asked about before").
 option(3, "Ask whynot about any fact in N_user_computer that I haven't asked about before.").
 
+reason(1, "It's an initial fact.").
+reason(2, "It is deduced by a rule.").
 
 fact(1, "Yes, it is a initial fact").
 fact(2, "No, I need some explanations about this fact").
@@ -15,8 +17,7 @@ fact(2, "No, I need some explanations about this fact").
 choice(1, "Yes, I am satisfied. Exit.").
 choice(2, "No, I need more explanations.").
 
-reason(1, "Because of a rule.").
-reason(2, "It's an initial fact.").
+
 
 
 
@@ -55,7 +56,7 @@ conclusion(F):-
         assert(y_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
         assert(n_user_computer(F)),!,
         assert(asked_question(F)),!,  
-        whynot_question(F),!.
+        whynot(F),!.
 
 
 
@@ -75,16 +76,18 @@ disagree(F):-
     ).
 
 
+
 option :-
     print_prompt(bot),
     write("Please select one of the option:"),nl,
     write("1. I don't know about this rule used by computer."),nl,
-    write_why_list,
+    write_why_list,!,
+    write_whynot_list,!,
     print_prompt(user),
     prompt(_, ''),
     read(Nanswer),
     (   Nanswer =:= 1
-    ->  print_prompt(bot), write('Bye'),nl,!, halt
+    ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!, halt
     ;   Nanswer =:= 2
     ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
     ;   write('Not a valid choice, try again...'), nl
