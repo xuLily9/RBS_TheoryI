@@ -20,37 +20,55 @@ print_fact(Fact):-
     fact_description(Fact).
 
 write_fact_list :-
-    write("FACT: "),nl,
-     node(N, Fact, initial_fact, []),
-     print_fact(Fact),nl,
-     fail.
+    write("USER FACT: "),nl,
+    user(N, Fact, initial_fact, []),
+    print_fact(Fact),nl,
+    fail.
 write_fact_list.
 
 
-%% Pretty print the rules 
-rule_description(rule(1,_,_)):-
+%% Pretty print the user rules 
+rule_description(1):-
     write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors."),nl.
 
-rule_description(rule(2,_,_)):-
-    write("2. If there is a city in tier1 then this city allow indoor meetings"),nl.
+rule_description(2):-
+    write("2. If there is a city in tier1 then this city allow indoor meetings."),nl.
 
 print_rule(Rule):-
     rule_description(Rule).
 
 write_rule_list :-
-    write('RULE: '),nl,
-    rule(N, Antecedants, C),
-    rule_description(rule(N, Antecedants, C)),
+    nl,
+    write("USER RULE: "),nl,
+    user_rule(N, Antecedants, C),
+    rule_description(N),
     fail.
 write_rule_list.
 
 
 
 
+%% Pretty print the system rules 
+r_description(1):-
+    write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors").
 
-write_whynot_list :-
-    write(1), write('. '), write("Why don't you beleive?"),nl,
-    write(2), write('. '), write("Exit"), nl.
+r_description(2):-
+    write("2. If there is a city in tier1 then this city allow indoor meetings").
+
+system_rule(Rule):-
+    r_description(Rule).
+
+
+
+write_why_list:-
+    %% LOUISE: What if the node was labelled unprovable?
+    y_user_computer(F),
+    \+ asked_question(F),
+    write("Why do you beleive "), write(F), write("?"),nl,
+    fail.
+write_why_list.
+
+
 
 
 write_choice_list :-
@@ -78,11 +96,7 @@ write_answer_list :-
     fail.
 write_answer_list.
 
-write_why_list:-
-    y_user_computer(Fact),
-    write(". Why do you beleive "),  write(Fact), write("?"), nl,
-    fail.
-write_why_list.
+
 
 write_option_list :-
     option(N, Name),
