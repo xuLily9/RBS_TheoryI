@@ -21,7 +21,7 @@ print_fact(Fact):-
 
 write_fact_list :-
     write("USER FACT: "),nl,
-    user(N, Fact, initial_fact, []),
+    user_fact(_N, Fact, initial_fact, []),
     print_fact(Fact),nl,
     fail.
 write_fact_list.
@@ -40,7 +40,7 @@ print_rule(Rule):-
 write_rule_list :-
     nl,
     write("USER RULE: "),nl,
-    user_rule(N, Antecedants, C),
+    user_rule(N, _Antecedants, _C),
     rule_description(N),
     fail.
 write_rule_list.
@@ -59,23 +59,34 @@ system_rule(Rule):-
     r_description(Rule).
 
 
+% write_why_list(N):-
+%    y_user_computer(F),
+%    \+ asked_question(F),
+%   N1 is N+1,
+%    aggregate_all(count, y_user_computer(F), Count),
+%    N1 < Count,
+%    write(N1),write(".Why do you beleive "), print_fact(F), write("?"),nl,
+%    fail.
 
 write_why_list:-
     %% LOUISE: What if the node was labelled unprovable?
     y_user_computer(F),
     \+ asked_question(F),
-    write("Why do you beleive "), write(F), write("?"),nl,
+    write("Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_why_list.
 
 
 
-
-write_choice_list :-
-    choice(N, Name),
-    write(N), write('. '), write(Name), nl,
+write_whynot_list:-
+    %% LOUISE: What if the node was labelled unprovable?
+    n_user_computer(not(F)),
+    \+ asked_question(not(F)),
+    write("Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
-write_choice_list.
+write_whynot_list.
+
+
 
 write_agree_list :-
     agree(N, Name),
@@ -88,6 +99,18 @@ write_reason_list :-
     write(N), write('. '), write(Name), nl,
     fail.
 write_reason_list.
+
+
+
+
+
+write_choice_list :-
+    choice(N, Name),
+    write(N), write('. '), write(Name), nl,
+    fail.
+write_choice_list.
+
+
 
 
 write_answer_list :-
