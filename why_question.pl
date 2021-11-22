@@ -70,16 +70,20 @@ question(Fact) :-
 
 pretty_print_node_list([],"").
 pretty_print_node_list([Head|Tail],Out):-
-    print_top_level(Head,HeadPretty),
+    print_top_level(Head,_HeadPretty),
     pretty_print_node_list(Tail,Out).
 
 print_top_level(node(_ID,Fact,_Rule,_NL),Pretty):-
     pretty_fact(Fact,Pretty).
+print_top_level(node(_ID,not(Fact),unprovable,_NL),Pretty):-
+    pretty_fact(not(Fact),Pretty).
 
 pretty_fact(Fact,Fact):-
     assert(y_user_computer(Fact)),!,
-    assert(n_user_computer(Fact)),!,
     print_fact(Fact),nl.
 
 
+pretty_fact(not(Fact),Fact):-
+    assert(n_user_computer(not(Fact))),!,
+    print_fact(Fact),nl.
 
