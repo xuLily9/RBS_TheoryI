@@ -2,20 +2,7 @@
 % why question section
 
 
-why_question(F) :-  
-    repeat,
-    write_why_list,
-    print_prompt(user),
-    read(N),
-    (    N =:= 1
-        ->write('You selected: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
-        %% LOUISE:  At this point Fact should also be removed from the list of facts the user can ask about.
-        assert(asked_question(Fact)),!,
-        assert(n_computer_user(Fact)), !,
-        assert(y_user_computer(Fact)),!,
-        why(Fact), ! 
-    ;   write('Not a valid choice, try again...'), nl, fail
-    ).
+
 
 why(F):-                                              
     node(_N, F, initial_fact, _NL), !,
@@ -47,24 +34,6 @@ why(F):-
 
 
 
-question(Fact) :-  
-    repeat,
-    %% LOUISE: I recommend putting the first fact as a choice and then using write_ask_list here.
-    write_ask_list,
-    print_prompt(user),
-    read(N),
-    node(N, Fact, _, _),
-    (   node(N, Fact, _, _)
-        %y_user_computer(Fact)
-        ->write('You selected: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
-        %% LOUISE:  At this point Fact should also be removed from the list of facts the user can ask about.
-        assert(asked_question(Fact)),!,
-        assert(n_computer_user(Fact)), !,
-        assert(y_user_computer(Fact)),!,
-        why(Fact), ! 
-    ;   write('Not a valid choice, try again...'), nl, fail
-    ).
-
 
 
 
@@ -79,8 +48,13 @@ print_top_level(node(_ID,not(Fact),unprovable,_NL),Pretty):-
     pretty_fact(not(Fact),Pretty).
 
 pretty_fact(Fact,Fact):-
-    assert(y_user_computer(Fact)),!,
-    print_fact(Fact),nl.
+    \+ y_user_computer(_N,Fact)
+    ->  aggregate_all(count, y_user_computer(_,_), Count),
+        N is Count +1,
+        assert(y_user_computer(N,Fact)),!,
+        print_fact(Fact),nl
+    ;
+        print_fact(Fact),nl.
 
 
 pretty_fact(not(Fact),Fact):-
