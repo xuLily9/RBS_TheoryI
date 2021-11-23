@@ -8,7 +8,7 @@ fact_description(residence(X,Y)):-
      write(X), write(" lives in "), write(Y).
 
 fact_description(tier1(X)):-
-     write(X), write(" is in tier1"), nl.
+     write(X), write(" is in tier1").
 
 fact_description(indoor_meetings_allowed(Y)):-
      write(Y), write(" allows indoor meetings").
@@ -59,22 +59,23 @@ system_rule(Rule):-
     r_description(Rule).
 
 
-% write_why_list(N):-
-%    y_user_computer(F),
-%    \+ asked_question(F),
-%   N1 is N+1,
-%    aggregate_all(count, y_user_computer(F), Count),
-%    N1 < Count,
-%    write(N1),write(".Why do you beleive "), print_fact(F), write("?"),nl,
-%    fail.
 
 write_why_list:-
     %% LOUISE: What if the node was labelled unprovable?
-    y_user_computer(F),
+    y_user_computer(N,F),
     \+ asked_question(F),
-    write("Why do you beleive "), print_fact(F), write("?"),nl,
+    write(N),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_why_list.
+
+
+new_list(NameList):-
+    findall(Name,y_user_computer(N,Name),NameList),
+    is_set(NameList).
+
+
+
+
 
 
 
