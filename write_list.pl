@@ -27,6 +27,9 @@ write_fact_list :-
 write_fact_list.
 
 
+
+
+
 %% Pretty print the user rules 
 rule_description(1):-
     write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors."),nl.
@@ -69,10 +72,6 @@ write_why_list:-
 write_why_list.
 
 
-new_list(NameList):-
-    findall(Name,y_user_computer(N,Name),NameList),
-    is_set(NameList).
-
 
 
 
@@ -102,6 +101,11 @@ write_reason_list :-
 write_reason_list.
 
 
+write_initial_list:-
+    initial_question(N,F,Pretty),
+    write(N), write('. '), write(Pretty), nl,
+    fail.
+write_initial_list.
 
 
 
