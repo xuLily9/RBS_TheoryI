@@ -35,9 +35,13 @@ chat:-
 
 print_welcome:-
     nl,
-    initial_question(_,F,Pretty),
-    write("Question: "), write(Pretty),nl,
-    conclusion(F).
+    write("Please select a question: "),nl,
+    write_initial_list,
+    print_prompt(user),
+    read(N),
+    (initial_question(N,F,Pretty),
+     conclusion(F)
+    ).
 
 
 conclusion(F):-
