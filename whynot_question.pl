@@ -43,7 +43,7 @@ why_rule(F):-
     print_prompt(user),
     prompt(_, ''),
     read(Number),
-    assert(yr_computer_user(Number,A,F)),!,    
+    assert(yr_computer_user(Number,A,F)),!,      
         
     %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
