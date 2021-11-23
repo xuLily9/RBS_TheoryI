@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/1,y_user_computer/1,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/1,y_user_computer/2,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -24,7 +24,6 @@ choice(2, "No, I need more explanations.").
 answer(1, "A fact").
 answer(2, "Exit").
 
-question(1,"Can Karl and mary can meet?").
 
 
 chat:-
@@ -47,7 +46,9 @@ conclusion(F):-
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
         disagree(F),!,
         assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
-        assert(y_user_computer(F)),!,  
+        aggregate_all(count, y_user_computer(_,_), Count),
+        N is Count +1,
+        assert(y_user_computer(N,F)),!,  
         assert(asked_question(F)),!,                                   
         why(F)
     ;
@@ -78,26 +79,28 @@ disagree(F):-
 
 
 option :-
+    repeat,
     print_prompt(bot),
     write("Please select one of the option:"),nl,
     write("1. I don't know about this rule used by computer."),nl,
     write_why_list,!,
-    write_whynot_list,!,
+   % mwrite_whynot_list,!,
     print_prompt(user),
     prompt(_, ''),
-    read(Nanswer),
-    (   Nanswer =:= 1
+    read(N),
+    (   N=:= 1
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!, halt
-    ;   Nanswer =:= 2
-    ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
-    ;   write('Not a valid choice, try again...'), nl
+    ;   y_user_computer(N, Fact), N \=1
+    ->  write('You selected: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
+        why(Fact)
+    ;   write('Not a valid choice, try again...'), nl,fail
     ).
 
 conversations:-
     repeat,
     option, 
-    write("Computer: What do you want to know?"), nl,
-    read_answer(_N),
+    % write("Computer: What do you want to know?"), nl,
+    % read_answer(_N),
     different(_),!,halt.
  
 print_prompt(bot):-
