@@ -15,7 +15,8 @@ whynot(F):-
     prompt(_, ''),
     read(Number),
     (  Number =:= 2
-    -> why_rule(F), nl, !
+    ->     
+        why_rule(F), nl, !
     ;   Number  =:= 1
     -> 
         print_prompt(user),
@@ -37,26 +38,21 @@ whynot(F):-
 %% IN this case the computer
 why_rule(F):-
     write("User: Please select a rule number: "),nl,
-    print_rule(R),nl,
-    yr_user_computer(R1,A,F),
-    system_rule(R1),nl,
+    yr_user_computer(Rule,_,_),
+    system_rule(Rule),nl,
     print_prompt(user),
     prompt(_, ''),
     read(Number),
     assert(yr_computer_user(Number,A,F)),!,      
-        
-    %% LOUISE: Computer adds all positive literals in A to Y_computer_user
-    %% LOUISE: Computer adds all negative literals in a to N_computer user
-    %% LOUISE: Computer then selects a fact that is in Y_computer_user and is not a node and asks
-    %% why the user believes that fact.
-    %% OR the computer picks a fact that is in N_computer_user and is a node and asks why the user
-    %% does not believe that fact.
-
-    check(A, N),
-    print_prompt(bot),
-    write("I cannot deduce "),  
-    pretty_print_node_list(N,Pretty),
-    write(Pretty),nl.
+    (   yr_user_computer(Number,_,_),
+        check(A, N),
+        print_prompt(bot),
+        write("I cannot deduce "),  
+        pretty_print_node_list(N,Pretty),
+        write(Pretty),nl
+    ;   write("I don't know this rule "),write(Number),write(". I found we have a different rule. Exit."), nl,
+        assert(difference(user_rule(Number,_,_))),!, halt
+    ).
 
 check([],[]).
 check([not(H)|T], [not(H)|N]):-
@@ -68,3 +64,11 @@ check([H|T], N):-
     assert(y_computer_user(H)),!,
     check(T,N).
 
+
+
+%% LOUISE: Computer adds all positive literals in A to Y_computer_user
+    %% LOUISE: Computer adds all negative literals in a to N_computer user
+    %% LOUISE: Computer then selects a fact that is in Y_computer_user and is not a node and asks
+    %% why the user believes that fact.
+    %% OR the computer picks a fact that is in N_computer_user and is a node and asks why the user
+    %% does not believe that fact.
