@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/1,y_user_computer/2,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -115,11 +115,7 @@ disagree_false(F):-
 
 
 
-option_whynot :-
-    repeat,
-    print_prompt(bot),
-    write("Please select one of the option:"),nl,
-    write_w_list.
+
 
 
 
