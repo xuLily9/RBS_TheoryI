@@ -75,6 +75,12 @@ write_why_list.
 
 
 
+write_w_list:-
+    y_computer_user(P),
+    \+ deduce_backwards(P,_),
+    print_fact(P),
+    fail.
+write_w_list.
 
 
 
@@ -102,35 +108,14 @@ write_reason_list.
 
 
 write_initial_list:-
-    initial_question(N,F,Pretty),
+    initial_question(N,_F,Pretty),
     write(N), write('. '), write(Pretty), nl,
     fail.
 write_initial_list.
 
 
 
-write_choice_list :-
-    choice(N, Name),
-    write(N), write('. '), write(Name), nl,
-    fail.
-write_choice_list.
 
-
-
-
-write_answer_list :-
-    answer(N, Name),
-    write(N), write('. '), write(Name), nl,
-    fail.
-write_answer_list.
-
-
-
-write_option_list :-
-    option(N, Name),
-    write(N), write('. '), write(Name), nl,
-    fail.
-write_option_list.
 
 
 %% LOUISE:  This should not offer all nodes as a choice.  It should offer everything that is in
