@@ -71,19 +71,6 @@ write_why_list:-
     fail.
 write_why_list.
 
-
-
-
-
-write_w_list:-
-    y_computer_user(P),
-    \+ deduce_backwards(P,_),
-    print_fact(P),
-    fail.
-write_w_list.
-
-
-
 write_whynot_list:-
     %% LOUISE: What if the node was labelled unprovable?
     n_user_computer(not(F)),
@@ -91,6 +78,28 @@ write_whynot_list:-
     write("Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
+
+
+
+write_w_list:-
+    y_computer_user(N,P),
+    \+ deduce_backwards(P,_),
+    write(N),write(". Why do you beleive "), print_fact(P), write("?"),nl,
+    fail.
+write_w_list.
+
+
+
+write_x_list:-
+    n_computer_user(not(P)),
+    deduce_backwards(P,_),
+    write("Why don't you beleive "), print_fact(P), write("?"),nl,
+    fail.
+write_x_list.
+
+
+
+
 
 
 
