@@ -24,7 +24,7 @@ whynot(F):-
         \+ node(_N, F, initial_fact, []), !,
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
-        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" ,but the computer neither believes nor infers it."),nl, 
+        write("Computer: I have identify the difference. User believes "), print_fact(F),write("is an initial fact,but the computer neither believes nor infers it."),nl, 
         assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
     ).
@@ -45,19 +45,37 @@ why_rule(F):-
     write_rule_list,
     print_prompt(user),
     prompt(_, ''),
-    read(N),
+    read(N),nl,
     % assert(yr_computer_user(Number,A,F)),!,      
     (  
         user_rule(N, A, F),
         check(A, NL),
-        print_prompt(bot),
-        write("I cannot deduce "),  
-        %write(NL)
-        pretty_list(NL,_Pretty),nl
-       % option_whynot
+        pretty_list(NL,Pretty),
+        option_whynot
     ;   write("The computer don't know this rule "),write(N),write(". I found the difference. Exit."), nl,
         assert(difference(user_rule(N,_,_))),!, halt
     ).
+
+
+
+option_whynot :-
+    repeat,
+    print_prompt(bot),
+    write("Please select one of the option:"),nl,
+    write_w_list,
+   % write_y_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(N),nl,
+    (   y_computer_user(N, Fact)
+    ->  whynot(Fact)
+   % ;  n_computer_user(N, Fact)
+   % ->  why(Fact)
+    ;
+     write('Not a valid choice, try again...'), nl,fail
+    ).
+
+
 
 
 check([],[]).
@@ -68,12 +86,13 @@ check([H|T], N):-
     deduce_backwards(H,_DAG),!,
     check(T,N).
 
-%check([not(H)|T], [not(H)|N]):-
-%    \+ deduce_backwards(H, _DAG),!, 
-%    assert(n_computer_user(H)),!,
-%    check(T,N).
+check([not(H)|T], [H|N]):-
+    \+ deduce_backwards(H, _DAG),!, 
+    check(T, N).
 
-
+check([not(H)|T], N):-
+    deduce_backwards(H,_DAG),!,
+    check(T,N).
 
 pretty_list([],"").
 pretty_list([Head|Tail],Out):-
@@ -81,8 +100,14 @@ pretty_list([Head|Tail],Out):-
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    print_fact(Fact).
+    print_fact(Fact),
+    aggregate_all(count, y_computer_user(_,_), Count),
+    N is Count +1,
+    assert(y_computer_user(N,Fact)).
 
+pretty_fact(not(Fact),Fact):-
+    assert(n_computer_user(not(Fact))),!,
+    print_fact(Fact),nl.
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
