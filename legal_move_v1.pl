@@ -7,10 +7,6 @@ agree(2, "No, I disagree. I want an explanation.").
 reason(1, "It's an initial fact.").
 reason(2, "It is deduced by a rule.").
 
-fact(1, "Yes, it is a initial fact").
-fact(2, "No, I need some explanations about this fact").
-
-
 
 print_prompt(bot):-
         my_icon(X), write(X), write(': '), flush_output.
@@ -29,12 +25,15 @@ chat:-
 
 print_welcome:-
     nl,
+    repeat,
     write("Please select a question: "),nl,
     write_initial_list,
     print_prompt(user),
     read(N),
-    (initial_question(N,F,_Pretty),
-     main(F)
+    (
+        initial_question(N,F,_Pretty),
+        main(F)
+    ;   write('Not a valid choice, try again...'), nl, fail
     ).
 
 
@@ -43,19 +42,12 @@ main(F):-
     -> 
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
         disagree_true(F),!,
-        assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
-        aggregate_all(count, y_user_computer(_,_), Count),
-        N is Count +1,
-        assert(y_user_computer(N,F)),!,  
-        assert(asked_question(F)),!,                                   
-        why(F),
+        add_1(F),  
+        why(F),                          
         conversations
     ;
         print_prompt(bot),print_fact(F), write(' is false.'),nl,!,
-        disagree_false(F),!,
-        assert(y_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
-        assert(n_user_computer(F)),!,
-        assert(asked_question(F)),!.
+        disagree_false(F),!.
 
 
 
@@ -70,9 +62,52 @@ disagree_true(F):-
     (   N =:= 1
     ->  print_prompt(bot), write("Bye"),nl,!, halt
     ;   N =:= 2
-    ->  print_prompt(user), write("Why do you beleive "), print_fact(F), write("?"), nl,!
+    ->  print_prompt(user), write("Why do you beleive "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
+
+disagree_false(F):-
+    nl,
+    repeat,
+    print_prompt(bot), write("Do you agree?"),nl,
+    write_agree_list,
+    print_prompt(user),
+    prompt(_, ''),
+    read(N),nl,
+    (   N =:= 1
+    ->  print_prompt(bot), write("Bye"),nl,!, halt
+    ;   N =:= 2
+    ->  whynot(F)
+    ;   write("Not a valid choice, try again..."), nl,fail
+    ).
+
+
+
+
+add_1(F):-
+    assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
+    aggregate_all(count, y_user_computer(_,_), Count),
+    N is Count +1,
+    assert(y_user_computer(N,F)),!,
+    write(N),
+    assert(asked_question(F)),!.  
+
+
+
+add_2(F):-
+    aggregate_all(count, y_computer_user(_,_), C),
+    B is C +1,
+    assert(y_computer_user(B,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
+    assert(n_user_computer(F)),!,
+    assert(asked_question(F)),!.
+
+
+
+
+conversations:-
+    repeat,
+    option_why, 
+    different(_),!,halt.
 
 
 option_why :-
@@ -93,25 +128,9 @@ option_why :-
     ;   write('Not a valid choice, try again...'), nl,fail
     ).
 
-conversations:-
-    repeat,
-    option_why, 
-    different(_),!,halt.
+
  
-disagree_false(F):-
-    nl,
-    repeat,
-    print_prompt(bot), write("Do you agree?"),nl,
-    write_agree_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(N),nl,
-    (   N =:= 1
-    ->  print_prompt(bot), write("Bye"),nl,!, halt
-    ;   N =:= 2
-    ->  whynot(F)
-    ;   write("Not a valid choice, try again..."), nl,fail
-    ).
+
 
 
 
