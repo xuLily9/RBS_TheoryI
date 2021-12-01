@@ -6,26 +6,25 @@
 
 
 whynot(F):-
-    nl,
     repeat,
-    print_prompt(bot),
-    write("Please state your reason: "), nl,
+    print_prompt(bot), write("Why do you beleive "), print_fact(F), write("?"), nl,
+    print_prompt(bot), write("Please state your reason: "), nl,
     write_reason_list,
     print_prompt(user),
     prompt(_, ''),
     read(Number),
     (  Number =:= 2
-    ->     
-        why_rule(F), nl, !
+    ->  why_rule(F), nl, !
     ;   Number  =:= 1
     -> 
         print_prompt(user),
+        write("Because "),
         print_fact(F),
         write(" is an initial fact."),nl, 
         \+ node(_N, F, initial_fact, []), !,
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
-        write("Computer: I have identify the difference "), print_fact(F),write(" is a user's initial fact, not a system's initial fact"),nl, 
+        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" ,but the computer neither believes nor infers it."),nl, 
         assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
     ).
@@ -36,34 +35,53 @@ whynot(F):-
 
 %% LOUISE: Case where rule is missing is missting.
 %% IN this case the computer
+
+
+
 why_rule(F):-
     write("User: Please select a rule number: "),nl,
-    yr_user_computer(Rule,_,_),
-    system_rule(Rule),nl,
+    %yr_user_computer(Rule,_,_),
+    %system_rule(Rule),nl,
+    write_rule_list,
     print_prompt(user),
     prompt(_, ''),
-    read(Number),
-    assert(yr_computer_user(Number,A,F)),!,      
-    (   yr_user_computer(Number,_,_),
-        check(A, N),
+    read(N),
+    % assert(yr_computer_user(Number,A,F)),!,      
+    (  
+        user_rule(N, A, F),
+        check(A, NL),
         print_prompt(bot),
         write("I cannot deduce "),  
-        pretty_print_node_list(N,Pretty),
-        write(Pretty),nl
-    ;   write("I don't know this rule "),write(Number),write(". I found we have a different rule. Exit."), nl,
-        assert(difference(user_rule(Number,_,_))),!, halt
+        %write(NL)
+        pretty_list(NL,_Pretty),nl
+       % option_whynot
+    ;   write("The computer don't know this rule "),write(N),write(". I found the difference. Exit."), nl,
+        assert(difference(user_rule(N,_,_))),!, halt
     ).
 
+
 check([],[]).
-check([not(H)|T], [not(H)|N]):-
+check([H|T], [H|N]):-
     \+ deduce_backwards(H, _DAG),!, 
-    assert(n_computer_user(H)),
     check(T, N).
 check([H|T], N):-
     deduce_backwards(H,_DAG),!,
-    assert(y_computer_user(H)),!,
     check(T,N).
 
+%check([not(H)|T], [not(H)|N]):-
+%    \+ deduce_backwards(H, _DAG),!, 
+%    assert(n_computer_user(H)),!,
+%    check(T,N).
+
+
+
+pretty_list([],"").
+pretty_list([Head|Tail],Out):-
+    print_top(Head,_HeadPretty),
+    pretty_list(Tail,Out).
+
+print_top(Fact,_Pretty):-
+    print_fact(Fact).
 
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
