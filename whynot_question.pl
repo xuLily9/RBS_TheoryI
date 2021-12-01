@@ -24,7 +24,7 @@ whynot(F):-
         \+ node(_N, F, initial_fact, []), !,
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
-        write("Computer: I have identify the difference. User believes "), print_fact(F),write("is an initial fact,but the computer neither believes nor infers it."),nl, 
+        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),nl, 
         assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
     ).
@@ -50,7 +50,7 @@ why_rule(F):-
     (  
         user_rule(N, A, F),
         check(A, NL),
-        pretty_list(NL,Pretty),
+        pretty_list(NL,_Pretty),
         option_whynot
     ;   write("The computer don't know this rule "),write(N),write(". I found the difference. Exit."), nl,
         assert(difference(user_rule(N,_,_))),!, halt
@@ -100,14 +100,12 @@ pretty_list([Head|Tail],Out):-
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    print_fact(Fact),
-    aggregate_all(count, y_computer_user(_,_), Count),
-    N is Count +1,
-    assert(y_computer_user(N,Fact)).
+    aggregate_all(count, y_computer_user(_,_), C),
+    N is C +1,
+    assert(y_computer_user(N,Fact)),!.
 
-pretty_fact(not(Fact),Fact):-
-    assert(n_computer_user(not(Fact))),!,
-    print_fact(Fact),nl.
+print_top(not(Fact),Fact):-
+    assert(n_computer_user(not(Fact))),!.
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
