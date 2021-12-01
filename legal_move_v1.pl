@@ -4,33 +4,27 @@
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
 
-option(1,"Computer use a rule that I didn't know").
-option(2,"Ask why about any fact in Y_user_computer that I haven't asked about before").
-option(3, "Ask whynot about any fact in N_user_computer that I haven't asked about before.").
-
 reason(1, "It's an initial fact.").
 reason(2, "It is deduced by a rule.").
 
 fact(1, "Yes, it is a initial fact").
 fact(2, "No, I need some explanations about this fact").
 
-choice(1, "Yes, I am satisfied. Exit.").
-choice(2, "No, I need more explanations.").
 
 
+print_prompt(bot):-
+        my_icon(X), write(X), write(': '), flush_output.
+print_prompt(user):-
+        user_icon(X), write(X), write(': '), flush_output.
 
-
-
-answer(1, "A fact").
-answer(2, "Exit").
-
+my_icon("Covid Advice System").
+user_icon("User Response").
 
 
 chat:-
     write_fact_list,!,
     write_rule_list,!,
-    print_welcome,
-    conversations.
+    print_welcome.
 
 
 print_welcome:-
@@ -39,33 +33,33 @@ print_welcome:-
     write_initial_list,
     print_prompt(user),
     read(N),
-    (initial_question(N,F,Pretty),
-     conclusion(F)
+    (initial_question(N,F,_Pretty),
+     main(F)
     ).
 
 
-conclusion(F):-
+main(F):-
     deduce_backwards(F,node(_ID, F, _R, _DAG))
     -> 
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
-        disagree(F),!,
+        disagree_true(F),!,
         assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
         aggregate_all(count, y_user_computer(_,_), Count),
         N is Count +1,
         assert(y_user_computer(N,F)),!,  
         assert(asked_question(F)),!,                                   
-        why(F)
+        why(F),
+        conversations
     ;
-        print_prompt(bot),write(F), write(' is false.'),nl,!,
-        disagree(F),!,
+        print_prompt(bot),print_fact(F), write(' is false.'),nl,!,
+        disagree_false(F),!,
         assert(y_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
         assert(n_user_computer(F)),!,
-        assert(asked_question(F)),!,  
-        whynot(F),!.
+        assert(asked_question(F)),!.
 
 
 
-disagree(F):-
+disagree_true(F):-
     nl,
     repeat,
     print_prompt(bot), write("Do you agree?"),nl,
@@ -81,8 +75,7 @@ disagree(F):-
     ).
 
 
-
-option :-
+option_why :-
     repeat,
     print_prompt(bot),
     write("Please select one of the option:"),nl,
@@ -95,82 +88,40 @@ option :-
     (   N=:= 1
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!, halt
     ;   y_user_computer(N, Fact), N \=1
-    ->  write('You selected: '), write("Why do you beleive "),write(Fact), write("?"), nl, !,
+    ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
         why(Fact)
     ;   write('Not a valid choice, try again...'), nl,fail
     ).
 
 conversations:-
     repeat,
-    option, 
-    % write("Computer: What do you want to know?"), nl,
-    % read_answer(_N),
+    option_why, 
     different(_),!,halt.
  
-print_prompt(bot):-
-        my_icon(X), write(X), write(': '), flush_output.
-print_prompt(user):-
-        user_icon(X), write(X), write(': '), flush_output.
-
-my_icon("Covid Advice System").
-user_icon("User Response").
-
-
-
-
-read_agree :-
-    write("Computer: Are you satisfied with the results? or you require additional explanations"),nl,
-    write_choice_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(Nanswer),
-    (   Nanswer =:= 1
-    ->  print_prompt(bot), write('Bye'),nl,!, halt
-    ;   Nanswer =:= 2
-    ->  print_prompt(bot), write('Okay, let us move on.'),nl,!
-    ;   write('Not a valid choice, try again...'), nl
-    ).
-
-
-read_answer(Nanswer) :-
+disagree_false(F):-
+    nl,
     repeat,
-    write_answer_list,
+    print_prompt(bot), write("Do you agree?"),nl,
+    write_agree_list,
     print_prompt(user),
     prompt(_, ''),
-    read(Nanswer),
-    (   Nanswer =:= 2
-    ->  print_prompt(bot), write('Bye'),nl,!, halt 
-     ;   Nanswer =:= 1
-    ->   print_prompt(bot), write("Please enter a fact on the list"),nl,
-        write_ask_list,
-        read_question(_F),!
-    ;   write('Not a valid choice, try again...'), nl,fail
+    read(N),nl,
+    (   N =:= 1
+    ->  print_prompt(bot), write("Bye"),nl,!, halt
+    ;   N =:= 2
+    ->  whynot(F)
+    ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
 
 
-read_question(Fact):-
+option_whynot :-
     repeat,
-    print_prompt(user),
-    read(N),
-    node(N, Fact, _, _),
-    %% LOUISE:  It's inelegant that this is repeated from the start, can you only do this once?
-    %% LOUISE:  We are missing a cases for when the computer has responded to the user with a why not question.
-    (  
-    user_question(Fact),!
-    ->  write("Computer: You have already asked this fact. Please enter a different fact."),nl,fail
+    print_prompt(bot),
+    write("Please select one of the option:"),nl,
+    write_w_list.
 
-    ;
-        (deduce_backwards(Fact,node(_ID, Fact, _R, _DAG))
-        -> print_prompt(bot),write(Fact), write(' is true.'), nl, ! ,
-        read_agree, !,
-        %% LOUISE: At this point the computer should add Fact to N_computer_user and Y_user_computer
-        why_question(Fact),!
-        ;                                 % legal move 4: some t ∈ Gi ∪ Nij the player may ask whynot(t)
-        print_prompt(bot),write(Fact), write(' is false.'), nl,!,
-        read_agree, !,
-        %% LOUISE: At this point the computer should add Fact to Y_computer_user and N_user_computer
-        whynot_question(Fact),!
-       )
-     ).
+
+
+
 
