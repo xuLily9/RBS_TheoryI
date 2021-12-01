@@ -4,17 +4,19 @@
 
 
 
-why(F):-                                              
+why(F):-  
+                                      
     node(_N, F, initial_fact, _NL), !,
     print_prompt(bot),                              
     write("Because "), 
     print_fact(F),
     write("is an initial fact"),nl,
     print_prompt(bot),
-    write("I have identify the difference. Computer believes "), print_fact(F),write("is an initial fact,but the user doesn't believe it. Exit."),nl, 
+    write("I have identify the difference. Computer believes "), print_fact(F),write(" is an initial fact,but the user doesn't believe it. Exit."),nl, 
     assert(different(F)),!, halt.
   
-why(F):-                                            
+why(F):-
+
     node(_N, F, R, NL), !,                           
     rule(R, A, F),
     print_prompt(bot),
