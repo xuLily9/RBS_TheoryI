@@ -4,8 +4,7 @@
 
 
 
-why(F):-  
-                                      
+why(F):-                                    
     node(_N, F, initial_fact, _NL), !,
     print_prompt(bot),                              
     write("Because "), 
@@ -16,7 +15,6 @@ why(F):-
     assert(different(F)),!, halt.
   
 why(F):-
-
     node(_N, F, R, NL), !,                           
     rule(R, A, F),
     print_prompt(bot),
