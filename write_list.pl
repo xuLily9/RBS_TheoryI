@@ -10,6 +10,9 @@ fact_description(residence(X,Y)):-
 fact_description(tier1(X)):-
      write(X), write(" is in tier1").
 
+fact_description(tier2(X)):-
+     write(X), write(" is in tier2").
+
 fact_description(indoor_meetings_allowed(Y)):-
      write(Y), write(" allows indoor meetings").
 
