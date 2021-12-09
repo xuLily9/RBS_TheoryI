@@ -18,8 +18,6 @@ write_fact_list.
 
 
 
-
-
 %% Pretty print the user rules 
 
 print_rule(Rule):-
@@ -32,7 +30,6 @@ write_rule_list :-
     rule_description(N),
     fail.
 write_rule_list.
-
 
 
 
@@ -58,8 +55,8 @@ write_why_list.
 
 write_whynot_list:-
     %% LOUISE: What if the node was labelled unprovable?
-    n_user_computer(not(F)),
-    \+ asked_question(not(F)),
+    n_user_computer(F),
+    \+ asked_question(F),
     write("Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
