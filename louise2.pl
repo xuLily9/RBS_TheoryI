@@ -44,6 +44,8 @@ fact_description(can_meet_indoors(X, A)):-
 fact_description(not(symptoms(X))):-
      write(X), write(" doesn't have any symptoms").
 
+fact_description(symptoms(X)):-
+     write(X), write(" has symptoms").
 
 
 
