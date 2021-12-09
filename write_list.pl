@@ -73,7 +73,7 @@ write_w_list.
 
 
 write_x_list:-
-    n_computer_user(not(P)),
+    n_computer_user(P),
     deduce_backwards(P,_),
     write("Why don't you beleive "), print_fact(P), write("?"),nl,
     fail.
