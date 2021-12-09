@@ -116,7 +116,7 @@ option_why :-
     write("Please select one of the option:"),nl,
     write("1. I don't know about this rule used by computer."),nl,
     write_why_list,!,
-   % mwrite_whynot_list,!,
+    write_whynot_list,!,
     print_prompt(user),
     prompt(_, ''),
     read(N),
@@ -125,7 +125,9 @@ option_why :-
     ;   y_user_computer(N, Fact), N \=1
     ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
         why(Fact)
-    ;   write('Not a valid choice, try again...'), nl,fail
+    ;   n_user_computer(Fact), N \=1
+     ->   write('You selected: '), write("Why don't you beleive "),print_fact(Fact), write("?"), nl, !
+    ;write('Not a valid choice, try again...'), nl,fail
     ).
 
 
