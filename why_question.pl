@@ -58,6 +58,6 @@ pretty_fact(Fact,Fact):-
 
 
 pretty_fact(not(Fact),Fact):-
-    assert(n_user_computer(not(Fact))),!,
+    assert(n_user_computer(Fact)),!,
     print_fact(Fact),nl.
 
