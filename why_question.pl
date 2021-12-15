@@ -25,6 +25,7 @@ why(F):-
     assert(asked_question(F)),!,
     assert(yr_user_computer(R, A, F)),!,
     write(", from facts:"),
+    %write(NL),
     nl,
     %% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals)
     %% So you should be extending Y_user_computer and N_user_computer
@@ -39,25 +40,32 @@ why(F):-
 
 pretty_print_node_list([],"").
 pretty_print_node_list([Head|Tail],Out):-
-    print_top_level(Head,_HeadPretty),
+    %write(Head),nl,
+    pretty_head(Head),
+   % print_top_level(Head,_Pretty),
     pretty_print_node_list(Tail,Out).
 
-print_top_level(node(_ID,Fact,_Rule,_NL),Pretty):-
-    pretty_fact(Fact,Pretty).
-print_top_level(node(_ID,not(Fact),unprovable,_NL),Pretty):-
-    pretty_fact(not(Fact),Pretty).
 
-pretty_fact(Fact,Fact):-
-    \+ y_user_computer(_N,Fact)
+pretty_head(node(_, Fact, Rule, _DAG)):-
+    \+ node(_, Fact, unprovable, _DAG)
+    ->
+        (\+ y_user_computer(_N,Fact)
     ->  aggregate_all(count, y_user_computer(_,_), Count),
         N is Count +1,
         assert(y_user_computer(N,Fact)),!,
         print_fact(Fact),nl
+        ;
+        print_fact(Fact),nl)
     ;
-        print_fact(Fact),nl.
-
-
-pretty_fact(not(Fact),Fact):-
     assert(n_user_computer(Fact)),!,
     print_fact(Fact),nl.
+
+
+ 
+
+    
+
+
+
+
 
