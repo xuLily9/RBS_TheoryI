@@ -50,17 +50,21 @@ pretty_head(node(_, Fact, Rule, _DAG)):-
     \+ node(_, Fact, unprovable, _DAG)
     ->
         (\+ y_user_computer(_N,Fact)
-    ->  aggregate_all(count, y_user_computer(_,_), Count),
-        N is Count +1,
-        assert(y_user_computer(N,Fact)),!,
-        print_fact(Fact),nl
+        ->  aggregate_all(count, y_user_computer(_,_), Count),
+             N is Count +1,
+            assert(y_user_computer(N,Fact)),!,
+            print_fact(Fact),nl
         ;
-        print_fact(Fact),nl)
-    ;
-    assert(n_user_computer(Fact)),!,
-    print_fact(Fact),nl.
-
-
+            print_fact(Fact),nl
+        )
+    ;   
+        (\+ y_user_computer(_N,Fact)
+        ->  aggregate_all(count, n_user_computer(_,_), A),
+            N_2 is A +1,
+            assert(n_user_computer(N_2,Fact)),!,
+            print_fact(Fact),nl
+        )
+    .
  
 
     
