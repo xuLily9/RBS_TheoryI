@@ -89,7 +89,6 @@ add_1(F):-
     aggregate_all(count, y_user_computer(_,_), Count),
     N is Count +1,
     assert(y_user_computer(N,F)),!,
-    write(N),
     assert(asked_question(F)),!.  
 
 
@@ -127,7 +126,7 @@ option_why :-
         why(Fact)
     ;   n_user_computer(Fact), N \=1
      ->   write('You selected: '), write("Why don't you beleive "),print_fact(Fact), write("?"), nl, !
-    ;write('Not a valid choice, try again...'), nl,fail
+    ;   write('Not a valid choice, try again...'), nl,fail
     ).
 
 
