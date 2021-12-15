@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/1,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -47,7 +47,8 @@ main(F):-
         conversations
     ;
         print_prompt(bot),print_fact(F), write(' is false.'),nl,!,
-        disagree_false(F),!.
+        disagree_false(F),!,
+        add_2(F).
 
 
 
@@ -97,7 +98,9 @@ add_2(F):-
     aggregate_all(count, y_computer_user(_,_), C),
     B is C +1,
     assert(y_computer_user(B,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
-    assert(n_user_computer(F)),!,
+    aggregate_all(count, n_user_computer(_,_), Count),
+    N is Count +1,
+    assert(n_user_computer(N,F)),!,
     assert(asked_question(F)),!.
 
 
@@ -124,8 +127,9 @@ option_why :-
     ;   y_user_computer(N, Fact), N \=1
     ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
         why(Fact)
-    ;   n_user_computer(Fact), N \=1
-     ->   write('You selected: '), write("Why don't you beleive "),print_fact(Fact), write("?"), nl, !
+    ;  n_user_computer(New,Fact), N \=1
+     ->   write('You selected: '), write("Why you beleive "),print_fact(Fact), write("?"), nl, !,
+        whynot(Fact)
     ;   write('Not a valid choice, try again...'), nl,fail
     ).
 
