@@ -55,9 +55,9 @@ write_why_list.
 
 write_whynot_list:-
     %% LOUISE: What if the node was labelled unprovable?
-    n_user_computer(F),
+    n_user_computer(A,F),
     \+ asked_question(F),
-    write("Why don't you beleive "), print_fact(F), write("?"),nl,
+     write(A),write(".Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
 
