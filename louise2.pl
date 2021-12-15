@@ -1,8 +1,6 @@
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
-node(3, tier1(manchester), initial_fact, []).
-node(4, not(symptoms(mary)), initial_fact, []).
-node(5, not(symptoms(karl)), initial_fact, []).
+node(3, tier1(manchester), initial_fact,[]).
 
 rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
 rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -17,8 +15,6 @@ initial_question(2,can_meet_indoors(mary, sue), "Can Mary and sue meet indoors?"
 user_fact(1,residence(mary, manchester),initial_fact,[]).
 user_fact(2,residence(karl, stockport),initial_fact,[]).
 user_fact(3,tier2(stockport),initial_fact,[]).
-user_fact(4, not(symptoms(mary)), initial_fact, []).
-user_fact(5, not(symptoms(karl)), initial_fact, []).
 
 
 user_rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
@@ -43,9 +39,6 @@ fact_description(can_meet_indoors(X, A)):-
 
 fact_description(not(symptoms(X))):-
      write(X), write(" doesn't have any symptoms").
-
-fact_description(symptoms(X)):-
-     write(X), write(" has symptoms").
 
 
 
