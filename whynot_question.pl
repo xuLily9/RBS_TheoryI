@@ -2,9 +2,6 @@
 
 % why not question section                         
 
-
-
-
 whynot(F):-
     repeat,
     print_prompt(bot), write("Why do you beleive "), print_fact(F), write("?"), nl,
@@ -28,31 +25,27 @@ whynot(F):-
         assert(different(F)),!, halt
     ; write('Not a valid choice, try again...'), nl, fail
     ).
-
-
-
     
 
 %% LOUISE: Case where rule is missing is missting.
 %% IN this case the computer
 
 
-
 why_rule(F):-
     write("User: Please select a rule number: "),nl,
-    %yr_user_computer(Rule,_,_),
-    %system_rule(Rule),nl,
     write_rule_list,
     print_prompt(user),
     prompt(_, ''),
     read(N),nl,
-    % assert(yr_computer_user(Number,A,F)),!,      
+    %assert(yr_computer_user(N,A,F)),!,      
     (  
         user_rule(N, A, F),
         check(A, NL),
+        write(NL),
         pretty_list(NL,_Pretty),
         option_whynot
-    ;   write("The computer don't know this rule "),write(N),write(". I found the difference. Exit."), nl,
+    ;   
+        write("The computer don't know this rule."),write(N),write(". I found the difference. Exit."), nl,
         assert(difference(user_rule(N,_,_))),!, halt
     ).
 
@@ -61,9 +54,9 @@ why_rule(F):-
 option_whynot :-
     repeat,
     print_prompt(bot),
-    write("Please select one of the option:"),nl,
+    write("Please select one of the question:(computer ask user)"),nl,
     write_w_list,
-   % write_y_list,
+   % write_x_list,
     print_prompt(user),
     prompt(_, ''),
     read(N),nl,
@@ -86,26 +79,18 @@ check([H|T], N):-
     deduce_backwards(H,_DAG),!,
     check(T,N).
 
-check([not(H)|T], [H|N]):-
-    \+ deduce_backwards(H, _DAG),!, 
-    check(T, N).
-
-check([not(H)|T], N):-
-    deduce_backwards(H,_DAG),!,
-    check(T,N).
-
 pretty_list([],"").
 pretty_list([Head|Tail],Out):-
     print_top(Head,_HeadPretty),
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    aggregate_all(count, y_computer_user(_,_), C),
-    N is C +1,
-    assert(y_computer_user(N,Fact)),!.
-
-print_top(not(Fact),Fact):-
-    assert(n_computer_user(not(Fact))),!.
+    \+ node(_, Fact, _, _)
+     -> aggregate_all(count, y_computer_user(_,_), C),
+        N is C +1,
+        assert(y_computer_user(N,Fact)),!
+    ;
+        assert(n_computer_user(Fact)),!.
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
