@@ -129,12 +129,14 @@ option_why :-
         N1 is N,
         y_user_computer(N1, Fact), N \=1
         ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
+            nl,
             why(Fact)
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count,
         n_user_computer(A,Fact), N \=1
          -> write('You selected: '), write("Why you beleive "),print_fact(Fact), write("?"), nl, !,
+            nl,
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
