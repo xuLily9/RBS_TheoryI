@@ -41,7 +41,7 @@ why_rule(F):-
     (  
         user_rule(N, A, F),
         check(A, NL),
-        write(NL),
+       % write(NL),
         pretty_list(NL,_Pretty),
         option_whynot
     ;   
@@ -62,8 +62,8 @@ option_whynot :-
     read(N),nl,
     (   y_computer_user(N, Fact)
     ->  whynot(Fact)
-   % ;  n_computer_user(N, Fact)
-   % ->  why(Fact)
+    ;  n_computer_user(N, Fact)
+    ->  whynot(Fact)
     ;
      write('Not a valid choice, try again...'), nl,fail
     ).
@@ -79,13 +79,17 @@ check([H|T], N):-
     deduce_backwards(H,_DAG),!,
     check(T,N).
 
+check([not(H)|T], [not(H)|N]):-
+    \+ deduce_backwards(H, _DAG),!, 
+    check(T, N).
+
 pretty_list([],"").
 pretty_list([Head|Tail],Out):-
     print_top(Head,_HeadPretty),
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    \+ node(_, Fact, _, _)
+    \+ node(_, Fact, unprovable, _)
      -> aggregate_all(count, y_computer_user(_,_), C),
         N is C +1,
         assert(y_computer_user(N,Fact)),!
