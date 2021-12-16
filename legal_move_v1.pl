@@ -88,19 +88,19 @@ disagree_false(F):-
 add_1(F):-
     assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
     aggregate_all(count, y_user_computer(_,_), Count),
-    N is Count +1,
-    assert(y_user_computer(N,F)),!,
+    N_1 is Count +1,
+    assert(y_user_computer(N_1,F)),!,
     assert(asked_question(F)),!.  
 
 
 
 add_2(F):-
+    aggregate_all(count, n_user_computer(_,_), Count),
+    N_2 is Count +1,
+    assert(n_user_computer(N_2,F)),!,
     aggregate_all(count, y_computer_user(_,_), C),
     B is C +1,
     assert(y_computer_user(B,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
-    aggregate_all(count, n_user_computer(_,_), Count),
-    N is Count +1,
-    assert(n_user_computer(N,F)),!,
     assert(asked_question(F)),!.
 
 
@@ -122,15 +122,22 @@ option_why :-
     print_prompt(user),
     prompt(_, ''),
     read(N),
-    (   N=:= 1
+    (   
+        N=:= 1
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!, halt
-    ;   y_user_computer(N, Fact), N \=1
-    ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
-        why(Fact)
-    ;  n_user_computer(New,Fact), N \=1
-     ->   write('You selected: '), write("Why you beleive "),print_fact(Fact), write("?"), nl, !,
-        whynot(Fact)
-    ;   write('Not a valid choice, try again...'), nl,fail
+    ;   
+        N1 is N,
+        y_user_computer(N1, Fact), N \=1
+        ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
+            why(Fact)
+    ;   
+        aggregate_all(count, y_user_computer(_,_), Count),
+        A is N-Count,
+        n_user_computer(A,Fact), N \=1
+         -> write('You selected: '), write("Why you beleive "),print_fact(Fact), write("?"), nl, !,
+            whynot(Fact)
+    ;   
+        write('Not a valid choice, try again...'), nl,fail
     ).
 
 
