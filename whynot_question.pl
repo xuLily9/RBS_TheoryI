@@ -41,7 +41,7 @@ why_rule(F):-
     (  
         user_rule(N, A, F),
         check(A, NL),
-       % write(NL),
+        write(NL),
         pretty_list(NL,_Pretty),
         option_whynot
     ;   
@@ -72,6 +72,11 @@ option_whynot :-
 
 
 check([],[]).
+
+check([not(H)|T], N):-
+    \+ deduce_backwards(H, _DAG),!, 
+    check(T, N).
+
 check([H|T], [H|N]):-
     \+ deduce_backwards(H, _DAG),!, 
     check(T, N).
@@ -79,9 +84,7 @@ check([H|T], N):-
     deduce_backwards(H,_DAG),!,
     check(T,N).
 
-check([not(H)|T], [not(H)|N]):-
-    \+ deduce_backwards(H, _DAG),!, 
-    check(T, N).
+
 
 pretty_list([],"").
 pretty_list([Head|Tail],Out):-
