@@ -1,4 +1,5 @@
 :-dynamic node/4, rule/3.
+%% Te main difference is user does not know karl have symptoms or not
 
 node(1, residence(mary, manchester), initial_fact,[]).
 node(2, residence(karl, manchester), initial_fact,[]).
@@ -22,7 +23,7 @@ user_fact(1,residence(mary, manchester),initial_fact,[]).
 user_fact(2,residence(karl, manchester),initial_fact,[]).
 user_fact(3,tier1(manchester),initial_fact,[]).
 user_fact(4, taste_and_smell(mary), initial_fact, []).
-%% user does not know karl have symptoms or not
+
 
 user_rule(1,[residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
 user_rule(2,[tier1(X)], indoor_meetings_allowed(X)).
@@ -73,3 +74,23 @@ rule_description(4):-
 
 rule_description(5):-
     write("5. If someone doesn't have taste or smell, he/she has symptoms."),nl.
+
+
+%% Pretty print the system rules 
+r_description(1):-
+    write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors").
+
+r_description(2):-
+    write("2. If there is a city in tier1 then this city allow indoor meetings").
+
+r_description(3):-
+    write("3. If someone has cough, he/she has symptoms.").
+
+r_description(4):-
+    write("4. If someone has fever, he/she has symptoms.").
+
+r_description(5):-
+   write("5. If someone doesn't have taste or smell, he/she has symptoms.").
+
+system_rule(Rule):-
+    r_description(Rule).
