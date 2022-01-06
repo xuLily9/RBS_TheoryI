@@ -16,7 +16,7 @@ rule(5, [not(taste_and_smell(X))], symptoms(X)).
 
 initial_question(1,can_meet_indoors(mary, karl), "Can Mary and Karl meet indoors?").
 
-
+initial_question(2,symptoms(mary), "Does Mary have symptoms?").
 
 %% A set of user facts and rules 
 user_fact(1,residence(mary, manchester),initial_fact,[]).
