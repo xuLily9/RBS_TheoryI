@@ -135,7 +135,7 @@ option_why :-
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count,
         n_user_computer(A,Fact), N \=1
-         -> write('You selected: '), write("Why you beleive "),print_fact(Fact), write("?"), nl, !,
+         -> write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
             nl,
             whynot(Fact)
     ;   
