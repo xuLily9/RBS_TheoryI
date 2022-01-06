@@ -117,6 +117,7 @@ option_why :-
     print_prompt(bot),
     write("Please select one of the option:"),nl,
     write("1. I don't know about this rule used by computer."),nl,
+    write("2. Exit"),nl,
     write_why_list,!,
     write_whynot_list,!,
     print_prompt(user),
@@ -124,17 +125,20 @@ option_why :-
     read(N),
     (   
         N=:= 1
-    ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!, halt
+    ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
+    ;   
+        N=:= 2
+    ->  write("Bye"),nl,!, halt
     ;   
         N1 is N,
-        y_user_computer(N1, Fact), N \=1
+        y_user_computer(N1, Fact), N \=1, N \=2
         ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
             nl,
             why(Fact)
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
-        A is N-Count,
-        n_user_computer(A,Fact), N \=1
+        A is N-Count-1,
+        n_user_computer(A,Fact), N \=1, N \=2
          -> write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
             nl,
             whynot(Fact)
