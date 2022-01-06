@@ -4,7 +4,7 @@
 
 whynot(F):-
     repeat,
-    print_prompt(bot), write("Why do you beleive "), print_fact(F), write("?"), nl,
+    print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
     print_prompt(bot), write("Please state your reason: "), nl,
     write_reason_list,
     print_prompt(user),
@@ -41,7 +41,7 @@ why_rule(F):-
     (  
         user_rule(N, A, F),
         check(A, NL),
-        write(NL),
+       % write(NL),
         pretty_list(NL,_Pretty),
         option_whynot
     ;   
