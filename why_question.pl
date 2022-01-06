@@ -12,7 +12,8 @@ why(F):-
     write(" is an initial fact."),nl,
     print_prompt(bot),
     write("I have identify the difference. Computer believes "), print_fact(F),write(" is an initial fact,but the user doesn't believe it. Exit."),nl, 
-    assert(different(F)),!, halt.
+    assert(different(F)),!, nl,
+    conversations.
   
 why(F):-
     node(_N, F, R, NL), !,                           
