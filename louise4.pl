@@ -94,19 +94,19 @@ fact_description(pinged(X)):-
      write(X), write(" get close contact with someone with Covid").
 
 fact_description(vaccinated(X)):-
-     write(X), write(" is vaccinated.").
+     write(X), write(" vaccinated").
 
 fact_description(symptoms(X)):-
      write(X), write(" has symptoms").
 
 fact_description(pcr(X)):-
-     write(X), write(" has a pcr test.").
+     write(X), write(" has a pcr test").
 
 fact_description(lft(X)):-
-     write(X), write(" has a lft test.").
+     write(X), write(" has a lft test").
 
 fact_description(not(vaccinated(X))):-
-     write(X), write(" isn't vaccinated.").
+     write(X), write(" doesn't vaccinate").
 
 fact_description(not(pcr(X))):-
      write(X), write(" doesn't take a pcr test").
