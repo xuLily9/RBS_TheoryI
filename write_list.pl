@@ -33,23 +33,14 @@ write_rule_list.
 
 
 
-%% Pretty print the system rules 
-r_description(1):-
-    write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors").
-
-r_description(2):-
-    write("2. If there is a city in tier1 then this city allow indoor meetings").
-
-system_rule(Rule):-
-    r_description(Rule).
-
 
 
 write_why_list:-
     %% LOUISE: What if the node was labelled unprovable?
     y_user_computer(N,F),
     \+ asked_question(F),
-    write(N),write(". Why do you beleive "), print_fact(F), write("?"),nl,
+    N1 is N+1,
+    write(N1),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_why_list.
 
@@ -58,7 +49,7 @@ write_whynot_list:-
     n_user_computer(A,F),
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
-    B is A +Count,
+    B is A +Count+1,
     write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
