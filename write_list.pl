@@ -59,7 +59,7 @@ write_whynot_list:-
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
     B is A +Count,
-    write(B),write(".Why you beleive "), print_fact(F), write("?"),nl,
+    write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
 
