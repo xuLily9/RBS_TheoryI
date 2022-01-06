@@ -6,6 +6,7 @@
 
 why(F):-                                    
     node(_N, F, initial_fact, _NL), !,
+    nl,
     print_prompt(bot),                              
     write("Because computer believes "), 
     print_fact(F),
@@ -18,6 +19,7 @@ why(F):-
 why(F):-
     node(_N, F, R, NL), !,                           
     rule(R, A, F),
+    nl,
     print_prompt(bot),
     write("Because "),
     print_fact(F),
