@@ -108,19 +108,3 @@ write_initial_list.
 
 
 
-
-
-
-%% LOUISE:  This should not offer all nodes as a choice.  It should offer everything that is in
-%% Y_user_computer (facts the user (should) think the computer knows) and which the user hasn't
-%% asked before.
-%% It should also allow the user to ask "why not" for everything in N_user_computer (facts the
-%% user (should) think the computer doesn't know) and which the users hasn't asked before.
-write_ask_list:-
-    %% LOUISE: What if the node was labelled unprovable?
-    node(N, Fact, _, _),
-    write(N), write(". Why do you beleive "), write(Fact), write("?"),nl,
-    fail.
-write_ask_list.
-
-
