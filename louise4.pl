@@ -26,8 +26,6 @@ rule(15, [pcr(X)], test(X)).
 rule(16, [lft(X)], test(X)).
 
 
-
-
 %% A set of user facts and rules 
 user_fact(1, taste_and_smell(mary), initial_fact, []).
 user_fact(2, taste_and_smell(karl), initial_fact, []).
