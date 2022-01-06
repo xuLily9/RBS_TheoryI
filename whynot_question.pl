@@ -22,7 +22,7 @@ whynot(F):-
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
         write("Computer: I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),nl, 
-        assert(different(F)),!, halt
+        assert(different(F)),!, conversations
     ; write('Not a valid choice, try again...'), nl, fail
     ).
     
@@ -45,8 +45,9 @@ why_rule(F):-
         pretty_list(NL,_Pretty),
         option_whynot
     ;   
-        write("The computer don't know this rule."),write(N),write(". I found the difference. Exit."), nl,
-        assert(difference(user_rule(N,_,_))),!, halt
+        write("The computer don't know this rule."),write(N),write(". I found the difference."), nl,
+        assert(difference(user_rule(N,_,_))),!, 
+        conversations
     ).
 
 
