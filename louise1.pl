@@ -49,3 +49,12 @@ rule_description(2):-
 
 
 
+%% Pretty print the system rules 
+r_description(1):-
+    write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors").
+
+r_description(2):-
+    write("2. If there is a city in tier1 then this city allow indoor meetings").
+
+system_rule(Rule):-
+    r_description(Rule).
