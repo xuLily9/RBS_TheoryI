@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -31,7 +31,8 @@ print_welcome:-
     print_prompt(user),
     read(N),
     (
-        initial_question(N,F,_Pretty),
+        initial_question(N,F,Pretty),
+        assert(user_question(Pretty)),!,
         main(F)
     ;   write('Not a valid choice, try again...'), nl, fail
     ).
@@ -41,12 +42,14 @@ main(F):-
     deduce_backwards(F,node(_ID, F, _R, _DAG))
     -> 
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
+        assert(conclusion_true(F)),
         disagree_true(F),!,
         add_1(F),  
         why(F),                          
         conversations
     ;
         print_prompt(bot),print_fact(F), write(' is false.'),nl,!,
+        assert(conclusion_false(F)),
         disagree_false(F),!,
         add_2(F).
 
@@ -55,13 +58,13 @@ main(F):-
 disagree_true(F):-
     nl,
     repeat,
-    print_prompt(bot), write("Do you agree?"),nl,
+    print_prompt(bot), write("Do you agree with this conclusion?"),nl,
     write_agree_list,
     print_prompt(user),
     prompt(_, ''),
     read(N),
     (   N =:= 1
-    ->  print_prompt(bot), write("Bye"),nl,!, halt
+    ->  assert(agree(F)),!,print_prompt(bot), is_quit, print_report,!, halt
     ;   N =:= 2
     ->  print_prompt(user), write("Why do you beleive "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
@@ -70,7 +73,7 @@ disagree_true(F):-
 disagree_false(F):-
     nl,
     repeat,
-    print_prompt(bot), write("Do you agree?"),nl,
+    print_prompt(bot), write("Do you agree with this conslusion?"),nl,
     write_agree_list,
     print_prompt(user),
     prompt(_, ''),
@@ -109,8 +112,16 @@ add_2(F):-
 conversations:-
     repeat,
     option_why, 
-    different(_),!,halt.
+    is_quit,
+    print_report, !,halt.
 
+is_quit:- 
+   write("Bye").
+
+subset([], _).
+subset([H|T], L2):- 
+        member(H, L2),
+        subset(T, L2).
 
 option_why :-
     repeat,
@@ -128,7 +139,7 @@ option_why :-
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
     ;   
         N=:= 2
-    ->  write("Bye"),nl,!, halt
+    ->  is_quit
     ;   
         N1 is N,
         y_user_computer(N1, Fact), N \=1, N \=2
@@ -148,7 +159,22 @@ option_why :-
 
 
  
-
+print_report:-
+        write('\n--- Conversation report ---\n'),
+        user_question(X), 
+        write('['),write(X),write(']: '),
+        conclusion_true(Y)
+        -> write("Yes"),nl
+        ;conclusion_false(Z)
+        -> write(" No"),nl
+        ,retract(user_question(X)),retract(conclusion_true(Y)),retract(conclusion_false(Z)),fail.
+print_report:-
+        nl, write("Do you agree with this conclusion?"), write(' : '),
+        agree(X)
+        ->write("Yes"),nl
+        ;disagree(Y),write("No"),nl,
+        retract(agree(X)), fail.
+print_report.
 
 
 
