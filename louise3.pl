@@ -59,6 +59,8 @@ fact_description(taste_and_smell(X)):-
 fact_description(not(symptoms(X))):-
      write(X), write(" doesn't have any symptoms").
 
+fact_description(symptoms(X)):-
+     write(X), write(" have symptoms").
 
 rule_description(1):-
     write("1. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings and both of them don't have any symptoms, then these two people can meet indoors."),nl.
