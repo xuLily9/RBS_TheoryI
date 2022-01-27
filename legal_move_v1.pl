@@ -66,7 +66,7 @@ disagree_true(F):-
     (   N =:= 1
     ->  assert(agree(F)),!,print_prompt(bot), is_quit, print_report,!, halt
     ;   N =:= 2
-    ->  print_prompt(user), write("Why do you beleive "), print_fact(F), write("?"),nl,!
+    ->  print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
@@ -112,8 +112,7 @@ add_2(F):-
 conversations:-
     repeat,
     option_why, 
-    is_quit,
-    print_report, !,halt.
+    is_quit,!,halt.
 
 is_quit:- 
    write("Bye").
@@ -141,17 +140,19 @@ option_why :-
         N=:= 2
     ->  is_quit
     ;   
-        N1 is N,
+        N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
-        ->  write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
+        ->  write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
             nl,
+            assert(asked_question(Fact)),
             why(Fact)
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count-1,
         n_user_computer(A,Fact), N \=1, N \=2
-         -> write('You selected: '), write("Why do you beleive "),print_fact(Fact), write("?"), nl, !,
+         -> write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
             nl,
+            assert(asked_question(Fact)),
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
