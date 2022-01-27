@@ -39,6 +39,7 @@ print_welcome:-
 
 
 main(F):-
+    write("about to deduce"),write(F),
     deduce_backwards(F,node(_ID, F, _R, _DAG))
     -> 
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
@@ -48,7 +49,7 @@ main(F):-
         why(F),                          
         conversations
     ;
-        print_prompt(bot),print_fact(F), write(' is false.'),nl,!,
+        print_prompt(bot), write(F), print_fact(F), write(' is false.'),nl,!,
         assert(conclusion_false(F)),
         disagree_false(F),!,
         add_2(F).
