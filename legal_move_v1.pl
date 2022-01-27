@@ -64,7 +64,7 @@ disagree_true(F):-
     prompt(_, ''),
     read(N),
     (   N =:= 1
-    ->  assert(agree(F)),!,print_prompt(bot), is_quit, print_report,!, halt
+    ->  assert(agree(F)),!,print_prompt(bot), write("Bye"),!, halt
     ;   N =:= 2
     ->  print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
@@ -112,10 +112,9 @@ add_2(F):-
 conversations:-
     repeat,
     option_why, 
-    is_quit,!,halt.
+    different(_),!,halt.
 
-is_quit:- 
-   write("Bye").
+
 
 subset([], _).
 subset([H|T], L2):- 
@@ -138,7 +137,7 @@ option_why :-
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
     ;   
         N=:= 2
-    ->  is_quit
+    ->  write("Bye"),!,halt
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
