@@ -8,7 +8,7 @@ rule(2,[tier1(X)], indoor_meetings_allowed(X)).
 
 
 initial_question(1,can_meet_indoors(mary, karl), "Can Mary and Karl meet indoors?").
-initial_question(2,can_meet_indoors(mary, sue), "Can Mary and sue meet indoors?").
+%%initial_question(2,can_meet_indoors(mary, sue), "Can Mary and sue meet indoors?").
 
 
 %% A set of user facts and rules 
