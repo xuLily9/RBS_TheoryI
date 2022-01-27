@@ -1,6 +1,4 @@
-
-
-% why not question section                         
+                       
 
 whynot(F):-
     repeat,
@@ -13,7 +11,7 @@ whynot(F):-
     (  Number =:= 2
     ->  why_rule(F), nl, !
     ;   Number  =:= 1
-    -> 
+    ->  nl,
         print_prompt(user),
         write("Because "),
         print_fact(F),
@@ -21,7 +19,8 @@ whynot(F):-
         \+ node(_N, F, initial_fact, []), !,
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
-        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),nl, 
+        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),
+        nl, 
         assert(different(F)),!, conversations
     ; write('Not a valid choice, try again...'), nl, fail
     ).
