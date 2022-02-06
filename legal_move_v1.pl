@@ -39,7 +39,6 @@ print_welcome:-
 
 
 main(F):-
-    write("about to deduce"),write(F),
     deduce_backwards(F,node(_ID, F, _R, _DAG))
     -> 
         print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
