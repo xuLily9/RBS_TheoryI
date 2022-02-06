@@ -48,7 +48,7 @@ main(F):-
         why(F),                          
         conversations
     ;
-        print_prompt(bot), write(F), print_fact(F), write(' is false.'),nl,!,
+        print_prompt(bot), print_fact(F), write(' is false.'),nl,!,
         assert(conclusion_false(F)),
         disagree_false(F),!,
         add_2(F).
@@ -81,7 +81,8 @@ disagree_false(F):-
     (   N =:= 1
     ->  print_prompt(bot), write("Bye"),nl,!, halt
     ;   N =:= 2
-    ->  whynot(F)
+    -> print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
+        whynot(F)
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
@@ -152,6 +153,7 @@ option_why :-
          -> write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
             nl,
             assert(asked_question(Fact)),
+            print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
