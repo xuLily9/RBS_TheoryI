@@ -11,7 +11,7 @@ user_rule(1,[not_pinged(A), not_pinged(B), vaccinated(A), vaccinated(B), not(sym
 user_rule(2,[taste_and_smell(X)], not(symptoms(X))).
 
 
-initial_question(1,can_meet(sara, harry), "Can Sara and harry meet indoors?").
+initial_question(1,can_meet(sara, harry), "Can Sara and harry meet?").
 
 
 node(1,not_pinged(sara),initial_fact,[]).
