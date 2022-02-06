@@ -153,7 +153,7 @@ option_why :-
          -> write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
             nl,
             assert(asked_question(Fact)),
-            print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
+            print_prompt(bot), write("Why don't you beleive "), print_fact(Fact), write("?"), nl,
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
