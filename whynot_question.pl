@@ -2,7 +2,7 @@
 
 whynot(F):-
     repeat,
-    print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
+    %print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
     print_prompt(bot), write("Please state your reason: "), nl,
     write_reason_list,
     print_prompt(user),
@@ -56,7 +56,7 @@ option_whynot :-
     print_prompt(bot),
     write("Please select one of the question:(computer ask user)"),nl,
     write_w_list,
-   % write_x_list,
+    write_x_list,
     print_prompt(user),
     prompt(_, ''),
     read(N),nl,
