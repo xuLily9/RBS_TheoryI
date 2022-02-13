@@ -8,22 +8,27 @@ node(2, taste_and_smell(karl), initial_fact, []).
 node(3, pinged(karl), initial_fact, []).
 node(4, vaccinated(karl), initial_fact, []).
 node(5, pinged(mary), initial_fact, []).
+node(6, positive_lft(mary),initial_fact, []).
+node(7, cough(mary), initial_fact, []).
+
+# node(6, vaccinated(mary), initial_fact, []).
+# node(7, negative_pcr(mary), initial_fact, []).
 
 rule(1, [cough(X)], symptoms(X)).
 rule(2, [fever(X)], symptoms(X)).
 rule(3, [not(taste_and_smell(X))], symptoms(X)).
 rule(4, [positive_pcr(X)], self_isolate(X)).
-rule(6, [positive_lft(X), not(pcr(X))], get_pcr(X)).
-rule(7, [positive_lft(X), not(pcr(X))], self_isolate(X)).
-rule(8, [symptoms(X)], get_pcr(X)).
-rule(9, [pinged(X), not(vaccinated(X)), not(test(X))], self_isolate(X)).
-rule(10, [pinged(X), not(vaccinated(X))], get_test(X)).
-rule(11, [negative_pcr(X)], pcr(X)).
-rule(12, [positive_pcr(X)], pcr(X)).
-rule(13, [negative_lft(X)], lft(X)).
-rule(14, [positive_lft(X)], lft(X)).
-rule(15, [pcr(X)], test(X)).
-rule(16, [lft(X)], test(X)).
+rule(5, [positive_lft(X), not(pcr(X))], get_pcr(X)).
+rule(6, [positive_lft(X), not(pcr(X))], self_isolate(X)).
+rule(7, [symptoms(X)], get_pcr(X)).
+rule(8, [pinged(X), not(vaccinated(X)), not(test(X))], self_isolate(X)).
+rule(9, [pinged(X), not(vaccinated(X))], get_test(X)).
+rule(10, [negative_pcr(X)], pcr(X)).
+rule(11, [positive_pcr(X)], pcr(X)).
+rule(12, [negative_lft(X)], lft(X)).
+rule(13, [positive_lft(X)], lft(X)).
+rule(14, [pcr(X)], test(X)).
+rule(15, [lft(X)], test(X)).
 
 
 %% A set of user facts and rules 
@@ -32,8 +37,8 @@ user_fact(2, taste_and_smell(karl), initial_fact, []).
 user_fact(3, pinged(karl), initial_fact, []).
 user_fact(4, vaccinated(karl), initial_fact, []).
 user_fact(5, pinged(mary), initial_fact, []).
-user_fact(6, vaccinated(mary), initial_fact, []).
-user_fact(7, negative_pcr(mary), initial_fact, []).
+# user_fact(6, vaccinated(mary), initial_fact, []).
+# user_fact(7, negative_pcr(mary), initial_fact, []).
 
 initial_question(1,self_isolate(mary), "Does Mary need to self isolate?").
 initial_question(2,self_isolate(karl), "Does karl need to self isolate?").
