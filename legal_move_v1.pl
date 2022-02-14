@@ -179,7 +179,10 @@ print_report:-
 print_report.
 
 
-
+program :-
+    open('file.txt',write, Stream),
+    forall(node(A,B,C,D), write(Stream,B)),
+    close(Stream).
 
 
 
