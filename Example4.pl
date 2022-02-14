@@ -1,6 +1,4 @@
 :-dynamic node/4, rule/3.
-%% The main difference between user and the computer is in user_fact mary is vaccinated and mary is negative, 
-%% and the computer fact does not have that 
 
 node(1, vaccinated(jane), initial_fact, []).
 node(2, vaccinated(adam), initial_fact, []).
