@@ -181,7 +181,10 @@ print_report.
 
 program :-
     open('file.txt',write, Stream),
-    forall(node(A,B,C,D), write(Stream,B)),
+    forall(user_question(X),write(Stream,X)),
+    (conclusion_true(Y)->write(Stream,'\nTrue\n')
+    ;conclusion_false(Z)->write(Stream,'\nFalse\n')
+    ),
     close(Stream).
 
 
