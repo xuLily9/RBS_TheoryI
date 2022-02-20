@@ -181,10 +181,7 @@ print_report.
 
 program :-
     open('file.txt',write, Stream),
-    forall(user_question(X),write(Stream,X)),
-    (conclusion_true(Y)->write(Stream,'\nTrue\n')
-    ;conclusion_false(Z)->write(Stream,'\nFalse\n')
-    ),
+    write(Stream,'\nTrue\n'),
     close(Stream).
 
 
