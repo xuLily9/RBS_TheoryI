@@ -48,7 +48,7 @@ fact_description(can_meet(A, B)):-
 
 
 rule_description(1):-
-    write("1. If both A and B are vaccinated, and none of them have been in close contact with someone who has Covid-19, and both of them doesn't have symptoms, then these two people can meet."),nl.
+    write("1. If both A and B are vaccinated, and none of them have been in close contact with someone who has Covid-19, and both of them don't have symptoms, then these two people can meet."),nl.
 rule_description(2):-
     write("2. If A doesn't have taste or smell, he/she has symptoms."),nl.
 
