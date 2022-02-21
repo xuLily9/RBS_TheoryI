@@ -13,8 +13,8 @@ initial_question(1,can_meet_indoors(sue, karl), "Can Sue and Karl meet indoors?"
 
 
 %% A set of user facts and rules 
-user_fact(1,residence(mary, manchester),initial_fact,[]).
-user_fact(2,residence(karl, stockport),initial_fact,[]).
+user_fact(1,residence(sue, london),initial_fact,[]).
+user_fact(2,residence(karl, manchester),initial_fact,[]).
 user_fact(3,tier1(manchester),initial_fact,[]).
 user_fact(4,tier2(london), initial_fact, []).
 
