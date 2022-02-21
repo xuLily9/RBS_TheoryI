@@ -39,14 +39,14 @@ fact_description(pcr(X)):-
 rule_description(1):-
     write("1. If someone has fever, he/she has symptoms."),nl.
 rule_description(2):-
-    write("2. If someone get close contact with a person with Covid and he/she hasn't vaccinated, and he/she doesn't have symptoms, then he need to take a pcr test."),nl.
+    write("2. If someone get close contact with a person with Covid and he/she hasn't been vaccinated, and he/she doesn't have symptoms, then he need to take a pcr test."),nl.
 
 
 %% Pretty print the system rules 
 r_description(1):-
    write("1. If someone has fever, he/she has symptoms."),nl.
 r_description(2):-
-  write("2. If someone get close contact with a person with Covid and he/she vaccinated, and he/she hasn't taken pcr test, then he need to take a pcr test."),nl.
+  write("2. If someone get close contact with a person with Covid and he/she been vaccinated, and he/she hasn't taken pcr test, then he need to take a pcr test."),nl.
 
 system_rule(Rule):-
     r_description(Rule).
