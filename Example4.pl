@@ -111,37 +111,37 @@ fact_description(not(self_isolate(X))):-
      write(X), write(" doesn't need to self isolate").
 
 rule_description(1):-
-    write("1. If someone doesn't have taste and smell, he/she has symptoms."),nl.
+    write("1. If someone doesn't have a sense of taste and smell, then he/she has symptoms."),nl.
 
 rule_description(2):-
-    write("2. If someone is negative in lft test then he/she has taken a lft test."),nl.
+    write("2. If someone has a negative LFT test then he/she has taken a LFT test."),nl.
 
 rule_description(3):-
-    write("3. If someone has been in close contact with someone who has Covid-19and he has vaccinated,and he doesn't take a test then he needs to self isolate."),nl.
+    write("3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),nl.
 
 rule_description(4):-
-    write("4. If someone meet a person who has positive pcr test, then he has been in close contact with someone who has Covid-19"),nl.
+    write("4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19."),nl.
 
 rule_description(5):-
-    write("5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings and both of them don't have symptoms, then these two people can meet indoors."),nl.
+    write("5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them don't have symptoms, then these two people can meet indoors."),nl.
 
 rule_description(6):-
-    write("6. If there is a city in tier1 then this city allows indoor meetings."),nl.
+    write("6. If  a city is in tier1 then this city allows indoor meetings."),nl.
 
 rule_description(7):-
-    write("7. If A and B doesn't need to self_isolate and they can meet indoors, then A and B can eat lunch together "),nl.
+    write("7. If A and B don't need to self-isolate and they can meet indoors, then A and B can eat lunch together."),nl.
 
 rule_description(8):-
-    write("8. If someone is negative in a pcr test then he/she has taken a pcr test."),nl.
+    write("8. If someone is negative in a PCR test then he/she has taken a PCR test."),nl.
 
 rule_description(9):-
-    write("9. If someone is negative in a lft test then he/she has taken a lft test."),nl.
+    write("9. If someone is negative in a LFT test then he/she has taken a LFT test."),nl.
 
 rule_description(10):-
-    write("10. If someone has taken a pcr test then he/she has taken a test."),nl.
+    write("10. If someone has taken a PCR test then he/she has taken a test."),nl.
 
 rule_description(11):-
-    write("11. If someone took a lft test then he/she has taken a test."),nl.
+    write("11. If someone took a LFT test then he/she has taken a test."),nl.
 
 
 
@@ -149,38 +149,38 @@ rule_description(11):-
 %% Pretty print the system rules 
 
 r_description(1):-
-    write("1. If someone doesn't have taste and smell, he/she has symptoms."),nl.
+    write("1. If someone doesn't have a sense of taste and smell, then he/she has symptoms."),nl.
 
 r_description(2):-
-    write("2. If someone is negative in lft test then he/she has taken a lft test."),nl.
+    write("2. If someone has a negative LFT test then he/she has taken a LFT test."),nl.
 
 r_description(3):-
-    write("3. If someone has been in close contact with someone who has Covid-19and he has vaccinated,and he doesn't take a test then he needs to self isolate."),nl.
+    write("3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),nl.
 
 r_description(4):-
-    write("4. If someone meet a person who has positive pcr test, then he has been in close contact with someone who has Covid-19"),nl.
+    write("4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19."),nl.
 
 r_description(5):-
-    write("5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, then these two people can meet indoors."),nl.
+    write("5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them don't have symptoms, then these two people can meet indoors."),nl.
 
 r_description(6):-
-    write("6. If there is a city in tier1 then this city allows indoor meetings."),nl.
+    write("6. If  a city is in tier1 then this city allows indoor meetings."),nl.
 
 r_description(7):-
-    write("7. If A and B doesn't need to self_isolate and they can meet indoors, then A and B can eat lunch together "),nl.
+    write("7. If A and B don't need to self-isolate and they can meet indoors, then A and B can eat lunch together."),nl.
 
 r_description(8):-
-    write("8. If someone is negative in a pcr test then he/she has taken a pcr test."),nl.
+    write("8. If someone is negative in a PCR test then he/she has taken a PCR test."),nl.
 
 r_description(9):-
-    write("9. If someone is negative in a lft test then he/she has taken a lft test."),nl.
+    write("9. If someone is negative in a LFT test then he/she has taken a LFT test."),nl.
 
 r_description(10):-
-    write("10. If someone has taken a pcr test then he/she has taken a test."),nl.
+    write("10. If someone has taken a PCR test then he/she has taken a test."),nl.
 
 
 r_description(11):-
-    write("11. If someone took a lft test then he/she has taken a test."),nl.
+    write("11. If someone took a LFT test then he/she has taken a test."),nl.
 
 
 
