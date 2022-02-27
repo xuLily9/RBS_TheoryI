@@ -1,9 +1,3 @@
-
-% why question section
-
-
-
-
 why(F):-                                    
     node(_N, F, initial_fact, _NL), !,
     nl,
@@ -12,8 +6,9 @@ why(F):-
     print_fact(F),
     write(" is an initial fact."),nl,
     print_prompt(bot),
-    write("I have identify the difference. Computer believes "), print_fact(F),write(" is an initial fact,but the user doesn't believe it."),nl, 
+    write("I have identify the difference. Computer believes "), print_fact(F),write(" is an initial fact, but the user doesn't believe it."),nl, 
     assert(different(F)),!, nl,
+    write('\n---Go back to question or exit---\n'),nl,
     conversations.
   
 why(F):-
@@ -22,23 +17,18 @@ why(F):-
     print_prompt(bot),
     write("Because "),
     print_fact(F),
-    write(" is deduced using rule "),
+    write(" is deduced using RULE ["),
     system_rule(R),
     assert(asked_question(F)),!,
     assert(yr_user_computer(R, A, F)),!,
-    write(", from facts:"),
-    %write(NL),
+    write("], from facts:"),
     nl,
-    %% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals)
-    %% So you should be extending Y_user_computer and N_user_computer
     pretty_print_node_list(NL,Pretty),
     write(Pretty),
     nl.
 
-
-
-
-
+%% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals),So you should be extending Y_user_computer and N_user_computer
+ 
 
 pretty_print_node_list([],"").
 pretty_print_node_list([Head|Tail],Out):-
