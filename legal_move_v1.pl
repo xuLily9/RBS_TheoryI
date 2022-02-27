@@ -1,5 +1,5 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,disagree/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -66,7 +66,7 @@ disagree_true(F):-
     (   N =:= 1
     ->  assert(agree(F)),!,print_prompt(bot), write("Bye"),!, halt
     ;   N =:= 2
-    ->  print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
+    ->  assert(disagree(F)),!,print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
@@ -179,10 +179,25 @@ print_report:-
 print_report.
 
 
-program :-
-    open('file.txt',write, Stream),
-    write(Stream,'\nTrue\n'),
-    close(Stream).
+write_report :-
+    open('file3.txt',write, Out),
+    write(Out,'\n--- Conversation report ---\n'),
+    user_question(X), 
+    write(Out,'['),write(Out,X),write(Out,']: '),
+    (conclusion_true(Y)
+    ->write(Out,'True')
+    ;conclusion_false(Z)
+    -> write(Out,'False')),
+
+    write(Out,'\n[Do you agree with this conclusion?]:'), 
+    (agree(A)
+    ->write(Out,'Yes')
+    ;disagree(B)
+    ->write(Out,'No')),
+    close(Out).
+
+   
+       
 
 
 
