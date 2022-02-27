@@ -1,5 +1,7 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,disagree/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
+:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,disagree/1,
+why_q/1,whynot_q/1,
+n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
 
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
@@ -109,18 +111,12 @@ add_2(F):-
 
 
 
-
 conversations:-
+    nl,
     repeat,
     option_why, 
     different(_),!,halt.
 
-
-
-subset([], _).
-subset([H|T], L2):- 
-        member(H, L2),
-        subset(T, L2).
 
 option_why :-
     repeat,
@@ -145,6 +141,7 @@ option_why :-
         ->  write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
             nl,
             assert(asked_question(Fact)),
+            assert(why_q(Fact)),
             why(Fact)
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
@@ -154,6 +151,7 @@ option_why :-
             nl,
             assert(asked_question(Fact)),
             print_prompt(bot), write("Why don't you beleive "), print_fact(Fact), write("?"), nl,
+            assert(whynot_q(Fact)),
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
@@ -180,7 +178,7 @@ print_report.
 
 
 write_report :-
-    open('file3.txt',write, Out),
+    open('file5.txt',write, Out),
     write(Out,'\n--- Conversation report ---\n'),
     user_question(X), 
     write(Out,'['),write(Out,X),write(Out,']: '),
@@ -194,6 +192,10 @@ write_report :-
     ->write(Out,'Yes')
     ;disagree(B)
     ->write(Out,'No')),
+    write(Out,'\n---User question:---\n'),
+    (why_q(F),write(Out,'\n[why do you beleive '),write(Out,F),write(Out,'?]'),fail
+    ;true),
+
     close(Out).
 
    
