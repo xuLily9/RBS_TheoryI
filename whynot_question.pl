@@ -1,5 +1,3 @@
-                       
-
 whynot(F):-
     repeat,
     %print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
@@ -19,9 +17,10 @@ whynot(F):-
         \+ node(_N, F, initial_fact, []), !,
         \+ user_fact(_,F,initial_fact,_), !,
         assert(user_fact(_,F,initial_fact,_)), !,
-        write("Computer: I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),
-        nl, 
-        assert(different(F)),!, conversations
+        print_prompt(bot), write("I have identify the difference. User believes "), print_fact(F),write(" is an initial fact,but the computer neither believes nor infers it."),
+        assert(different(F)),!, 
+         write('\n---Go back to question or exit---\n'),
+        conversations
     ; write('Not a valid choice, try again...'), nl, fail
     ).
     
@@ -44,8 +43,9 @@ why_rule(F):-
         pretty_list(NL,_Pretty),
         option_whynot
     ;   
-        write("The computer don't know this rule."),write(N),write(". I found the difference."), nl,
+        print_prompt(bot),write("The computer don't know this rule."),write(N),write(". I found the difference."), nl,
         assert(difference(user_rule(N,_,_))),!, 
+        write("---Go back to question or exit---"),
         conversations
     ).
 
