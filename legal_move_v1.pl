@@ -66,7 +66,7 @@ disagree_true(F):-
     prompt(_, ''),
     read(N),
     (   N =:= 1
-    ->  assert(agree(F)),!,print_prompt(bot), write("Bye"),!, halt
+    ->  assert(agree(F)),!,print_prompt(bot), write("Bye"),!, write_report,halt
     ;   N =:= 2
     ->  assert(disagree(F)),!,print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
     ;   write("Not a valid choice, try again..."), nl,fail
@@ -81,7 +81,7 @@ disagree_false(F):-
     prompt(_, ''),
     read(N),nl,
     (   N =:= 1
-    ->  print_prompt(bot), write("Bye"),nl,!, halt
+    ->  print_prompt(bot), write("Bye"),nl,!, write_report,halt
     ;   N =:= 2
     -> print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
         whynot(F)
@@ -114,8 +114,7 @@ add_2(F):-
 conversations:-
     nl,
     repeat,
-    option_why, 
-    different(_),!,halt.
+    option_why.
 
 
 option_why :-
@@ -134,7 +133,7 @@ option_why :-
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
     ;   
         N=:= 2
-    ->  write("Bye"),!,halt
+    ->  write('Bye'),write_report,!,halt
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
@@ -192,8 +191,13 @@ write_report :-
     ->write(Out,'Yes')
     ;disagree(B)
     ->write(Out,'No')),
-    write(Out,'\n---User question:---\n'),
-    (why_q(F),write(Out,'\n[why do you beleive '),write(Out,F),write(Out,'?]'),fail
+    write(Out,'\n---User question:---'),
+    (why_q(C),write(Out,'\n[why do you beleive '),write(Out,C),write(Out,'?]'),fail
+    ;true),
+    (whynot_q(D),write(Out,'\n[why do you beleive '),write(Out,D),write(Out,'?]'),fail
+    ;true),
+     write(Out,'\n---Difference---'),
+     (different(E),write(Out,E),fail
     ;true),
 
     close(Out).
