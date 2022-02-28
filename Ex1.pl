@@ -17,7 +17,7 @@ node(1,vaccinated(sara), initial_fact, []).
 node(2,taste_and_smell(sara), initial_fact, []).
 node(3,taste_and_smell(harry), initial_fact, []).
 
-rule(1,[not_pinged(A), not_pinged(B), vaccinated(A), vaccinated(B), not(symptoms(A)), not(symptoms(B))],can_meet(A, B)).
+rule(1,[not(pinged(A)), not(pinged(B)), vaccinated(A), vaccinated(B), not(symptoms(A)), not(symptoms(B))],can_meet(A, B)).
 rule(2,[not(taste_and_smell(X))], symptoms(X)).
 rule(3,[fever(X)],symptoms(X)).
 rule(4,[cough(X)],symptoms(X)).
@@ -48,15 +48,21 @@ fact_description(cough(X)):-
 rule_description(1):-
     write("1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet."),nl.
 rule_description(2):-
-    write("2. If A doesn't have taste or smell, he/she has symptoms."),nl.
-
+    write("2. If X doesn't have taste or smell, then X has symptoms."),nl.
+rule_description(3):-
+   write("3. If X has a fever, then X has symptoms."),nl.
+rule_description(4):-
+   write("4. If X has a cough, then X has symptoms."),nl.
 
 %% Pretty print the system rules 
 r_description(1):-
    write("1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet."),nl.
 r_description(2):-
-   write("2. If A doesn't have taste or smell, he/she has symptoms."),nl.
-
+   write("2. If X doesn't have taste or smell, then X has symptoms."),nl.
+r_description(3):-
+    write("3. If X has a fever, then X has symptoms."),nl.
+r_description(4):-
+    write("4. If X has a cough, then X has symptoms."),nl.
 system_rule(Rule):-
     r_description(Rule).
 
