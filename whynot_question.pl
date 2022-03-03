@@ -1,7 +1,6 @@
 whynot(F):-
     repeat,
-    %print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
-    print_prompt(bot), write("Please state your reason: "), nl,
+    print_prompt(bot), write('Why do you beleive '), print_fact(F), write('? Please state your reason:\n'),
     write_reason_list,
     print_prompt(user),
     prompt(_, ''),
@@ -31,7 +30,7 @@ whynot(F):-
 
 why_rule(F):-
     write("User: Please select a rule number: "),nl,
-    write_rule_list,
+    write_user_rule,
     print_prompt(user),
     prompt(_, ''),
     read(N),nl,
