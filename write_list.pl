@@ -1,39 +1,37 @@
 
 %% LOUISE:  both write_why_list and write_why_not_list feel a bit redundant to me.
 %% The user has already said they want an explanation.
+agree(1, "Yes, I agree. Exit.").
+agree(2, "No, I disagree. I want an explanation.").
 
+reason(1, "Because it's an initial fact.").
+reason(2, "Because it is deduced by a rule.").
 
-%% Pretty print the facts with nature language
-
- 
-print_fact(Fact):-
-    fact_description(Fact).
-
-write_fact_list :-
-    write("USER FACT: "),nl,
+write_user_fact:-
+    write('\n----------USER FACT ----------\n'),nl,
     user_fact(_N, Fact, initial_fact, []),
     print_fact(Fact),nl,
     fail.
-write_fact_list.
+write_user_fact.
 
-
-
-%% Pretty print the user rules 
-
-print_rule(Rule):-
-    rule_description(Rule).
-
-write_rule_list :-
-    nl,
-    write("USER RULE: "),nl,
+write_user_rule:-
+    write('\n----------USER RULE ----------\n'),nl,
     user_rule(N, _Antecedants, _C),
     rule_description(N),
     fail.
-write_rule_list.
+write_user_rule.
+
+print_fact(Fact):-
+    fact_description(Fact).
+print_rule(Rule):-
+    rule_description(Rule).
 
 
-
-
+yes_no:-
+    agree(N, Name),
+    write(N), write('. '), write(Name), nl,
+    fail.
+yes_no.
 
 write_why_list:-
     %% LOUISE: What if the node was labelled unprovable?
@@ -78,11 +76,7 @@ write_x_list.
 
 
 
-write_agree_list :-
-    agree(N, Name),
-    write(N), write('. '), write(Name), nl,
-    fail.
-write_agree_list.
+
 
 write_reason_list :-
     reason(N, Name),
