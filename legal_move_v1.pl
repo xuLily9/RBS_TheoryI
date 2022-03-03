@@ -16,44 +16,49 @@ print_welcome:-
 
 print_conclusion(Conclusion,F):-
     write('\n----------CONVERSATION ----------\n'),nl,
-    print_prompt(bot),conclusion(F), 
+    nb_getval(fileOutput,Out),
+    write('Covid Advice System: '),conclusion(F), 
+    write(Out,'Covid Advice System: '),
     (
         deduce_backwards(F,node(_ID, F, _R, _DAG))
     ->  
-        nb_getval(fileOutput,Out),
         print_fact(F),write(' is true.\n'),nl,
         write(Out,' is true\n'),
         Conclusion =true
     ;   
-        nb_getval(fileOutput,Out),
         print_fact(F),write(' is false.\n'),nl,
         write(Out,' is false\n'),
         Conclusion = false
+        
     ).
 
 ask_agree(Conclusion,F):-
     repeat,
-    print_prompt(bot), write('Do you agree with this conclusion?\n'),
+    nb_getval(fileOutput,Out),
+    write('Covid Advice System: Do you agree with this conclusion?\n'),
+    write(Out, 'Covid Advice System: [Do you agree with this conclusion?]\n'),
     yes_no,
-    print_prompt(user),
-    read(N),
+    write('User:'),read(N),
     (   N =:= 1
-    ->  print_prompt(bot), write('Bye\n'),!,halt
+    ->   write(Out,'User: YES\n'),write('Covid Advice System: Bye\n')->halt
     ;   N =:= 2
-    ->  
-        (
-            Conclusion =true
-            ->print_prompt(user), write('Why do you believe '), print_fact(F), write('?\n'),nl, why(F), conversations
+    ->   write(Out,'User: NO\n'),
+    
+        (Conclusion =true
+        ->
+            write('User: Why do you believe '),
+            write(Out,'User: Why do you believe '), print_fact(F), write(Out,'?\n'),write('?\n'),nl, 
+            why(F), conversations
         ;   
-            print_prompt(user), write('Why do not you believe '), print_fact(F), write('?\n'), nl,whynot(F)
+            write('User: Why do not you believe '), write(Out,'User: Why do not you believe '),
+            print_fact(F), write('?\n'),write(Out, '?\n'), nl, whynot(F),exampleClose
         )
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
 
 database(Conclusion,F):-
-   (
-    Conclusion =true
+   (Conclusion =true
     ->
         assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
         aggregate_all(count, y_user_computer(_,_), Count1),
@@ -94,7 +99,7 @@ option_why :-
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
     ;   
         N=:= 2
-    ->  write('Bye'),!,halt
+    ->  write('Covid Advice System:Bye\n')->halt
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
