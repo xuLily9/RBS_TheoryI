@@ -1,113 +1,74 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, user_question/1,conclusion_true/1,conclusion_false/1,agree/1,disagree/1,
-why_q/1,whynot_q/1,
-n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3, asked_question/1.
-
-agree(1, "Yes, I agree. Exit.").
-agree(2, "No, I disagree. I want an explanation.").
-
-reason(1, "It's an initial fact.").
-reason(2, "It is deduced by a rule.").
-
-
-print_prompt(bot):-
-        my_icon(X), write(X), write(': '), flush_output.
-print_prompt(user):-
-        user_icon(X), write(X), write(': '), flush_output.
-
-my_icon("Covid Advice System").
-user_icon("User Response").
-
+:-dynamic node/4, user_fact/4, different/1, asked_question/1,
+why_q/1,whynot_q/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3.
 
 chat:-
-    write_fact_list,!,
-    write_rule_list,!,
-    print_welcome.
-
+    print_welcome,
+    print_conclusion(Conclusion,F),
+    ask_agree(Conclusion,F),
+    database(Conclusion,F),
+    exampleClose.
 
 print_welcome:-
-    nl,
-    repeat,
-    write("Please select a question: "),nl,
-    write_initial_list,
-    print_prompt(user),
-    read(N),
+    exampleOpen,
+    write_user_fact,
+    write_user_rule.
+
+print_conclusion(Conclusion,F):-
+    write('\n----------CONVERSATION ----------\n'),nl,
+    print_prompt(bot),conclusion(F), 
     (
-        initial_question(N,F,Pretty),
-        assert(user_question(Pretty)),!,
-        main(F)
-    ;   write('Not a valid choice, try again...'), nl, fail
+        deduce_backwards(F,node(_ID, F, _R, _DAG))
+    ->  
+        nb_getval(fileOutput,Out),
+        print_fact(F),write(' is true.\n'),nl,
+        write(Out,' is true\n'),
+        Conclusion =true
+    ;   
+        nb_getval(fileOutput,Out),
+        print_fact(F),write(' is false.\n'),nl,
+        write(Out,' is false\n'),
+        Conclusion = false
     ).
 
-
-main(F):-
-    deduce_backwards(F,node(_ID, F, _R, _DAG))
-    -> 
-        print_prompt(bot),print_fact(F), write(' is true.'),nl,!,
-        assert(conclusion_true(F)),
-        disagree_true(F),!,
-        add_1(F),  
-        why(F),                          
-        conversations
-    ;
-        print_prompt(bot), print_fact(F), write(' is false.'),nl,!,
-        assert(conclusion_false(F)),
-        disagree_false(F),!,
-        add_2(F).
-
-
-
-disagree_true(F):-
-    nl,
+ask_agree(Conclusion,F):-
     repeat,
-    print_prompt(bot), write("Do you agree with this conclusion?"),nl,
-    write_agree_list,
+    print_prompt(bot), write('Do you agree with this conclusion?\n'),
+    yes_no,
     print_prompt(user),
-    prompt(_, ''),
     read(N),
     (   N =:= 1
-    ->  assert(agree(F)),!,print_prompt(bot), write("Bye"),!, write_report,halt
+    ->  print_prompt(bot), write('Bye\n'),!,halt
     ;   N =:= 2
-    ->  assert(disagree(F)),!,print_prompt(user), write("Why do you believe "), print_fact(F), write("?"),nl,!
-    ;   write("Not a valid choice, try again..."), nl,fail
-    ).
-
-disagree_false(F):-
-    nl,
-    repeat,
-    print_prompt(bot), write("Do you agree with this conslusion?"),nl,
-    write_agree_list,
-    print_prompt(user),
-    prompt(_, ''),
-    read(N),nl,
-    (   N =:= 1
-    ->  print_prompt(bot), write("Bye"),nl,!, write_report,halt
-    ;   N =:= 2
-    -> print_prompt(bot), write("Why don't you beleive "), print_fact(F), write("?"), nl,
-        whynot(F)
+    ->  
+        (
+            Conclusion =true
+            ->print_prompt(user), write('Why do you believe '), print_fact(F), write('?\n'),nl, why(F), conversations
+        ;   
+            print_prompt(user), write('Why do not you believe '), print_fact(F), write('?\n'), nl,whynot(F)
+        )
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
 
-
-
-add_1(F):-
-    assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
-    aggregate_all(count, y_user_computer(_,_), Count),
-    N_1 is Count +1,
-    assert(y_user_computer(N_1,F)),!,
-    assert(asked_question(F)),!.  
-
-
-
-add_2(F):-
-    aggregate_all(count, n_user_computer(_,_), Count),
-    N_2 is Count +1,
-    assert(n_user_computer(N_2,F)),!,
-    aggregate_all(count, y_computer_user(_,_), C),
-    B is C +1,
-    assert(y_computer_user(B,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
-    assert(asked_question(F)),!.
+database(Conclusion,F):-
+   (
+    Conclusion =true
+    ->
+        assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
+        aggregate_all(count, y_user_computer(_,_), Count1),
+        A is Count1 +1,
+        assert(y_user_computer(A,F)),!,
+        assert(asked_question(F)),!
+    ;
+        aggregate_all(count, n_user_computer(_,_), Count2),
+        B is Count2 +1,
+        assert(n_user_computer(B,F)),!,
+        aggregate_all(count, y_computer_user(_,_), Count3),
+        C is Count3 +1,
+        assert(y_computer_user(C,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
+        assert(asked_question(F)),!
+    ).
 
 
 
@@ -133,7 +94,7 @@ option_why :-
     ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
     ;   
         N=:= 2
-    ->  write('Bye'),write_report,!,halt
+    ->  write('Bye'),!,halt
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
@@ -157,52 +118,22 @@ option_why :-
     ).
 
 
- 
-print_report:-
-        write('\n--- Conversation report ---\n'),
-        user_question(X), 
-        write('['),write(X),write(']: '),
-        conclusion_true(Y)
-        -> write("Yes"),nl
-        ;conclusion_false(Z)
-        -> write(" No"),nl
-        ,retract(user_question(X)),retract(conclusion_true(Y)),retract(conclusion_false(Z)),fail.
-print_report:-
-        nl, write("Do you agree with this conclusion?"), write(' : '),
-        agree(X)
-        ->write("Yes"),nl
-        ;disagree(Y),write("No"),nl,
-        retract(agree(X)), fail.
-print_report.
+print_prompt(bot):-
+        my_icon(X), write(X), write(': '), flush_output.
+print_prompt(user):-
+        user_icon(X), write(X), write(': '), flush_output.
 
+my_icon("Covid Advice System").
+user_icon("User").
 
-write_report :-
-    open('file5.txt',write, Out),
-    write(Out,'\n--- Conversation report ---\n'),
-    user_question(X), 
-    write(Out,'['),write(Out,X),write(Out,']: '),
-    (conclusion_true(Y)
-    ->write(Out,'True')
-    ;conclusion_false(Z)
-    -> write(Out,'False')),
+exampleOpen:-
+    open('file.txt',write, Out),
+    write(Out,'\n----------CONVERSATION REPORT ----------\n'),
+    nb_setval(fileOutput,Out).
 
-    write(Out,'\n[Do you agree with this conclusion?]:'), 
-    (agree(A)
-    ->write(Out,'Yes')
-    ;disagree(B)
-    ->write(Out,'No')),
-    write(Out,'\n---User question:---'),
-    (why_q(C),write(Out,'\n[why do you beleive '),write(Out,C),write(Out,'?]'),fail
-    ;true),
-    (whynot_q(D),write(Out,'\n[why do you beleive '),write(Out,D),write(Out,'?]'),fail
-    ;true),
-     write(Out,'\n---Difference---'),
-     (different(E),write(Out,E),fail
-    ;true),
-
+exampleClose:-
+    nb_getval(fileOutput,Out),
     close(Out).
-
-   
        
 
 
