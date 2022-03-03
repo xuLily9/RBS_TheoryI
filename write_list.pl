@@ -4,8 +4,9 @@
 agree(1, "Yes, I agree. Exit.").
 agree(2, "No, I disagree. I want an explanation.").
 
-reason(1, "Because it's an initial fact.").
-reason(2, "Because it is deduced by a rule.").
+reason(1, "Because it's a user initial fact.").
+reason(2, "Because it is a new fact deduced by a rule.").
+reason(3, "Exit.").
 
 write_user_fact:-
     write('\n----------USER FACT ----------\n'),nl,
@@ -55,18 +56,20 @@ write_whynot_list.
 
 
 write_w_list:-
-    y_computer_user(N,P),
-    \+ deduce_backwards(P,_),
-    write(N),write(". Why do you beleive "), print_fact(P), write("?"),nl,
+    y_computer_user(N,F),
+    \+ deduce_backwards(F,_),
+   %\+ node(_N, F,_, _), !,
+    write(N),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_w_list.
 
 
 
 write_x_list:-
-    n_computer_user(P),
-    deduce_backwards(P,_),
-    write("Why don't you beleive "), print_fact(P), write("?"),nl,
+    n_computer_user(F),
+    deduce_backwards(F,_),
+    %node(_N, F,_, _)
+    write("Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_x_list.
 
@@ -78,11 +81,11 @@ write_x_list.
 
 
 
-write_reason_list :-
+write_reason:-
     reason(N, Name),
     write(N), write('. '), write(Name), nl,
     fail.
-write_reason_list.
+write_reason.
 
 
 write_initial_list:-
