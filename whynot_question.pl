@@ -3,7 +3,7 @@
 whynot(F):-
     repeat,
     nb_getval(fileOutput,Out),
-    write('Covid Advice System: Why do you beleive '),write(Out,'Covid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n'),
+    write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n'),
     write_reason,
     write('User: '),
     prompt(_, ''),
@@ -21,14 +21,14 @@ whynot(F):-
             write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.'),
             assert(different(F)),!
         ; 
-             \+user_fact(_,F,initial_fact,_),!,
+            \+user_fact(_,F,initial_fact,_),!,
             write('Covid Advice System: It is not an initial user fact,try again...\n'),
             write(Out,'Covid Advice System: It is not a user initial fact, please select another reason.\n'),nl,fail
         )
     ;    Number =:= 2
-    ->  write(Out, 'Because it is a new fact deduced by a rule'), because_rule(F), nl, !
+    ->  write(Out, 'Because it is a new fact deduced by a rule'), reason_rule, nl, !
     ;    Number =:= 3
-    -> write('Covid Advice System: Bye\n')->halt
+    -> write(Out,'Covid Advice System:Bye\n'),write('Covid Advice System: Bye\n')->halt
     ;
         write('Not a valid choice, try again...'), nl, fail
     ).
@@ -38,7 +38,7 @@ whynot(F):-
 %% IN this case the computer
 
 
-because_rule(F):-
+reason_rule:-
     repeat,
     nb_getval(fileOutput,Out),
     write('User: Please select a rule number: '),nl,
@@ -48,25 +48,26 @@ because_rule(F):-
     prompt(_, ''),
     read(N),nl,     
     (  
-        user_rule(N, A, F),
-        rule(_,A,F),
-        write(Out,'User:'),
-        assert(yr_computer_user(N,A,F)),!, 
-        check(A, NL),
-        %write(NL),
-        pretty_list(NL,_Pretty),
-        option_whynot
-    ;   
+        user_rule(N, A, F)
+        ->
+        (
+            rule(_,A,F)
+        ->
+            write(Out,'User:'),
+            assert(yr_computer_user(N,A,F)),!, 
+            check(A, NL),
+            write(NL),
+            pretty_list(NL,_Pretty),
+            option_whynot
+         ;   
 
-        write('Covid Advice System: I found the disagreement! I do not have this rule'),
-        write(Out, '\n----------DISAGREEMENT----------\n'),
-        write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-        assert(different(user_rule(N,_,_))),!
+            write('Covid Advice System: I found the disagreement! I do not have this rule'),
+            write(Out, '\n----------DISAGREEMENT----------\n'),
+            write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
+            assert(different(user_rule(N,_,_))),!
+        )
     ;   
         write('Not a valid choice, try again...'), nl, fail).
-
-
-
 
 
 option_whynot :-
@@ -84,10 +85,9 @@ option_whynot :-
     ).
 
 
-
-
 check([],[]).
 check([not(H)|T], N):-
+    write(H),
     \+ deduce_backwards(H, _DAG),!, 
     check(T, N).
 check([H|T], [H|N]):-
@@ -111,7 +111,6 @@ print_top(Fact,_Pretty):-
     ;   
         aggregate_all(count, y_computer_user(_,_), Count4),
         Num is Count4 +1,
-        %write(y_computer_user(Num,Fact)),
         assert(y_computer_user(Num,Fact)),!
     ). 
 
