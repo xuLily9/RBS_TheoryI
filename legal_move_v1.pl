@@ -44,21 +44,21 @@ ask_agree(Conclusion,F):-
     ;   N =:= 2
     ->   write(Out,'User: NO\n'),
     
-        (Conclusion =true
+        (   Conclusion =true
         ->
             write('User: Why do you believe '),
-            write(Out,'User: Why do you believe '), print_fact(F), write(Out,'?\n'),write('?\n'),nl, 
-            why(F), conversations
+            write(Out,'User: Why do you believe '), print_fact(F), write(Out,'?\n'),write('?\n'), 
+            why(F)
         ;   
-            write('User: Why do not you believe '), write(Out,'User: Why do not you believe '),
-            print_fact(F), write('?\n'),write(Out, '?\n'), nl, whynot(F),exampleClose
+            write('User: Why do not you believe '), 
+            write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'), whynot(F)
         )
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
 
 
 database(Conclusion,F):-
-   (Conclusion =true
+   (    Conclusion =true
     ->
         assert(n_computer_user(F)),!,     %% LOUISE: At this point the computer should add F to N_computer_user and Y_user_computer
         aggregate_all(count, y_user_computer(_,_), Count1),
