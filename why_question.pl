@@ -10,8 +10,7 @@ why(F):-
     write(Out, '\nCovid Advice System: I have found the disagreement. Computer believes '), 
     write('\nCovid Advice System: I have found the disagreement. Computer believes '), print_fact(F),write(' is an initial fact, but the user does not have it.\n'),nl, 
     write(Out,' is an initial fact, but the user does not have it.\n'),
-    assert(different(F)),!, 
-    write('\n----------SELECT A QUESTION OR EXIT----------\n'),nl.
+    assert(different(F)),!.
   
 why(F):-
     nb_getval(fileOutput,Out), 
