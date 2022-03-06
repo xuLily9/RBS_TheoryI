@@ -1,13 +1,13 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, asked_question/1,
-why_q/1,whynot_q/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3.
+:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3.
 
 chat:-
     print_welcome,
     print_conclusion(Conclusion,F),
+    assert(asked_question(F)),
     ask_agree(Conclusion,F),
     database(Conclusion,F),
-    exampleClose.
+    conversations.
 
 print_welcome:-
     exampleOpen,
@@ -40,7 +40,7 @@ ask_agree(Conclusion,F):-
     yes_no,
     write('User:'),read(N),
     (   N =:= 1
-    ->   write(Out,'User: YES\n'),write('Covid Advice System: Bye\n')->halt
+    ->   write(Out,'User: YES, BYE\n'),exampleClose,write('Covid Advice System: Bye\n')->halt
     ;   N =:= 2
     ->   write(Out,'User: NO\n'),
     
@@ -78,45 +78,46 @@ database(Conclusion,F):-
 
 
 conversations:-
-    nl,
     repeat,
-    option_why.
+    write('\n----------SELECT A QUESTION OR EXIT----------\n'),nl,
+    dialogue.
 
-
-option_why :-
+dialogue:-
     repeat,
-    print_prompt(bot),
-    write("Please select one of the option:"),nl,
-    write("1. I don't know about this rule used by computer."),nl,
-    write("2. Exit"),nl,
+    nb_getval(fileOutput,Out),
+    write('Covid Advice System: Please select one of the option:\n'),
+    write('1. Exit\n'),
+    write('2. I do not have this rule used by computer\n'),
+    write(Out,'\nCovid Advice System: Please select one of the option:\n'),
+    write(Out,'\n1. Exit\n'),
+    write(Out,'\n2. I do not have this rule used by computer\n'),
     write_why_list,!,
     write_whynot_list,!,
-    print_prompt(user),
+    write('User:'),
     prompt(_, ''),
     read(N),
     (   
         N=:= 1
-    ->  print_prompt(bot), write("I have identify the difference: the computer used a rule that you don't know about it."),nl,!
+     -> write(Out,'\nCovid Advice System:Bye\n'),exampleClose,write('Covid Advice System:Bye\n')->halt
     ;   
         N=:= 2
-    ->  write('Covid Advice System:Bye\n')->halt
+    ->  write(Out, '\n----------DISAGREEMENT----------\n'),
+        write(Out,'\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'),
+        write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n')
     ;   
-        N1 is N-1,
+        N1 is N-2,
         y_user_computer(N1, Fact), N \=1, N \=2
-        ->  write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
-            nl,
+        ->  write(Out,'\nUser: Why do you believe '),
+            write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
             assert(asked_question(Fact)),
-            assert(why_q(Fact)),
-            why(Fact)
+            why(Fact), conversations
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
-        A is N-Count-1,
+        A is N-Count-2,
         n_user_computer(A,Fact), N \=1, N \=2
-         -> write('You selected: '), write("Why do you believe "),print_fact(Fact), write("?"), nl, !,
-            nl,
+         -> write(Out,'\nUser: Why do you believe '),
+            write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
             assert(asked_question(Fact)),
-            print_prompt(bot), write("Why don't you beleive "), print_fact(Fact), write("?"), nl,
-            assert(whynot_q(Fact)),
             whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
