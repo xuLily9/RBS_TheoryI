@@ -18,9 +18,10 @@ write_user_fact.
 write_user_rule:-
     write('\n----------USER RULE ----------\n'),nl,
     user_rule(N, _Antecedants, _C),
-    rule_description(N),
+    print_rule(N),nl,
     fail.
 write_user_rule.
+
 
 print_fact(Fact):-
     fact_description(Fact).
@@ -38,7 +39,7 @@ write_why_list:-
     %% LOUISE: What if the node was labelled unprovable?
     y_user_computer(N,F),
     \+ asked_question(F),
-    N1 is N+1,
+    N1 is N+2,
     write(N1),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_why_list.
@@ -48,7 +49,7 @@ write_whynot_list:-
     n_user_computer(A,F),
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
-    B is A +Count+1,
+    B is A +Count+2,
     write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
 write_whynot_list.
