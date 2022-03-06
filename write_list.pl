@@ -40,7 +40,13 @@ write_why_list:-
     y_user_computer(N,F),
     \+ asked_question(F),
     N1 is N+2,
-    write(N1),write(". Why do you beleive "), print_fact(F), write("?"),nl,
+    (  
+
+     \+node(_,F,unprovable,_)
+    ->
+        write(N1),write(". Why do you beleive "), print_fact(F), write("?"),nl
+    ;   write(N1),write(". Why do not you beleive "), rewrite_fact(F), write("?"),nl
+    ),
     fail.
 write_why_list.
 
@@ -50,10 +56,16 @@ write_whynot_list:-
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
     B is A +Count+2,
-    write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl,
+   (  \+node(_,_,unprovable,_)
+    ->
+        write(B),write(". Why do not you beleive "), print_fact(F), write("?"),nl
+    ;   write(B),write(". Why do not you beleive "), rewrite_fact(F), write("?"),nl
+    ),
     fail.
 write_whynot_list.
 
+rewrite_fact(not(H)):-
+    print_fact(H).
 
 
 write_w_list:-
