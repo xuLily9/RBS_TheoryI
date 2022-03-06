@@ -5,9 +5,7 @@ chat:-
     print_welcome,
     print_conclusion(Conclusion,F),
     assert(asked_question(F)),
-    ask_agree(Conclusion,F),
-    database(Conclusion,F),
-    conversations.
+    ask_agree(Conclusion,F).
 
 print_welcome:-
     exampleOpen,
@@ -45,11 +43,11 @@ ask_agree(Conclusion,F):-
     ->   write(Out,'User: NO\n'),
     
         (   Conclusion =true
-        ->
+        ->  database(Conclusion,F),
             write('User: Why do you believe '),
             write(Out,'User: Why do you believe '), print_fact(F), write(Out,'?\n'),write('?\n'), 
             why(F)
-        ;   
+        ;   database(Conclusion,F),
             write('User: Why do not you believe '), 
             write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'), whynot(F)
         )
@@ -69,6 +67,7 @@ database(Conclusion,F):-
         aggregate_all(count, n_user_computer(_,_), Count2),
         B is Count2 +1,
         assert(n_user_computer(B,F)),!,
+        %write(n_user_computer(B,F)),
         aggregate_all(count, y_computer_user(_,_), Count3),
         C is Count3 +1,
         assert(y_computer_user(C,F)),!,     %% LOUISE: At this point the computer should add F to Y_computer_user and N_user_computer
@@ -103,7 +102,7 @@ dialogue:-
         N=:= 2
     ->  write(Out, '\n----------DISAGREEMENT----------\n'),
         write(Out,'\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'),
-        write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n')
+        write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'), conversations
     ;   
         N1 is N-2,
         y_user_computer(N1, Fact), N \=1, N \=2
@@ -123,14 +122,6 @@ dialogue:-
         write('Not a valid choice, try again...'), nl,fail
     ).
 
-
-print_prompt(bot):-
-        my_icon(X), write(X), write(': '), flush_output.
-print_prompt(user):-
-        user_icon(X), write(X), write(': '), flush_output.
-
-my_icon("Covid Advice System").
-user_icon("User").
 
 exampleOpen:-
     open('file.txt',write, Out),
