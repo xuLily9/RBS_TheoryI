@@ -1,30 +1,34 @@
-why(F):-                                    
-    node(_N, F, initial_fact, _NL), !,
-    nl,
-    print_prompt(bot),                              
-    write("Because computer believes "), 
+why(F):- 
+    nb_getval(fileOutput,Out),                                   
+    node(_N, F, initial_fact, _NL), !,                              
+    write('\nCovid Advice System: Because computer believes '), 
+    write(Out,'\nCovid Advice System: Because computer believes '), 
     print_fact(F),
-    write(" is an initial fact."),nl,
-    print_prompt(bot),
-    write("I have identify the difference. Computer believes "), print_fact(F),write(" is an initial fact, but the user doesn't believe it."),nl, 
-    assert(different(F)),!, nl,
-    write('\n---Go back to question or exit---\n'),nl,
-    conversations.
+    write(' is an initial fact.\n'),
+    write(Out,' is an initial fact.\n'),
+    write(Out, '\n----------DISAGREEMENT----------\n'),
+    write('\nCovid Advice System: I have found the disagreement. Computer believes '), print_fact(F),write(' is an initial fact, but the user does not have it.\n'),nl, 
+    write(Out, '\nCovid Advice System: I have found the disagreement. Computer believes '), print_fact(F),write(Out,' is an initial fact, but the user does not have it.\n'),
+    assert(different(F)),!, 
+    write('\n---Go back to question or exit---\n').
   
 why(F):-
+    nb_getval(fileOutput,Out), 
     node(_N, F, R, NL), !,                           
     rule(R, A, F),
-    print_prompt(bot),
-    write("Because "),
+    write('\nCovid Advice System: Because '),
+    write(Out,'\nCovid Advice System: Because '),
     print_fact(F),
-    write(" is deduced using RULE ["),
+    write(' is deduced using RULE '),
+    write(Out,' is deduced using RULE '),
     system_rule(R),
     assert(asked_question(F)),!,
     assert(yr_user_computer(R, A, F)),!,
-    write("], from facts:"),
-    nl,
+    write('---FROM FACTS---\n'),
+    write(Out,'\n---FROM FACTS---\n'),
     pretty_print_node_list(NL,Pretty),
     write(Pretty),
+    write(Out, Pretty),
     nl.
 
 %% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals),So you should be extending Y_user_computer and N_user_computer
@@ -56,8 +60,7 @@ pretty_head(node(_, Fact, _Rule, _)):-
             N_2 is A +1,
             assert(n_user_computer(N_2,Fact)),!,
             print_fact(Fact),nl
-        )
-    .
+        ).
  
 
     
