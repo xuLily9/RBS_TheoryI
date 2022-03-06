@@ -41,7 +41,6 @@ write_why_list:-
     \+ asked_question(F),
     N1 is N+2,
     (  
-
      \+node(_,F,unprovable,_)
     ->
         write(N1),write(". Why do you beleive "), print_fact(F), write("?"),nl
@@ -53,13 +52,15 @@ write_why_list.
 write_whynot_list:-
     %% LOUISE: What if the node was labelled unprovable?
     n_user_computer(A,F),
+    %write(n_user_computer(A,F)),
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
-    B is A +Count+2,
-   (  \+node(_,_,unprovable,_)
+    B is A+Count+2,
+   (  
+    \+node(_,F,unprovable,_)
     ->
-        write(B),write(". Why do not you beleive "), print_fact(F), write("?"),nl
-    ;   write(B),write(". Why do not you beleive "), rewrite_fact(F), write("?"),nl
+        write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl
+    ;   write(B),write(". Why do not you beleive "), write(F),rewrite_fact(F), write("?"),nl
     ),
     fail.
 write_whynot_list.
@@ -71,6 +72,7 @@ rewrite_fact(not(H)):-
 write_w_list:-
     y_computer_user(N,F),
     \+ deduce_backwards(F,_),
+    \+ asked_question(F),
    %\+ node(_N, F,_, _), !,
     write(N),write(". Why do you beleive "), print_fact(F), write("?"),nl,
     fail.
@@ -81,6 +83,7 @@ write_w_list.
 write_x_list:-
     n_computer_user(F),
     deduce_backwards(F,_),
+    \+ asked_question(F),
     %node(_N, F,_, _)
     write("Why don't you beleive "), print_fact(F), write("?"),nl,
     fail.
