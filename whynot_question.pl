@@ -3,7 +3,13 @@
 whynot(F):-
     repeat,
     nb_getval(fileOutput,Out),
-    write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n'),
+    (
+    node(_,F,unprovable,_)
+    ->write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), rewrite_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n')
+
+   ; write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n')
+
+    ),
     write_reason,
     write('User: '),
     prompt(_, ''),
