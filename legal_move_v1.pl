@@ -21,11 +21,11 @@ print_conclusion(Conclusion,F):-
     (
         deduce_backwards(F,node(_ID, F, _R, _DAG))
     ->  
-        print_fact(F),write(' is true.\n'),nl,
+        print_fact(F),write(': True.\n'),nl,
         write(Out,' is true\n'),
         Conclusion =true
     ;   
-        print_fact(F),write(' is false.\n'),nl,
+        print_fact(F),write(': False.\n'),nl,
         write(Out,' is false\n'),
         Conclusion = false
         
@@ -118,7 +118,7 @@ dialogue:-
          -> 
          write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),rewrite_fact(Fact), write('?\n'),write(Out,'?\n'),
          assert(asked_question(Fact)),
-         whynot(Fact), conversations
+         whynot(Fact)
     ;   
         write('Not a valid choice, try again...'), nl,fail
     ).
