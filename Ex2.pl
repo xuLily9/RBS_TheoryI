@@ -49,8 +49,8 @@ fact_description(covid_pass(A)):-
      write(A), write(" has NHS Covid pass").
 fact_description(close_pcr_positive(A)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," has been in close contact with someone whose pcr test is positive. "),
-    write(A), write(" has been in close contact with someone whose pcr test is positive. ").
+    write(Out,A), write(Out," has been in close contact with someone whose PCR test is positive. "),
+    write(A), write(" has been in close contact with someone whose PCR test is positive. ").
 fact_description(not(pinged(A))):-
     nb_getval(fileOutput,Out),
     write(Out,A), write(Out," has not been in close contact with someone who has Covid-19 "),
@@ -85,8 +85,8 @@ fact_description(can_meet(A, B)):-
     write(A), write(" and "), write(B),write(" can meet").
 fact_description(watch_football(A, B)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," and "), write(Out,B),write(Out," can watch football in stadium together"),
-    write(A), write(" and "), write(B),write(" can watch football in stadium together").
+    write(Out,A), write(Out," and "), write(Out,B),write(Out," can watch football in the stadium together"),
+    write(A), write(" and "), write(B),write(" can watch football in the stadium together").
 fact_description(fever(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out," has fever"),
@@ -117,16 +117,16 @@ rule_description(4):-
     write("4. If X has a cough, then X has symptoms.").
 rule_description(5):-
     nb_getval(fileOutput,Out),
-    write(Out, "5. If X has been in close contact with someone whose pcr test is positive, then X is pinged"),
-    write("5. If X has been in close contact with someone whose pcr test is positive, then X is pinged").
+    write(Out, "5. If X has been in close contact with someone whose PCR test is positive, then X is pinged"),
+    write("5. If X has been in close contact with someone whose PCR test is positive, then X is pinged").
 rule_description(6):-
     nb_getval(fileOutput,Out),
     write(Out,"6. If X is vaccinated, then X has an NHS Covid pass."),
     write("6. If X is vaccinated, then X has an NHS Covid pass.").
 rule_description(7):-
     nb_getval(fileOutput,Out),
-    write(Out,"7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football together"),
-    write("7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football together").
+    write(Out,"7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together"),
+    write("7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together").
 rule_description(8):-
     nb_getval(fileOutput,Out),
     write(Out, "8. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated."),
@@ -151,8 +151,8 @@ r_description(4):-
     write("4. If X has a cough, then X has symptoms."),nl.
 r_description(5):-
     nb_getval(fileOutput,Out),
-    write(Out,"5. If X has been in close contact with someone whose pcr test is positive, then X is pinged"),
-    write("5. If X has been in close contact with someone whose pcr test is positive, then X is pinged"),nl.
+    write(Out,"5. If X has been in close contact with someone whose PCR test is positive, then X is pinged"),
+    write("5. If X has been in close contact with someone whose PCR test is positive, then X is pinged"),nl.
 r_description(6):-
     nb_getval(fileOutput,Out),
     write(Out,"6. If X is vaccinated, then X has an NHS Covid pass."),
