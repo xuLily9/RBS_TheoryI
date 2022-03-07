@@ -5,7 +5,8 @@ chat:-
     print_welcome,
     print_conclusion(Conclusion,F),
     assert(asked_question(F)),
-    ask_agree(Conclusion,F).
+    ask_agree(Conclusion,F),
+    conversations.
 
 print_welcome:-
     exampleOpen,
@@ -16,7 +17,7 @@ print_conclusion(Conclusion,F):-
     write('\n----------CONVERSATION ----------\n'),nl,
     nb_getval(fileOutput,Out),
     write('Covid Advice System: '),conclusion(F), 
-    write(Out,'Covid Advice System: '),
+    write(Out,'\nCovid Advice System: '),
     (
         deduce_backwards(F,node(_ID, F, _R, _DAG))
     ->  
@@ -116,8 +117,8 @@ dialogue:-
         n_user_computer(A,Fact), N \=1, N \=2
          -> 
          write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),rewrite_fact(Fact), write('?\n'),write(Out,'?\n'),
-            assert(asked_question(Fact)),
-            whynot(Fact)
+         assert(asked_question(Fact)),
+         whynot(Fact), conversations
     ;   
         write('Not a valid choice, try again...'), nl,fail
     ).
