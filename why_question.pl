@@ -43,8 +43,6 @@ pretty_print_node_list([Head|Tail],Out):-
 
 
 pretty_head(node(_, Fact, _Rule, _)):-
-    \+ node(_, Fact, unprovable, _)
-    ->
         (\+ y_user_computer(_N,Fact)
         ->  aggregate_all(count, y_user_computer(_,_), Count),
              N is Count +1,
@@ -52,14 +50,14 @@ pretty_head(node(_, Fact, _Rule, _)):-
             print_fact(Fact),nl
         ;
             print_fact(Fact),nl
-        )
-    ;   
-        (\+ n_user_computer(_N_2,Fact)
-        ->  
-            aggregate_all(count, n_user_computer(_,_), A),
-            N_2 is A +1,
-            assert(n_user_computer(N_2,Fact)),!,
-            print_fact(Fact),nl
         ).
+
+pretty_head(node(_, not(H), _, _)):-
+    \+ n_user_computer(_N_2,H)
+    ->  
+        aggregate_all(count, n_user_computer(_,_), A),
+        N_2 is A +1,
+        assert(n_user_computer(N_2,H)),!,
+        print_fact(H),nl.
  
 
