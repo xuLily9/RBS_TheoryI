@@ -59,8 +59,8 @@ write_whynot_list:-
    (  
     \+node(_,F,unprovable,_)
     ->
-        write(B),write(". Why do you beleive "), print_fact(F), write("?"),nl
-    ;   write(B),write(". Why do not you beleive "), rewrite_fact(F), write("?"),nl
+        write(B),write(". Why do not you beleive "), print_fact(F), write("?"),nl
+    ;   write(B),write(". Why do you beleive "), rewrite_fact(F), write("?"),nl
     ),
     fail.
 write_whynot_list.
