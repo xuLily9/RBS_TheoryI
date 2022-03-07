@@ -68,9 +68,7 @@ write_w_list.
 
 write_x_list:-
     n_computer_user(F),
-    deduce_backwards(F,_),
     \+ asked_question(F),
-    %node(_N, F,_, _)
     write("Why don't you believe "), print_fact(F), write("?"),nl,
     fail.
 write_x_list.
