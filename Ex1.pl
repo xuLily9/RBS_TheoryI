@@ -39,8 +39,8 @@ fact_description(vaccinated(A)):-
     write(A), write(" is vaccinated").
 fact_description(taste_and_smell(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out,' have taste and smell'),
-    write(X), write(" have taste and smell").
+    write(Out,X), write(Out,' has the taste and smell'),
+    write(X), write(" has the taste and smell").
 fact_description(symptoms(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out,' has symptoms'),
