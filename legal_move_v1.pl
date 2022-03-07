@@ -107,18 +107,28 @@ dialogue:-
     ;   
         N1 is N-2,
         y_user_computer(N1, Fact), N \=1, N \=2
-        ->  write(Out,'\nUser: Why do you believe '),
-            write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
-            assert(asked_question(Fact)),
-            why(Fact), conversations
+        ->  (
+                \+node(_,Fact,unprovable,_)
+            ->  write(Out,'\nUser: Why do you believe '),write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
+                assert(asked_question(Fact)),
+                why(Fact), conversations
+            ;write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),rewrite_fact(Fact), write('?\n'),write(Out,'?\n'),
+                assert(asked_question(Fact)),
+                whynot(Fact)
+            )
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count-2,
         n_user_computer(A,Fact), N \=1, N \=2
          -> 
-         write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),rewrite_fact(Fact), write('?\n'),write(Out,'?\n'),
-         assert(asked_question(Fact)),
-         whynot(Fact)
+         (  \+node(_,Fact,unprovable,_)
+         ->write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),rewrite_fact(Fact), write('?\n'),write(Out,'?\n'),
+            assert(asked_question(Fact)),
+            whynot(Fact)
+         ;  write(Out,'\nUser: Why do you believe '),write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
+            assert(asked_question(Fact)),
+            why(Fact), conversations
+         )
     ;   
         write('Not a valid choice, try again...'), nl,fail
     ).
