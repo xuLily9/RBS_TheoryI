@@ -3,13 +3,8 @@
 whynot(F):-
     repeat,
     nb_getval(fileOutput,Out),
-    (
-    node(_,F,unprovable,_)
-    ->write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), rewrite_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n')
-
-   ; write('\nCovid Advice System: Why do you beleive '),write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n')
-
-    ),
+    write('\nCovid Advice System: Why do you beleive '),
+    write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n'),
     write_reason,
     write('User: '),
     prompt(_, ''),
@@ -30,7 +25,7 @@ whynot(F):-
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I have found the disagreement. User believes '),print_fact(F),
             write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.'),
-            assert(different(F)),!, conversations
+            assert(different(F)),!
         ; 
             \+user_fact(_,F,initial_fact,_),!,
             write('Covid Advice System: It is not an initial user fact,please select another reason.\n'),whynot(F),
@@ -100,9 +95,13 @@ option_whynot :-
     ).
 
 
+question:-
+    write('Covid Advice System:').
+
 check([],[]).
 check([not(H)|T], N):-
     \+ deduce_backwards(H, _DAG),!, 
+    assert(n_computer_user(H)),
     check(T, N).
 check([H|T], [H|N]):-
     \+ deduce_backwards(H, _DAG),!, 
@@ -118,15 +117,11 @@ pretty_list([Head|Tail],Out):-
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    (
-        node(_, Fact, unprovable, _)
+    \+node(_,Fact,unprovable,_)
     ->
-        assert(n_computer_user(Fact)),!
-    ;   
         aggregate_all(count, y_computer_user(_,_), Count4),
         Num is Count4 +1,
-        assert(y_computer_user(Num,Fact)),!
-    ). 
+        assert(y_computer_user(Num,Fact)),!.
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
