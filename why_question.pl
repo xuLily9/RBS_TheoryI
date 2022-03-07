@@ -63,9 +63,3 @@ pretty_head(node(_, Fact, _Rule, _)):-
         ).
  
 
-    
-
-
-
-
-
