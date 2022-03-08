@@ -56,11 +56,11 @@ write_whynot_list.
 
 
 write_w_list:-
-    y_computer_user(N,F),
+    y_computer_user(_N,F),
     \+ deduce_backwards(F,_),
     \+ asked_question(F),
-   %\+ node(_N, F,_, _), !,
-    write(N),write(". Why do you believe "), print_fact(F), write("?"),nl,
+    assert(computer_ask_user(F)),
+    %write(N),write(". Why do you believe "), print_fact(F), write("?"),nl,
     fail.
 write_w_list.
 
@@ -69,16 +69,23 @@ write_w_list.
 write_x_list:-
     n_computer_user(F),
     \+ asked_question(F),
-    write("Why don't you believe "), print_fact(F), write("?"),nl,
+    assert(computer_ask_user(F)),
+    %write("Why don't you believe "), print_fact(F), write("?"),nl,
     fail.
 write_x_list.
 
 
 
+random_pick(Res, R):- 
+        length(Res, Length),  
+        Upper is Length + 1,
+        random(1, Upper, Rand),
+        nth_item(Res, Rand, R).
 
-
-
-
+nth_item([H|_], 1, H).
+nth_item([_|T], N, X):-
+        nth_item(T, N1, X),
+        N is N1 + 1.
 
 
 write_reason:-
