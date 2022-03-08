@@ -1,5 +1,6 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
-:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3.
+:- use_module(library(random)).
+:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3,computer_ask_user/1.
 
 chat:-
     print_welcome,
