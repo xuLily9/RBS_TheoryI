@@ -28,3 +28,25 @@ check_antecedants([not(H)|T], [node(ID_n,not(H),unprovable,[])|NodeList]):-
 
 
 
+% the deduce processing using user rules 
+deduce_user(Q, node(ID, Q, R , DAG)):-
+   node(ID, Q, R , DAG).
+deduce_user(Q, node(ID, Q, ID_r , NodeList)):-
+   user_rule(ID_r, A, Q),
+   \+ node(_ID, Q, _ID_r, _NodeList),
+   check_antecedants(A, NodeList), !,
+   countNumbers(Numbers),
+   ID is Numbers +1,
+   assert(node(ID,Q,ID_r,NodeList)).
+ 
+check_as([],[]).
+check_as([H|T], [node(ID, H, R, DAG)|NodeList]):-
+    deduce_user(H, node(ID, H, R, DAG)),
+    check_as(T, NodeList).
+
+check_as([not(H)|T], [node(ID_n,not(H),unprovable,[])|NodeList]):-
+    \+ deduce_user(H, _DAG), !,
+    countNumbers(Numbers),
+    ID_n is Numbers +1,
+    assert(node(ID_n,not(H),unprovable,[])),
+    check_as(T, NodeList).
