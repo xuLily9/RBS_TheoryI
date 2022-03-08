@@ -1,7 +1,3 @@
-
-
-
-
 user_fact(1,two_dose_v(harry), initial_fact, []).
 user_fact(2,two_dose_v(ella), initial_fact, []).
 user_fact(3,taste_and_smell(harry), initial_fact, []).
