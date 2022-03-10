@@ -1,10 +1,9 @@
-:- use_module(library(random)).
+
 
 whynot(F):-
     repeat,
     nb_getval(fileOutput,Out),
-    write('\nCovid Advice System: Why do you beleive '),
-    write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? Please state your reason:\n'),write('? Please state your reason:\n'),
+    write(Out,'Please state your reason:\n'),write('Please state your reason:\n'),
     write_reason,
     write('User: '),
     prompt(_, ''),
@@ -32,7 +31,7 @@ whynot(F):-
             write(Out,'Covid Advice System: It is not a user initial fact, please select another reason.\n'),nl,fail
         )
     ;    Number =:= 2
-    ->  write(Out, 'Because it is a new fact deduced by a rule'), reason_rule(F), nl, !
+    ->  write(Out, 'Because it is a new fact deduced by a rule.'), reason_rule(F), nl, !
     ;    Number =:= 3
     -> write(Out,'Covid Advice System:Bye\n'),write('Covid Advice System: Bye\n')->halt
     ;
@@ -64,7 +63,6 @@ reason_rule(F):-
             assert(yr_computer_user(N,A,F)),!, 
             check(A, NL),
             pretty_list(NL,_Pretty),
-            %write('Covid Advice System:'),
             option_whynot
          ;   
 
@@ -82,26 +80,30 @@ reason_rule(F):-
         write('Not a valid choice, try again...'), nl, fail).
 
 
-option_whynot :-
-    %nb_getval(fileOutput,Out),
-    %write('\nCovid Advice System: '),
-    %write(Out,'\nCovid Advice System: '),
+option_whynot:-
     write_w_list,
     write_x_list,
     choose(F),
-    write('User:'),
     whynot(F).
 
 choose(F):-
     computer_ask_user(F),
     \+asked_question(F),
-    assert(asked_question(F)), whynot(F).
+    assert(asked_question(F)),
+    nb_getval(fileOutput,Out),
+    (   n_computer_user(F)
+     ->  
+        write(Out,'Covid Advice System: Why do not you believe '),write('Covid Advice System: Why do not you believe '),print_fact(F), write('? '),write(Out,'?\n'),
+        whynot(F)
+    ;   write(Out,'Covid Advice System: Why do you believe '),write('Covid Advice System: Why do not you believe '),print_fact(F), write('? '),write(Out,'?\n'),
+        whynot(F)
+    ).
 
 
 check([],[]).
 check([not(H)|T], N):-
     \+ deduce_user(H, _DAG),!, 
-    assert(n_computer_user(not(H))),
+    assert(n_computer_user(H)),
     check(T, N).
 check([H|T], [H|N]):-
     \+ deduce_user(H, _DAG),!, 
