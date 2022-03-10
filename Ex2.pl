@@ -33,28 +33,28 @@ rule(8,[two_dose_v(X)], vaccinated(X)).
 
 fact_description(two_dose_v(A)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," is vaccinated with two doses of any approved vaccine "),
-     write(A), write(" is vaccinated with two doses of any approved vaccine ").
+    write(Out,A), write(Out," is vaccinated with two doses of any approved vaccine"),
+     write(A), write(" is vaccinated with two doses of any approved vaccine").
 fact_description(wear_mask(A)):-
      nb_getval(fileOutput,Out),
-     write(Out,A), write(Out,' wears the mask\n'),
+     write(Out,A), write(Out,' wears the mask'),
      write(A), write(" wears the mask").
 fact_description(covid_pass(A)):-
      nb_getval(fileOutput,Out),
-     write(Out,A), write(Out,' has NHS Covid pass\n'),
+     write(Out,A), write(Out,' has NHS Covid pass'),
      write(A), write(" has NHS Covid pass").
 fact_description(close_pcr_positive(A)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," has been in close contact with someone whose PCR test is positive. "),
-    write(A), write(" has been in close contact with someone whose PCR test is positive. ").
+    write(Out,A), write(Out," has been in close contact with someone whose PCR test is positive"),
+    write(A), write(" has been in close contact with someone whose PCR test is positive").
 fact_description(not(pinged(A))):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," has not been in close contact with someone who has Covid-19 "),
-    write(A), write(" has not been in close contact with someone who has Covid-19 ").
+    write(Out,A), write(Out," has not been in close contact with someone who has Covid-19"),
+    write(A), write(" has not been in close contact with someone who has Covid-19").
 fact_description(pinged(A)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out," has been in close contact with someone who has Covid-19 "),
-    write(A), write(" has been in close contact with someone who has Covid-19 ").
+    write(Out,A), write(Out," has been in close contact with someone who has Covid-19"),
+    write(A), write(" has been in close contact with someone who has Covid-19").
 fact_description(vaccinated(A)):-
     nb_getval(fileOutput,Out),
     write(Out,A), write(Out," is vaccinated"),
