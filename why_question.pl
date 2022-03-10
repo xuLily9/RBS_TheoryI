@@ -10,7 +10,9 @@ why(F):-
     write(Out, '\nCovid Advice System: I have found the disagreement. Computer has the fact: '), 
     write('\nCovid Advice System: I have found the disagreement. Computer has the fact: '), print_fact(F),write(' as an initial fact, but the user does not have it.\n'),nl, 
     write(Out,' is an initial fact, but the user does not have it.\n'),
-    assert(different(F)),!.
+    assert(different(F)),!,
+    Used=false,
+    conversations(Used).
   
 why(F):-
     nb_getval(fileOutput,Out), 
@@ -30,6 +32,8 @@ why(F):-
     pretty_print_node_list(NL,Pretty),
     write(Pretty),
     write(Out, Pretty),
+    Used=true,
+    conversations(Used),
     nl.
 
 %% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals),So you should be extending Y_user_computer and N_user_computer
