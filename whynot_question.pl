@@ -1,5 +1,3 @@
-
-
 whynot(F):-
     repeat,
     nb_getval(fileOutput,Out),
@@ -24,7 +22,7 @@ whynot(F):-
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I have found the disagreement. User believes '),print_fact(F),
             write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.\n'),nl,
-            assert(different(F)),!, option_whynot
+            assert(different(F)),!
         ; 
             \+user_fact(_,F,initial_fact,_),!,
             write('Covid Advice System: It is not an initial user fact,please select another reason.\n'),whynot(F),
@@ -69,7 +67,7 @@ reason_rule(F):-
             write('Covid Advice System: I found the disagreement! I do not have this rule'),
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-            assert(different(user_rule(N,_,_))),!, option_whynot
+            assert(different(user_rule(N,_,_))),!, quit
             )
         ;   write('Covid Advice System: This rule are not used in deduction, please choose another rule.'),
             write(Out,'Covid Advice System: This rule are not used in deduction, please choose another rule.'),
@@ -83,22 +81,30 @@ reason_rule(F):-
 option_whynot:-
     write_w_list,
     write_x_list,
-    choose(F),
-    whynot(F).
+    aggregate_all(count, computer_ask_user(_,_), N),
+    computer_ask_user(N,_F),
+    choose(N).
 
-choose(F):-
-    computer_ask_user(F),
-    \+asked_question(F),
-    assert(asked_question(F)),
+choose(0):-
     nb_getval(fileOutput,Out),
-    (   n_computer_user(F)
+    write('----------FINISHED----------\n'),
+    write(Out, '----------FINISHED----------\n'),
+    write(Out,'Covid Advice System: Bye\n'),
+    write('Covid Advice System: Bye\n'), !,halt .
+choose(N):-
+    nb_getval(fileOutput,Out),
+    computer_ask_user(N,F),
+    assert(asked_question(F)),
+    Num is N-1,
+    ( n_computer_user(F)
      ->  
-        write(Out,'Covid Advice System: Why do not you believe '),write('Covid Advice System: Why do not you believe '),print_fact(F), write('? '),write(Out,'?\n'),
-        whynot(F)
-    ;   write(Out,'Covid Advice System: Why do you believe '),write('Covid Advice System: Why do not you believe '),print_fact(F), write('? '),write(Out,'?\n'),
-        whynot(F)
-    ).
-
+        write(Out,'Covid Advice System: Why do not you believe '),write('Covid Advice System: Why do not you believe '),print_fact(F), write('?\n'),write(Out,'?\n'),
+        write(Out,'User: Why do you believe '),write('User: Why do you believe '), print_fact(F),write('? '),write(Out,'?\n'),
+        whynot(F),choose(Num)
+    ;   write(Out,'Covid Advice System: Why do you believe '),write('Covid Advice System: Why do you believe '),print_fact(F), write('? '),write(Out,'?\n'),
+        whynot(F),choose(Num)
+    ),
+    choose(Num).
 
 check([],[]).
 check([not(H)|T], N):-
