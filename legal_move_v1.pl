@@ -7,12 +7,21 @@ chat:-
     print_conclusion(Conclusion,F),
     assert(asked_question(F)),
     ask_agree(Conclusion,F),
-    conversations.
+    conversations(_Used).
 
 print_welcome:-
     exampleOpen,
     write_user_fact,
     write_user_rule.
+
+exampleOpen:-
+    open('file.txt',write, Out),
+    write(Out,'\n----------CONVERSATION REPORT ----------\n'),
+    nb_setval(fileOutput,Out).
+
+exampleClose:-
+    nb_getval(fileOutput,Out),
+    close(Out).
 
 print_conclusion(Conclusion,F):-
     write('\n----------CONVERSATION ----------\n'),nl,
@@ -52,8 +61,8 @@ ask_agree(Conclusion,F):-
         ;   database(Conclusion,F),
             write('User: Why do not you believe '), 
             write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'),
-            write('\nCovid Advice System: Why do you beleive '),
-            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? '),write(Out, '? '),
+            write('\nCovid Advice System: Why do you beleive '), 
+            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '? '),
             whynot(F)
         )
     ;   write("Not a valid choice, try again..."), nl,fail
@@ -81,10 +90,13 @@ database(Conclusion,F):-
 
 
 
-conversations:-
+conversations(Used):-
     repeat,
     write('\n----------SELECT A QUESTION OR EXIT----------\n'),nl,
-    dialogue.
+    (
+    Used=true
+    -> dialogue
+    ; dialogue2).
 
 dialogue:-
     repeat,
@@ -107,13 +119,13 @@ dialogue:-
         N=:= 2
     ->  write(Out, '\n----------DISAGREEMENT----------\n'),
         write(Out,'\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'),
-        write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'), conversations
+        write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n')
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
         ->  write(Out,'\nUser: Why do you believe '),write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
             assert(asked_question(Fact)),
-            why(Fact), conversations
+            why(Fact)
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count-1,
@@ -126,16 +138,39 @@ dialogue:-
         write('Not a valid choice, try again...'), nl,fail
     ).
 
-exampleOpen:-
-    open('file.txt',write, Out),
-    write(Out,'\n----------CONVERSATION REPORT ----------\n'),
-    nb_setval(fileOutput,Out).
 
-exampleClose:-
+dialogue2:-
+    repeat,
     nb_getval(fileOutput,Out),
-    close(Out).
-       
-
+    write('Covid Advice System: Please select one of the option:\n'),
+    write('1. Exit\n'),
+    write(Out,'\nCovid Advice System: Please select one of the option:\n'),
+    write(Out,'\n1. Exit\n'),
+    write_why_list,!,
+    write_whynot_list,!,
+    write('User:'),
+    prompt(_, ''),
+    read(N),
+    (   
+        N=:= 1
+     -> write(Out,'\nCovid Advice System:Bye\n'),exampleClose,write('Covid Advice System:Bye\n')->halt
+   ;   
+        N1 is N-1,
+        y_user_computer(N1, Fact), N \=1, N \=2
+        ->  write(Out,'\nUser: Why do you believe '),write('\nUser: Why do you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
+            assert(asked_question(Fact)),
+            why(Fact)
+    ;   
+        aggregate_all(count, y_user_computer(_,_), Count),
+        A is N-Count-1,
+        n_user_computer(A,Fact), N \=1, N \=2
+         -> write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
+            write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(Fact), write('? '),write(Out, '?'),
+            assert(asked_question(Fact)),
+            whynot(Fact)
+    ;   
+        write('Not a valid choice, try again...'), nl,fail
+    ).
 
 
 
