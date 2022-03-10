@@ -51,7 +51,10 @@ ask_agree(Conclusion,F):-
             why(F)
         ;   database(Conclusion,F),
             write('User: Why do not you believe '), 
-            write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'), whynot(F)
+            write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'),
+            write('\nCovid Advice System: Why do you beleive '),
+            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '? '),
+            whynot(F)
         )
     ;   write("Not a valid choice, try again..."), nl,fail
     ).
@@ -116,6 +119,7 @@ dialogue:-
         A is N-Count-1,
         n_user_computer(A,Fact), N \=1, N \=2
          -> write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
+            write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(Fact), write('? '),write(Out, '?'),
             assert(asked_question(Fact)),
             whynot(Fact)
     ;   
