@@ -22,6 +22,7 @@ why(F):-
     write(' is deduced using RULE '),
     write(Out,' is deduced using RULE '),
     system_rule(R),
+    assert(rule_used(R)),
     assert(asked_question(F)),!,
     assert(yr_user_computer(R, A, F)),!,
     write('---FROM FACTS---\n'),
