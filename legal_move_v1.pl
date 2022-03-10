@@ -1,6 +1,6 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
 :- use_module(library(random)).
-:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3,computer_ask_user/2.
+:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3,computer_ask_user/2,rule_used/1.
 
 chat:-
     print_welcome,
@@ -53,7 +53,7 @@ ask_agree(Conclusion,F):-
             write('User: Why do not you believe '), 
             write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'),
             write('\nCovid Advice System: Why do you beleive '),
-            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '? '),
+            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write(Out, '? '),write(Out, '? '),
             whynot(F)
         )
     ;   write("Not a valid choice, try again..."), nl,fail
@@ -117,7 +117,7 @@ dialogue:-
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count-1,
-        n_user_computer(A,Fact), N \=1, N \=2,
+        n_user_computer(A,Fact), N \=1, N \=2
          -> write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
             write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(Fact), write('? '),write(Out, '?'),
             assert(asked_question(Fact)),
@@ -125,7 +125,6 @@ dialogue:-
     ;   
         write('Not a valid choice, try again...'), nl,fail
     ).
-
 
 exampleOpen:-
     open('file.txt',write, Out),
