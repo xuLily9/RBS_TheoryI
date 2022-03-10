@@ -37,20 +37,28 @@ whynot(F):-
     ).
     
 
-%% LOUISE: Case where rule is missing is missting.
-%% IN this case the computer
-
-
 reason_rule(F):-
     repeat,
     nb_getval(fileOutput,Out),
     write('User: Please select a rule number: '),nl,
     write(Out,'User: Please select a rule number: '),
     write_user_rule,
+    aggregate_all(count, user_rule(_,_,_), Count),
+    Restart is Count+1,
+    write(Restart),write('. Restart to choose another reason\n'),
+    E is Restart+1,
+    write(E),write('. Exit\n'),
+    
     write('User: '),
     prompt(_, ''),
     read(N),nl,     
-    (  
+    (  N=:=E
+    ->  write(Out,'\nCovid Advice System:Bye\n'),
+        exampleClose,write('Covid Advice System:Bye\n')->halt
+    ;  N=:=Restart
+    ->write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
+        whynot(F)
+    ;
         (   
             user_rule(N, A, F)
         ->
@@ -73,12 +81,14 @@ reason_rule(F):-
             write(Out,'Covid Advice System: This fact is not deducted by this rule.'),
             button(F)
         )
+
     ;   
         write('Not a valid choice, try again...'), nl, fail).
 
 
 button(F):-
     nb_getval(fileOutput,Out),
+    write(Out,'Covid Advice System: Please choose another rule or reason\n'),
     write('Covid Advice System: Please choose another rule or reason\n'),
     write('1. Restart to choose a reason\n'),
     write('2. Choose another rule\n'),
@@ -87,8 +97,8 @@ button(F):-
     prompt(_, ''),
     read(N),
     (   N=:= 1
-    -> write(Out,'Please choose another rule or reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
-         whynot(F)
+    -> write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
+        whynot(F)
     ;   N=:= 2
     -> write(Out,'2. Choose another rule\n'),reason_rule(F)
     ;   N=:= 3
