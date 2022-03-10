@@ -1,14 +1,14 @@
 why(F):- 
     nb_getval(fileOutput,Out),
     node(_N, F, initial_fact, _NL), !,                              
-    write('\nCovid Advice System: Because computer believes '), 
-    write(Out,'\nCovid Advice System: Because computer believes '), 
+    write('\nCovid Advice System: Because computer has the fact: '), 
+    write(Out,'\nCovid Advice System: Because computer has the fact: '), 
     print_fact(F),
     write(' is an initial fact.\n'),
     write(Out,' is an initial fact.\n'),
     write(Out, '\n----------DISAGREEMENT----------\n'),
-    write(Out, '\nCovid Advice System: I have found the disagreement. Computer believes '), 
-    write('\nCovid Advice System: I have found the disagreement. Computer believes '), print_fact(F),write(' is an initial fact, but the user does not have it.\n'),nl, 
+    write(Out, '\nCovid Advice System: I have found the disagreement. Computer has the fact: '), 
+    write('\nCovid Advice System: I have found the disagreement. Computer has the fact: '), print_fact(F),write(' as an initial fact, but the user does not have it.\n'),nl, 
     write(Out,' is an initial fact, but the user does not have it.\n'),
     assert(different(F)),!.
   
@@ -56,7 +56,7 @@ pretty_head(node(_, Fact, _Rule, _)):-
      ).
 
 not_fact(not(H)):-
-    \+ n_user_computer(_N_2,H)
+    \+ n_user_computer(_,H)
     ->  
         aggregate_all(count, n_user_computer(_,_), A),
         N_2 is A +1,
