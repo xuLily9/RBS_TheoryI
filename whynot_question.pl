@@ -25,8 +25,8 @@ whynot(F):-
             assert(different(F)),!
         ; 
             \+user_fact(_,F,initial_fact,_),!,
-            write('Covid Advice System: It is not an initial user fact,please select another reason.\n'),whynot(F),
-            write(Out,'Covid Advice System: It is not a user initial fact, please select another reason.\n'),nl,fail
+            write('Covid Advice System: It is not an initial user fact,please select another reason.'),whynot(F),
+            write(Out,'Covid Advice System: It is not a user initial fact, please select another reason.'),nl,fail
         )
     ;    Number =:= 2
     ->  write(Out, 'Because it is a new fact deduced by a rule.'), reason_rule(F), nl, !
@@ -69,13 +69,32 @@ reason_rule(F):-
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
             assert(different(user_rule(N,_,_))),!, quit
             )
-        ;   write('Covid Advice System: This rule are not used in deduction, please choose another rule.'),
-            write(Out,'Covid Advice System: This rule are not used in deduction, please choose another rule.'),
-            reason_rule(F)
-
+        ;   write('Covid Advice System: This fact is not deducted by this rule.'),
+            write(Out,'Covid Advice System: This fact is not deducted by this rule.'),
+            button(F)
         )
     ;   
         write('Not a valid choice, try again...'), nl, fail).
+
+
+button(F):-
+    nb_getval(fileOutput,Out),
+    write('Covid Advice System: Please choose another rule or reason\n'),
+    write('1. Restart to choose a reason\n'),
+    write('2. Choose another rule\n'),
+    write('3. Exit\n'),
+    write('User:'),
+    prompt(_, ''),
+    read(N),
+    (   N=:= 1
+    -> write(Out,'Please choose another rule or reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
+         whynot(F)
+    ;   N=:= 2
+    -> write(Out,'2. Choose another rule\n'),reason_rule(F)
+    ;   N=:= 3
+    -> write(Out,'\nCovid Advice System:Bye\n'),
+      exampleClose,write('Covid Advice System:Bye\n')->halt
+      ).
 
 
 option_whynot:-
