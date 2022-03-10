@@ -59,8 +59,10 @@ write_w_list:-
     y_computer_user(_N,F),
     \+ deduce_backwards(F,_),
     \+ asked_question(F),
-    assert(computer_ask_user(F)),
-    %write(N),write(". Why do you believe "), print_fact(F), write("?"),nl,
+    aggregate_all(count, computer_ask_user(_,_), Num),
+    N is Num+1,
+    assert(computer_ask_user(N, F)),
+    %write("Why do you believe "), print_fact(F), write("?"),nl,
     fail.
 write_w_list.
 
@@ -68,8 +70,11 @@ write_w_list.
 
 write_x_list:-
     n_computer_user(F),
+    deduce_backwards(F,_),
     \+ asked_question(F),
-    assert(computer_ask_user(F)),
+    aggregate_all(count, computer_ask_user(_,_), Num),
+    N is Num +1,
+    assert(computer_ask_user(N, F)),
     %write("Why don't you believe "), print_fact(F), write("?"),nl,
     fail.
 write_x_list.
