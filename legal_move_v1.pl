@@ -117,7 +117,7 @@ dialogue:-
     ;   
         aggregate_all(count, y_user_computer(_,_), Count),
         A is N-Count-1,
-        n_user_computer(A,Fact), N \=1, N \=2
+        n_user_computer(A,Fact), N \=1, N \=2,
          -> write(Out,'\nUser: Why do not you believe '),write('\nUser: Why do not you believe '),print_fact(Fact), write('?\n'),write(Out,'?\n'),
             write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(Fact), write('? '),write(Out, '?'),
             assert(asked_question(Fact)),
