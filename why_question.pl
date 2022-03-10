@@ -1,5 +1,5 @@
 why(F):- 
-    nb_getval(fileOutput,Out),                                   
+    nb_getval(fileOutput,Out),
     node(_N, F, initial_fact, _NL), !,                              
     write('\nCovid Advice System: Because computer believes '), 
     write(Out,'\nCovid Advice System: Because computer believes '), 
