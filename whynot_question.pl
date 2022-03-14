@@ -67,8 +67,8 @@ reason_rule(F):-
         ->
             write(Out,'User:'),
             assert(yr_computer_user(N,A,F)),!, 
-            check(A, NL),
-            write(A),write(NL),
+            check(A, _NL),
+            %write(A),write(NL),
             %pretty_list(NL,_Pretty),
             option_whynot
          ;   
@@ -78,8 +78,8 @@ reason_rule(F):-
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
             assert(different(user_rule(N,_,_))),!, conversations(_)
             )
-        ;   write('Covid Advice System: This fact is not deducted by this rule.'),
-            write(Out,'Covid Advice System: This fact is not deducted by this rule.'),
+        ;   write('Covid Advice System: This fact is not directly deducted by this rule.'),
+            write(Out,'Covid Advice System: This fact is not directly deducted by this rule.'),
             button(F)
         )
 
