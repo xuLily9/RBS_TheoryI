@@ -47,7 +47,7 @@ write_why_list.
 write_whynot_list:-
     %% LOUISE: What if the node was labelled unprovable?
     n_user_computer(A,F),
-    write(F),
+    %write(F),
     deduce_user(F,_),
     \+ asked_question(F),
     aggregate_all(count, y_user_computer(_,_), Count),
@@ -107,6 +107,3 @@ write_initial_list:-
     write(N), write('. '), write(Pretty), nl,
     fail.
 write_initial_list.
-
-
-
