@@ -15,9 +15,17 @@ print_welcome:-
     write_user_rule.
 
 exampleOpen:-
-    open('file.txt',write, Out),
+    get_time(N),
+    string_concat(N, ' .txt',Filename),
+    open(Filename,write, Out),
     write(Out,'\n----------CONVERSATION REPORT ----------\n'),
     nb_setval(fileOutput,Out).
+
+writeBoth(String):-
+    write(String),write(nl),
+    nb_getval(fileOutput,Out),
+    write(Out,String),write(Out,nl).
+
 
 exampleClose:-
     nb_getval(fileOutput,Out),
