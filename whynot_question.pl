@@ -72,7 +72,6 @@ reason_rule(F):-
             %pretty_list(NL,_Pretty),
             option_whynot
          ;   
-
             write('Covid Advice System: I found the disagreement! I do not have this rule'),
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
