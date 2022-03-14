@@ -43,7 +43,7 @@ user_fact(8, taste_and_smell(jane),initial_fact, []).
 user_fact(9, taste_and_smell(adam), initial_fact, []).
 user_fact(10, positive_pcr(beth), initial_fact, []).
 user_fact(11, meet_indoors(beth,adam), initial_fact, []).
-\
+
 conclusion(eat_lunch(jane,adam)).
 
 
@@ -75,8 +75,8 @@ fact_description(taste_and_smell(X)):-
      write(X), write(" have taste and smell").
 fact_description(negative_pcr(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out," is negative in pcr test"),
-     write(X), write(" is negative in pcr test").
+    write(Out,X), write(Out," is negative in PCR test"),
+     write(X), write(" is negative in PCR test").
  fact_description(negative_lft(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out," is negative in lft test"),
@@ -91,8 +91,8 @@ fact_description(tier1(X)):-
      write(X), write(" is in tier1").
 fact_description(positive_pcr(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out," is positive in pcr test"),
-     write(X), write(" is positive in pcr test").
+    write(Out,X), write(Out," is positive in PCR test"),
+     write(X), write(" is positive in PCR test").
 fact_description(self_isolate(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out," need to self isolate"),
@@ -107,8 +107,8 @@ fact_description(can_meet_indoors(X, A)):-
     write(X), write(" and "), write(A),write(" can meet indoors").
 fact_description(test(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out," has already get a pcr or lft test"),
-     write(X), write(" has already get a pcr or lft test").
+    write(Out,X), write(Out," has already get a PCR or lft test"),
+     write(X), write(" has already get a PCR or lft test").
 fact_description(pinged(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out," get close contact with someone with Covid"),
@@ -119,8 +119,8 @@ fact_description(symptoms(X)):-
      write(X), write(" has symptoms").
 fact_description(pcr(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out," has a pcr test"),
-     write(X), write(" has a pcr test").
+    write(Out,X), write(Out," has a PCR test"),
+     write(X), write(" has a PCR test").
 fact_description(lft(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out," has a lft test"),
@@ -165,13 +165,13 @@ rule_description(1):-
 
 rule_description(2):-
     nb_getval(fileOutput,Out),
-    write(Out,"2. If someone has a negative LFT test then he/she has taken a LFT test."),
-    write("2. If someone has a negative LFT test then he/she has taken a LFT test.").
+    write(Out,"2. If someone has a negative LFT test then he/she has taken and LFT test."),
+    write("2. If someone has a negative LFT test then he/she has taken an LFT test.").
 
 rule_description(3):-
     nb_getval(fileOutput,Out),
-     write(Out,"3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),
-    write("3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate.").
+     write(Out,"3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she doesn't take a test then he/she needs to self-isolate."),
+    write("3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she doesn't take a test then he/she needs to self-isolate.").
 
 rule_description(4):-
     nb_getval(fileOutput,Out),
@@ -185,8 +185,8 @@ rule_description(5):-
 
 rule_description(6):-
     nb_getval(fileOutput,Out),
-    write(Out,"6. If  a city is in tier1 then this city allows indoor meetings."),
-    write("6. If  a city is in tier1 then this city allows indoor meetings.").
+    write(Out,"6. If a city is in tier1 then this city allows indoor meetings."),
+    write("6. If a city is in tier1 then this city allows indoor meetings.").
 
 rule_description(7):-
     nb_getval(fileOutput,Out),
@@ -196,22 +196,22 @@ rule_description(7):-
 rule_description(8):-
     nb_getval(fileOutput,Out),
     write(Out,"8. If someone is negative in a PCR test then he/she has taken a PCR test."),
-    write("8. If someone is negative in a PCR test then he/she has taken a PCR test."),nl.
+    write("8. If someone is negative in a PCR test then he/she has taken a PCR test.").
 
 rule_description(9):-
     nb_getval(fileOutput,Out),
-    write(Out,"9. If someone is negative in a LFT test then he/she has taken a LFT test."),
-    write("9. If someone is negative in a LFT test then he/she has taken a LFT test."),nl.
+    write(Out,"9. If someone is negative in a LFT test then he/she has taken an LFT test."),
+    write("9. If someone is negative in a LFT test then he/she has taken an LFT test.").
 
 rule_description(10):-
     nb_getval(fileOutput,Out),
     write(Out,"10. If someone has taken a PCR test then he/she has taken a test."),
-    write("10. If someone has taken a PCR test then he/she has taken a test."),nl.
+    write("10. If someone has taken a PCR test then he/she has taken a test.").
 
 rule_description(11):-
     nb_getval(fileOutput,Out),
-    write(Out,"11. If someone took a LFT test then he/she has taken a test."),
-    write("11. If someone took a LFT test then he/she has taken a test."),nl.
+    write(Out,"11. If someone took an LFT test then he/she has taken a test."),
+    write("11. If someone took an LFT test then he/she has taken a test.").
 
 
 
@@ -225,13 +225,13 @@ r_description(1):-
 
 r_description(2):-
     nb_getval(fileOutput,Out),
-    write(Out,"2. If someone has a negative LFT test then he/she has taken a LFT test."),
-    write("2. If someone has a negative LFT test then he/she has taken a LFT test."),nl.
+    write(Out,"2. If someone has a negative LFT test then he/she has taken an LFT test."),
+    write("2. If someone has a negative LFT test then he/she has taken an LFT test."),nl.
 
 r_description(3):-
     nb_getval(fileOutput,Out),
-     write(Out,"3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),
-    write("3. If  someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),nl.
+     write(Out,"3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),
+    write("3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she doesn't take a test then he/she needs to self isolate."),nl.
 
 r_description(4):-
     nb_getval(fileOutput,Out),
@@ -245,8 +245,8 @@ r_description(5):-
 
 r_description(6):-
     nb_getval(fileOutput,Out),
-    write(Out,"6. If  a city is in tier1 then this city allows indoor meetings."),
-    write("6. If  a city is in tier1 then this city allows indoor meetings."),nl.
+    write(Out,"6. If a city is in tier1 then this city allows indoor meetings."),
+    write("6. If a city is in tier1 then this city allows indoor meetings."),nl.
 
 r_description(7):-
     nb_getval(fileOutput,Out),
@@ -260,8 +260,8 @@ r_description(8):-
 
 r_description(9):-
     nb_getval(fileOutput,Out),
-    write(Out,"9. If someone is negative in a LFT test then he/she has taken a LFT test."),
-    write("9. If someone is negative in a LFT test then he/she has taken a LFT test."),nl.
+    write(Out,"9. If someone is negative in a LFT test then he/she has taken an LFT test."),
+    write("9. If someone is negative in a LFT test then he/she has taken an LFT test."),nl.
 
 r_description(10):-
     nb_getval(fileOutput,Out),
@@ -271,8 +271,8 @@ r_description(10):-
 
 r_description(11):-
     nb_getval(fileOutput,Out),
-     write(Out,"11. If someone took a LFT test then he/she has taken a test."),
-    write("11. If someone took a LFT test then he/she has taken a test."),nl.
+     write(Out,"11. If someone took an LFT test then he/she has taken a test."),
+    write("11. If someone took an LFT test then he/she has taken a test."),nl.
 
 
 
