@@ -56,26 +56,27 @@ reason_rule(F):-
     ->  write(Out,'\nCovid Advice System:Bye\n'),
         exampleClose,write('Covid Advice System:Bye\n')->halt
     ;  N=:=Restart
-    ->write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
+    ->  write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
         whynot(F)
     ;
         (   
             user_rule(N, A, F)
-        ->
+        ->  
             (
             rule(_,A,F)
         ->
             write(Out,'User:'),
             assert(yr_computer_user(N,A,F)),!, 
             check(A, NL),
-            pretty_list(NL,_Pretty),
+            write(A),write(NL),
+            %pretty_list(NL,_Pretty),
             option_whynot
          ;   
 
             write('Covid Advice System: I found the disagreement! I do not have this rule'),
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-            assert(different(user_rule(N,_,_))),!, quit
+            assert(different(user_rule(N,_,_))),!, conversations(_)
             )
         ;   write('Covid Advice System: This fact is not deducted by this rule.'),
             write(Out,'Covid Advice System: This fact is not deducted by this rule.'),
@@ -145,6 +146,9 @@ check([H|T], [H|N]):-
     check(T, N).
 check([H|T], N):-
     deduce_user(H,_DAG),!,
+    aggregate_all(count, y_computer_user(_,_), Count4),
+    Num is Count4 +1,
+    assert(y_computer_user(Num,H)),
     check(T,N).
 
 
