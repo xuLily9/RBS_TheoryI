@@ -10,26 +10,28 @@ whynot(F):-
     ->  write(Out,'Because it is an user initial fact.'),
         ( 
             user_fact(_,F,initial_fact,_),
-            write('User: Because '),write(Out,'User: Because '), print_fact(F),write(' is an initial fact.'),write(Out,' is an initial fact.'),nl, 
-            aggregate_all(count, y_computer_user(_,_), X),
-            aggregate_all(count, n_user_computer(_,_), Y),
-            X1 is X +1,
-            Y1 is Y+1,
-            assert(y_computer_user(X1,F)),!,
-            assert(n_user_computer(Y1,F)),!,
-            \+ node(_N, F,_, _), !,
-            write('Covid Advice System: I have found the disagreement. User believes '), 
-            write(Out, '\n----------DISAGREEMENT----------\n'),
-            write(Out, 'Covid Advice System: I have found the disagreement. User believes '),print_fact(F),
-            write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.\n'),nl,
-            assert(different(F)),!
+            \+ node(_N, F,_, _)
+            -> (    write('User: Because '),write(Out,'User: Because '), print_fact(F),write(' is an initial fact.'),write(Out,' is an initial fact.'),nl, 
+                    aggregate_all(count, y_computer_user(_,_), X),
+                    aggregate_all(count, n_user_computer(_,_), Y),
+                    X1 is X +1,
+                    Y1 is Y+1,
+                    assert(y_computer_user(X1,F)),!,
+                    assert(n_user_computer(Y1,F)),!,
+                    write('Covid Advice System: I have found the disagreement. User believes '), 
+                    write(Out, '\n----------DISAGREEMENT----------\n'),
+                    write(Out, 'Covid Advice System: I have found the disagreement. User believes '),print_fact(F),
+                    write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.\n'),nl,
+                    assert(different(F)),!
+            )
         ; 
-            \+user_fact(_,F,initial_fact,_),!,
-            write('Covid Advice System: It is not an initial user fact,please select another reason.'),whynot(F),
-            write(Out,'Covid Advice System: It is not a user initial fact, please select another reason.'),nl,fail
+            \+user_fact(_,F,initial_fact,_)
+            ->
+            (write('\nCovid Advice System: It is not an initial user fact,please select another reason.'),whynot(F),
+            write(Out,'\nCovid Advice System: It is not a user initial fact, please select another reason.'),nl,fail)
         )
     ;    Number =:= 2
-    ->  write(Out, 'Because it is a new fact deduced by a rule.'), reason_rule(F), nl, !
+    ->  write(Out, 'Because it is a new fact deduced by a rule.'), reason_rule(F,_), nl, !
     ;    Number =:= 3
     -> write(Out,'Covid Advice System:Bye\n'),write('Covid Advice System: Bye\n')->halt
     ;
@@ -37,7 +39,7 @@ whynot(F):-
     ).
     
 
-reason_rule(F):-
+reason_rule(Fact,F):-
     repeat,
     nb_getval(fileOutput,Out),
     write('User: Please select a rule number: '),nl,
@@ -48,7 +50,6 @@ reason_rule(F):-
     write(Restart),write('. Restart to choose another reason\n'),
     E is Restart+1,
     write(E),write('. Exit\n'),
-    
     write('User: '),
     prompt(_, ''),
     read(N),nl,     
@@ -56,9 +57,9 @@ reason_rule(F):-
     ->  write(Out,'\nCovid Advice System:Bye\n'),
         exampleClose,write('Covid Advice System:Bye\n')->halt
     ;  N=:=Restart
-    ->  write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
-        whynot(F)
-    ;
+    ->  write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(Fact), write('? '),write(Out, '?'),
+        whynot(Fact)
+    ;   
         (   
             user_rule(N, A, F)
         ->  
@@ -75,15 +76,15 @@ reason_rule(F):-
             write('Covid Advice System: I found the disagreement! I do not have this rule'),
             write(Out, '\n----------DISAGREEMENT----------\n'),
             write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-            assert(different(user_rule(N,_,_))),!, conversations(_)
+            assert(different(user_rule(N,_,_))),!, conversations(false)
             )
         ;   write('Covid Advice System: This fact is not directly deducted by this rule.'),
             write(Out,'Covid Advice System: This fact is not directly deducted by this rule.'),
-            button(F)
+            button(Fact)
         )
-
     ;   
         write('Not a valid choice, try again...'), nl, fail).
+
 
 
 button(F):-
@@ -157,11 +158,8 @@ pretty_list([Head|Tail],Out):-
     pretty_list(Tail,Out).
 
 print_top(Fact,_Pretty):-
-    \+node(_,Fact,unprovable,_)
-    ->
-        aggregate_all(count, y_computer_user(_,_), Count4),
-        Num is Count4 +1,
-        assert(y_computer_user(Num,Fact)),!.
+    user_fact(_,Fact,Rule,_)
+    ->assert(d_rule(Fact,Rule)).
 
 %% LOUISE: Computer adds all positive literals in A to Y_computer_user
     %% LOUISE: Computer adds all negative literals in a to N_computer user
