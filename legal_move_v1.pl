@@ -1,6 +1,6 @@
 :- [deduce_backwards],[why_question],[whynot_question],[write_list].
 :- use_module(library(random)).
-:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3,computer_ask_user/2,rule_used/1.
+:-dynamic node/4, user_fact/4, different/1, asked_question/1,n_computer_user/1,y_computer_user/2,y_user_computer/2,n_user_computer/2,yr_user_computer/3,yr_computer_user/3,computer_ask_user/2,rule_used/1,d_rule/2.
 
 chat:-
     print_welcome,
@@ -101,8 +101,7 @@ database(Conclusion,F):-
 conversations(Used):-
     repeat,
     write('\n----------SELECT A QUESTION OR EXIT----------\n'),nl,
-    (
-    Used=true
+    (Used=true
     -> dialogue
     ; dialogue2).
 
