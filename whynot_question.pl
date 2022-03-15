@@ -61,25 +61,25 @@ reason_rule(Fact,F):-
         whynot(Fact)
     ;   
         (   
-            user_rule(N, A, F)
-        ->  
+            user_rule(N, A, F),
+            check(A, _),
+            user_fact(_,F,_,_)
+        -> 
             (
-            rule(_,A,F)
-        ->
-            write(Out,'User:'),
-            assert(yr_computer_user(N,A,F)),!, 
-            check(A, _NL),
-            %write(A),write(NL),
-            %pretty_list(NL,_Pretty),
-            option_whynot
-         ;   
-            write('Covid Advice System: I found the disagreement! I do not have this rule'),
-            write(Out, '\n----------DISAGREEMENT----------\n'),
-            write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-            assert(different(user_rule(N,_,_))),!, conversations(false)
+                rule(_,A,F)
+            ->
+                write(Out,'User:'),
+                assert(yr_computer_user(N,A,F)),!
+                option_whynot
+             ;   
+                write('Covid Advice System: I found the disagreement! I do not have this rule'),
+                write(Out, '\n----------DISAGREEMENT----------\n'),
+                write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
+                assert(different(user_rule(N,_,_))),!, conversations(false)
             )
-        ;   write('Covid Advice System: This fact is not directly deducted by this rule.'),
-            write(Out,'Covid Advice System: This fact is not directly deducted by this rule.'),
+
+        ;   write('Covid Advice System: This rule is not used in deduction of this fact.'),
+            write(Out,'Covid Advice System: This rule is not used in deduction of this fact.'),
             button(Fact)
         )
     ;   
@@ -89,8 +89,8 @@ reason_rule(Fact,F):-
 
 button(F):-
     nb_getval(fileOutput,Out),
-    write(Out,'Covid Advice System: Please choose another rule or reason\n'),
-    write('Covid Advice System: Please choose another rule or reason\n'),
+    write(Out,'Please choose another rule or reason\n'),
+    write('Please choose another rule or reason\n'),
     write('1. Restart to choose a reason\n'),
     write('2. Choose another rule\n'),
     write('3. Exit\n'),
@@ -101,7 +101,7 @@ button(F):-
     -> write(Out,'1. Restart to choose a reason\n'),write(Out,'\nCovid Advice System: Why do you beleive '),write('\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '?'),
         whynot(F)
     ;   N=:= 2
-    -> write(Out,'2. Choose another rule\n'),reason_rule(F)
+    -> write(Out,'2. Choose another rule\n'),reason_rule(F,_)
     ;   N=:= 3
     -> write(Out,'\nCovid Advice System:Bye\n'),
       exampleClose,write('Covid Advice System:Bye\n')->halt
