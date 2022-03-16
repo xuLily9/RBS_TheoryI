@@ -1,19 +1,25 @@
 why(F):- 
     nb_getval(fileOutput,Out),
-    node(_N, F, initial_fact, _NL), !,                           
-    write('\nCovid Advice System: Because computer has the fact: '), 
-    write(Out,'\nCovid Advice System: Because computer has the fact: '), 
-    print_fact(F),
-    write(' is an initial fact.\n'),
-    (   deduce_user(F,_),
+    node(_N, F, initial_fact, _NL), !,  
+    (  
+        \+ deduce_user(F,_),
         \+ user_fact(_,F,_,_)
-    ->
-        write(Out,' is an initial fact.\n'),
+    ->  write('\nCovid Advice System: Because computer has the fact: '), 
+        write(Out,'\nCovid Advice System: Because computer has the fact: '), 
+        print_fact(F),
+        write(' is an initial fact.'),
+        write(Out,' is an initial fact.'),
         write(Out, '\n----------DISAGREEMENT----------\n'),
-        write(Out, '\nCovid Advice System: I have found the disagreement. Computer has the fact: '), 
-        write('\nCovid Advice System: I have found the disagreement. Computer has the fact: '), print_fact(F),write(' as an initial fact, but the user does not have it.\n'),nl, 
+        write(Out, 'Covid Advice System: I have found the disagreement. Computer has the fact: '), 
+        write('Covid Advice System: I have found the disagreement. Computer has the fact: '), print_fact(F),write(' as an initial fact, but the user does not have it.\n'),nl, 
         write(Out,' is an initial fact, but the user does not have it.\n'),
-        assert(different(F)),!
+        assert(different(F))
+    ;   
+        write('\nCovid Advice System: Because computer has the fact: '), 
+        write(Out,'\nCovid Advice System: Because computer has the fact: '), 
+        print_fact(F),
+        write(' is an initial fact.\n'),
+        write(Out,' is an initial fact.\n')
     ),
     conversations(false).
   
