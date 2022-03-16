@@ -63,19 +63,21 @@ reason_rule(Fact,F):-
         (   
             user_rule(N, A, F),
             check(A, _),
-            user_fact(_,F,_,_)
+            %write(A),write(F)
+            deduce_user(F,_)
+            %user_fact(_,F,_,_)
         -> 
             (
                 rule(_,A,F)
             ->
                 write(Out,'User:'),
-                assert(yr_computer_user(N,A,F)),!
+                assert(yr_computer_user(N,A,F)),!,
                 option_whynot
              ;   
                 write('Covid Advice System: I found the disagreement! I do not have this rule'),
                 write(Out, '\n----------DISAGREEMENT----------\n'),
                 write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-                assert(different(user_rule(N,_,_))),!, conversations(false)
+                assert(different(user_rule(N,_,_))),!,conversations(false)
             )
 
         ;   write('Covid Advice System: This rule is not used in deduction of this fact.'),
@@ -88,6 +90,7 @@ reason_rule(Fact,F):-
 
 
 button(F):-
+    repeat,
     nb_getval(fileOutput,Out),
     write(Out,'Please choose another rule or reason\n'),
     write('Please choose another rule or reason\n'),
@@ -105,6 +108,8 @@ button(F):-
     ;   N=:= 3
     -> write(Out,'\nCovid Advice System:Bye\n'),
       exampleClose,write('Covid Advice System:Bye\n')->halt
+    ;   
+        write('Not a valid choice, try again...'), nl, fail
       ).
 
 
@@ -145,11 +150,16 @@ check([H|T], [H|N]):-
     \+ deduce_user(H, _DAG),!, 
     check(T, N).
 check([H|T], N):-
-    deduce_user(H,_DAG),!,
-    aggregate_all(count, y_computer_user(_,_), Count4),
-    Num is Count4 +1,
-    assert(y_computer_user(Num,H)),
-    check(T,N).
+    deduce_user(H,_DAG),
+    %write(H),
+    (   \+y_computer_user(_,H)
+    ->
+        aggregate_all(count, y_computer_user(_,_), Count4),
+        Num is Count4 +1,
+        assert(y_computer_user(Num,H))
+    ;
+    check(T,N)
+    ).
 
 
 pretty_list([],"").
