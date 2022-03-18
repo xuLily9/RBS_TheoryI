@@ -64,7 +64,7 @@ fact_description(fever(X)):-
 fact_description(cough(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out,' has cough'),
-    write(X), write(" has cough").
+    write(X), write(" has cough"
 
 rule_description(1):-
     write("1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet."),
