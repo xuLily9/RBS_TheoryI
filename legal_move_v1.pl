@@ -21,11 +21,15 @@ exampleOpen:-
     write(Out,'\n----------CONVERSATION REPORT ----------\n'),
     nb_setval(fileOutput,Out).
 
-writeBoth(String):-
+writeBothFact(String):-
+    write(String),
+    nb_getval(fileOutput,Out),
+    write(Out,String).
+
+writeBothRule(String):-
     write(String),write(nl),
     nb_getval(fileOutput,Out),
     write(Out,String),write(Out,nl).
-
 
 exampleClose:-
     nb_getval(fileOutput,Out),
