@@ -1,4 +1,3 @@
-:-dynamic node/4, rule/3.
 
 node(1, vaccinated(jane), initial_fact, []).
 node(2, vaccinated(adam), initial_fact, []).
