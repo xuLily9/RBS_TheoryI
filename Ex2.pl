@@ -10,7 +10,7 @@ user_rule(3,[fever(X)],symptoms(X)).
 user_rule(4,[cough(X)],symptoms(X)).
 user_rule(5,[close_pcr_positive(X)], pinged(X)).
 user_rule(6,[vaccinated(X)], covid_pass(X)).
-user_rule(7,[can_meet(X,Y),covid_pass(X),covid_pass(Y),wear_mask(X),wear_mask(Y)], watch_football(X,Y)).
+user_rule(7,[meet_friends(X),meet_friends(Y),covid_pass(X),covid_pass(Y),wear_mask(X),wear_mask(Y)], watch_football(X,Y)).
 user_rule(8,[two_dose_v(X)], vaccinated(X)).
 
 conclusion(watch_football(ella, harry)).
@@ -22,13 +22,13 @@ node(4,taste_and_smell(harry), initial_fact, []).
 node(5,wear_mask(harry), initial_fact, []).
 node(6,wear_mask(ella), initial_fact, []).
 
-rule(1,[not(pinged(A)), not(pinged(B)), vaccinated(A), vaccinated(B), not(symptoms(A)), not(symptoms(B))],can_meet(A, B)).
+rule(1,[not(pinged(A)), vaccinated(A), not(symptoms(A))],meet_friends(A)).
 rule(2,[not(taste_and_smell(X))], symptoms(X)).
 rule(3,[fever(X)],symptoms(X)).
 rule(4,[cough(X)],symptoms(X)).
 rule(5,[close_pcr_positive(X)], pinged(X)).
 rule(6,[vaccinated(X)], covid_pass(X)).
-rule(7,[can_meet(X,Y),covid_pass(X),covid_pass(Y),wear_mask(X),wear_mask(Y)], watch_football(X,Y)).
+rule(7,[meet_friends(X),meet_friends(Y),covid_pass(X),covid_pass(Y),wear_mask(X),wear_mask(Y)], watch_football(X,Y)).
 rule(8,[two_dose_v(X)], vaccinated(X)).
 
 fact_description(two_dose_v(A)):-
@@ -75,10 +75,10 @@ fact_description(not(taste_and_smell(X))):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out,' does not have taste and smell'),
     write(X), write(' does not have taste and smell').
-fact_description(can_meet(A, B)):-
+fact_description(meet_friends(A)):-
     nb_getval(fileOutput,Out),
-    write(Out,A), write(Out,' and '), write(Out,B),write(Out,' can meet'),
-    write(A), write(' and '), write(B),write(' can meet').
+    write(Out,A), write(Out,' can meet friends'),
+    write(A),write(' can meet friends').
 fact_description(watch_football(A, B)):-
     nb_getval(fileOutput,Out),
     write(Out,A), write(Out,' and '), write(Out,B),write(Out,' can watch football in the stadium together'),
@@ -121,8 +121,8 @@ rule_description(6):-
     write('6. If X is vaccinated, then X has an NHS Covid pass.').
 rule_description(7):-
     nb_getval(fileOutput,Out),
-    write(Out,'7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together'),
-    write('7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together').
+    write(Out,'7. If A can meet firends and B can meet friends and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together'),
+    write('7. If A can meet firends and B can meet friends and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together').
 rule_description(8):-
     nb_getval(fileOutput,Out),
     write(Out, '8. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
@@ -155,8 +155,8 @@ r_description(6):-
     write('6. If X is vaccinated, then X has an NHS Covid pass.'),nl.
 r_description(7):-
     nb_getval(fileOutput,Out),
-    write(Out,'7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in stadium together.'),
-    write('7. If A and B can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in stadium together.'),nl.
+    write(Out,'7. If A can meet firends and B can meet friends and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in stadium together.'),
+    write('7. If A can meet firends and B can meet friends can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in stadium together.'),nl.
 r_description(8):-
     nb_getval(fileOutput,Out),
     write(Out,'8. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
