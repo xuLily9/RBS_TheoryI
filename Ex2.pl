@@ -97,8 +97,8 @@ fact_description(cough(X)):-
 
 rule_description(1):-
     nb_getval(fileOutput,Out),
-    write(Out, '1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.'),
-    write('1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.').
+    write(Out, '1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.'),
+    write('1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.').
 rule_description(2):-
     nb_getval(fileOutput,Out),
     write(Out, '2. If X does not have taste or smell, then X has symptoms.'),
@@ -131,8 +131,8 @@ rule_description(8):-
 %% Pretty print the system rules 
 r_description(1):-
     nb_getval(fileOutput,Out),
-    write(Out, '1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.'),
-    write('1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.'),nl.
+    write(Out, '1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.'),
+    write('1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.'),nl.
 r_description(2):-
     nb_getval(fileOutput,Out),
     write(Out,'2. If X does not have taste or smell, then X has symptoms.'),
