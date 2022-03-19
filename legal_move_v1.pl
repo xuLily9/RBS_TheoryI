@@ -69,8 +69,8 @@ ask_agree(Conclusion,F):-
         ;   database(Conclusion,F),
             write('User: Why do not you believe '), 
             write(Out,'User: Why do not you believe '), print_fact(F), write('?\n'),write(Out, '?\n'),
-            write('\nCovid Advice System: Why do you beleive '), 
-            write(Out,'\nCovid Advice System: Why do you beleive '), print_fact(F), write('? '),write(Out, '? '),
+            write('\nCovid Advice System: Why do you believe '), 
+            write(Out,'\nCovid Advice System: Why do you believe '), print_fact(F), write('? '),write(Out, '? '),
             whynot(F)
         )
     ;   write("Not a valid choice, try again..."), nl,fail
