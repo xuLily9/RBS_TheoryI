@@ -9,14 +9,14 @@ reason(2, "Because it is a new fact deduced by a rule.").
 reason(3, "Exit.").
 
 write_user_fact:-
-    write('\n----------USER FACT ----------\n'),nl,
+    write('\n----------YOUR FACTS ----------\n'),nl,
     user_fact(_N, Fact, initial_fact, []),
     print_fact(Fact),nl,
     fail.
 write_user_fact.
 
 write_user_rule:-
-    write('\n----------USER RULE ----------\n'),nl,
+    write('\n----------YOUR RULES ----------\n'),nl,
     user_rule(N, _Antecedants, _C),
     print_rule(N),nl,
     fail.
