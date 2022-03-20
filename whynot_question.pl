@@ -69,10 +69,19 @@ reason_rule(Fact,F):-
         -> 
             (
                 rule(_,A,F)
-            ->
+            ->  
                 write(Out,'User:'),
                 assert(yr_computer_user(N,A,F)),!,
-                option_whynot
+                write_w_list,
+                write_x_list,
+                aggregate_all(count, computer_ask_user(_,_), Num),
+                (   Num==0
+                ->  write('Covid Advice System: This rule is used in deduction. Both computer and user are agree with this rule, please select another rule to find disagreement.\n'),
+                     write(Out,'Covid Advice System: This rule is used in deduction. Both computer and user are agree with this rule, please select another rule to find disagreement.\n'),
+                     reason_rule(F,_)
+                ;   computer_ask_user(Num,_F),
+                    choose(Num)
+                )
              ;   
                 write('Covid Advice System: I found the disagreement! I do not have this rule'),
                 write(Out, '\n----------DISAGREEMENT----------\n'),
