@@ -4,7 +4,7 @@ user_fact(3,taste_and_smell(harry), initial_fact, []).
 user_fact(4,taste_and_smell(ella), initial_fact, []).
 user_fact(5,wear_mask(harry), initial_fact, []).
 
-user_rule(1,[not(pinged(A)), not(pinged(B)), vaccinated(A), vaccinated(B), not(symptoms(A)), not(symptoms(B))],can_meet(A, B)).
+user_rule(1,[not(pinged(A)), vaccinated(A), not(symptoms(A))],meet_friends(A)).
 user_rule(2,[not(taste_and_smell(X))], symptoms(X)).
 user_rule(3,[fever(X)],symptoms(X)).
 user_rule(4,[cough(X)],symptoms(X)).
