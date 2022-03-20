@@ -1,5 +1,3 @@
-% user has a rule and computer does not have
-
 user_fact(1,pinged(may),initial_fact,[]).
 user_fact(2, vaccinated(may), initial_fact, []).
 user_fact(3, negative_pcr(may), initial_fact, []).
