@@ -102,14 +102,14 @@ database(Conclusion,F):-
 
 
 
-conversations(Used):-
+conversations(Used,R):-
     repeat,
     write('\n----------SELECT A QUESTION OR EXIT----------\n'),nl,
     (Used=true
-    -> dialogue
+    -> dialogue(R)
     ; dialogue2).
 
-dialogue:-
+dialogue(R):-
     repeat,
     nb_getval(fileOutput,Out),
     write('Covid Advice System: Please select one of the option:\n'),
@@ -128,9 +128,15 @@ dialogue:-
      -> write(Out,'\nCovid Advice System:Bye\n'),exampleClose,write('Covid Advice System:Bye\n')->halt
     ;   
         N=:= 2
-    ->  write(Out, '\n----------DISAGREEMENT----------\n'),
+    ->  rule(R,A,F),
+       (\+ user_rule(_,A,F),
+        write(Out, '\n----------DISAGREEMENT----------\n'),
         write(Out,'\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n'),
         write('\nCovid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.\n')
+        ;  write('\nCovid Advice System: This computer and user both have this rule, please select again.\n'),
+             write(Out,'\nCovid Advice System: This computer and user both have this rule, please select again.\n'),
+            dialogue2
+        )
     ;   
         N1 is N-1,
         y_user_computer(N1, Fact), N \=1, N \=2
@@ -182,8 +188,3 @@ dialogue2:-
     ;   
         write('Not a valid choice, try again...'), nl,fail
     ).
-
-
-
-
-
