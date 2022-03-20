@@ -1,4 +1,4 @@
-/* computer doesn not have a rule but user have*/
+/* computer doesn not have a rule but user has*/
 node(1, two_dose_v(jane), initial_fact, []).
 node(2, two_dose_v(adam), initial_fact, []).
 node(3, negative_lft(jane),initial_fact, []).
