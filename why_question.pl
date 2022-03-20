@@ -21,7 +21,7 @@ why(F):-
         write(' is an initial fact.\n'),
         write(Out,' is an initial fact.\n')
     ),
-    conversations(false).
+    conversations(false,_).
   
 why(F):-
     nb_getval(fileOutput,Out), 
@@ -42,7 +42,7 @@ why(F):-
     write(Pretty),
     write(Out, Pretty),
     Used=true,
-    conversations(Used),
+    conversations(Used,R),
     nl.
 
 %% LOUISE:  You also want to store these facts in a list of facts that the user now knows the computer believes (or does not believe for negative literals),So you should be extending Y_user_computer and N_user_computer
