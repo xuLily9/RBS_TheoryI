@@ -1,4 +1,4 @@
-
+/* computer doesn not have a rule but user have*/
 node(1, two_dose_v(jane), initial_fact, []).
 node(2, two_dose_v(adam), initial_fact, []).
 node(3, negative_lft(jane),initial_fact, []).
@@ -20,29 +20,29 @@ rule(3, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
 rule(4, [positive_pcr(X), meet_indoors(X,Y)], pinged(Y)).
 rule(5, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
 rule(6, [tier1(X)], indoor_meetings_allowed(X)).
-rule(7, [not(self_isolate(X)),not(self_isolate(Y)),can_meet_indoors(X, Y),vaccinated(X),vaccinated(Y)], eat_lunch(X,Y)).
+rule(7, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
 rule(8, [negative_pcr(X)], pcr(X)).
 rule(9, [negative_lft(X)], lft(X)).
 rule(10, [pcr(X)], test(X)).
 rule(11, [lft(X)], test(X)).
-rule(12,[two_dose_v(X)], vaccinated(X)).
+%rule(12,[two_dose_v(X)], vaccinated(X)).
 
 
 %% A set of user facts and rules 
 user_fact(1, two_dose_v(jane), initial_fact, []).
 user_fact(2, two_dose_v(adam), initial_fact, []).
 user_fact(3, negative_lft(jane),initial_fact, []).
-%% node(4, negative_pcr(adam), initial_fact, []).
+user_fact(4, negative_pcr(adam), initial_fact, []).
 
-user_fact(4, residence(jane, manchester), initial_fact,[]).
-user_fact(5, residence(adam, leeds), initial_fact,[]).
-user_fact(6, tier1(manchester), initial_fact, []).
-user_fact(7, tier1(leeds), initial_fact, []).
+user_fact(5, residence(jane, manchester), initial_fact,[]).
+user_fact(6, residence(adam, leeds), initial_fact,[]).
+user_fact(7, tier1(manchester), initial_fact, []).
+user_fact(8, tier1(leeds), initial_fact, []).
 
-user_fact(8, taste_and_smell(jane),initial_fact, []).
-user_fact(9, taste_and_smell(adam), initial_fact, []).
-user_fact(10, positive_pcr(beth), initial_fact, []).
-user_fact(11, meet_indoors(beth,adam), initial_fact, []).
+user_fact(9, taste_and_smell(jane),initial_fact, []).
+user_fact(10, taste_and_smell(adam), initial_fact, []).
+user_fact(11, positive_pcr(beth), initial_fact, []).
+user_fact(12, meet_indoors(beth,adam), initial_fact, []).
 
 conclusion(eat_lunch(jane,adam)).
 
@@ -213,6 +213,11 @@ rule_description(11):-
     write(Out,'11. If someone took an LFT test then he/she has taken a test.'),
     write('11. If someone took an LFT test then he/she has taken a test.').
 
+rule_description(12):-
+    nb_getval(fileOutput,Out),
+    write(Out,'12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
+    write('12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.').
+
 
 
 
@@ -274,6 +279,10 @@ r_description(11):-
      write(Out,'11. If someone took an LFT test then he/she has taken a test.'),
     write('11. If someone took an LFT test then he/she has taken a test.'),nl.
 
+r_description(12):-
+    nb_getval(fileOutput,Out),
+    write(Out,'12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
+    write('12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),nl.
 
 
 
