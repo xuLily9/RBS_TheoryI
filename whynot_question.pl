@@ -86,7 +86,7 @@ reason_rule(Fact,F):-
                 write('Covid Advice System: I found the disagreement! I do not have this rule'),
                 write(Out, '\n----------DISAGREEMENT----------\n'),
                 write(Out, 'Covid Advice System: I found the disagreement! I do not have this rule '),print_rule(N),write(Out, ', but the user has it.'),write(', but the user has it.'), nl,
-                assert(different(user_rule(N,_,_))),!,conversations(false)
+                assert(different(user_rule(N,_,_))),!,conversations(false,_)
             )
 
         ;   write('Covid Advice System: This rule is not used in deduction of this fact.'),
