@@ -24,11 +24,11 @@ whynot(F):-
                     write(Out, ' is an initial fact,but the computer neither believes nor infers it.'), write(' is an initial fact,but the computer neither believes nor infers it.\n'),nl,
                     assert(different(F)),!
             )
-        ; 
+        ; (
             \+user_fact(_,F,initial_fact,_)
-            ->
-            (write('\nCovid Advice System: It is not an initial user fact,please select another reason.'),whynot(F),
-            write(Out,'\nCovid Advice System: It is not a user initial fact, please select another reason.'),nl,fail)
+            ->write('\nCovid Advice System: It is not an initial user fact,please select another reason.'),whynot(F),
+            write(Out,'\nCovid Advice System: It is not a user initial fact, please select another reason.'),nl,fail
+            )
         )
     ;    Number =:= 2
     ->  write(Out, 'Because it is a new fact deduced by a rule.'), reason_rule(F,_), nl, !
