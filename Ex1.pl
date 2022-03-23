@@ -1,4 +1,4 @@
-/* user has a fact but computer does not have it. */
+% computer does not have a fact but user has(conclusion is false)
 
 user_fact(1,vaccinated(harry), initial_fact, []).
 user_fact(2,vaccinated(sara), initial_fact, []).
