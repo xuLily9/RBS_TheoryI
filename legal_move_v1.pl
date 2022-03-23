@@ -7,7 +7,7 @@ chat:-
     print_conclusion(Conclusion,F),
     assert(asked_question(F)),
     ask_agree(Conclusion,F),
-    conversations(_Used).
+    conversations(_Used,_).
 
 print_welcome:-
     exampleOpen,
