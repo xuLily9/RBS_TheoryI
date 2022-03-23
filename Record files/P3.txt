@@ -1,0 +1,107 @@
+----------YOUR FACTS ----------
+
+harry is vaccinated with two doses of any approved vaccine
+ella is vaccinated with two doses of any approved vaccine
+harry has taste and smell
+ella has taste and smell
+harry wears the mask
+
+----------YOUR RULES ----------
+
+1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.
+2. If X does not have taste or smell, then X has symptoms.
+3. If X has a fever, then X has symptoms.
+4. If X has a cough, then X has symptoms.
+5. If X has been in close contact with someone whose PCR test is positive, then X is pinged
+6. If X is vaccinated, then X has an NHS Covid pass.
+7. If A can meet firends and B can meet friends and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in the stadium together
+8. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.
+
+----------CONVERSATION ----------
+
+Covid Advice System: ella and harry can watch football in the stadium together: True.
+
+Covid Advice System: Do you agree with this conclusion?
+1. Yes, I agree. Exit.
+2. No, I disagree. I want an explanation.
+User:2.
+User: Why do you believe ella and harry can watch football in the stadium together?
+
+Covid Advice System: Because ella and harry can watch football in the stadium together is deduced using RULE 7. If A can meet firends and B can meet friends can meet and both of them have NHS Covid pass, and both of them wear masks, then A and B can watch football in stadium together.
+---FROM FACTS---
+ella can meet friends
+harry can meet friends
+ella has NHS Covid pass
+harry has NHS Covid pass
+ella wears the mask
+harry wears the mask
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+2. I do not have this rule used by computer
+3. Why do you believe ella can meet friends?
+4. Why do you believe harry can meet friends?
+5. Why do you believe ella has NHS Covid pass?
+6. Why do you believe harry has NHS Covid pass?
+7. Why do you believe ella wears the mask?
+8. Why do you believe harry wears the mask?
+User:3.
+
+User: Why do you believe ella can meet friends?
+
+Covid Advice System: Because ella can meet friends is deduced using RULE 1. If both A is vaccinated, and he/she does not have been pinged(close contact with someone who has Covid-19), and he/she does not have symptoms, then A can meet friends.
+---FROM FACTS---
+ella has not been in close contact with someone who has Covid-19
+ella is vaccinated
+ella does not have any symptoms
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+2. I do not have this rule used by computer
+4. Why do you believe harry can meet friends?
+5. Why do you believe ella has NHS Covid pass?
+6. Why do you believe harry has NHS Covid pass?
+7. Why do you believe ella wears the mask?
+8. Why do you believe harry wears the mask?
+9. Why do you believe ella is vaccinated?
+User:6.
+
+User: Why do you believe harry has NHS Covid pass?
+
+Covid Advice System: Because harry has NHS Covid pass is deduced using RULE 6. If X is vaccinated, then X has an NHS Covid pass.
+---FROM FACTS---
+harry is vaccinated
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+2. I do not have this rule used by computer
+4. Why do you believe harry can meet friends?
+5. Why do you believe ella has NHS Covid pass?
+7. Why do you believe ella wears the mask?
+8. Why do you believe harry wears the mask?
+9. Why do you believe ella is vaccinated?
+10. Why do you believe harry is vaccinated?
+User:7.
+
+User: Why do you believe ella wears the mask?
+
+Covid Advice System: Because computer has the fact: ella wears the mask is an initial fact.Covid Advice System: I have found the disagreement. Computer has the fact: ella wears the mask as an initial fact, but the user does not have it.
+
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+4. Why do you believe harry can meet friends?
+5. Why do you believe ella has NHS Covid pass?
+8. Why do you believe harry wears the mask?
+9. Why do you believe ella is vaccinated?
+10. Why do you believe harry is vaccinated?
+User:1.
+Covid Advice System:Bye

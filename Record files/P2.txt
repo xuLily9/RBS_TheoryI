@@ -1,0 +1,83 @@
+
+----------CONVERSATION REPORT ----------
+
+----------YOUR FACTS ----------
+
+may has a negative PCR test
+sarah has a negative PCR test
+may is vaccinated with two doses of any approved vaccine 
+sarah is vaccinated with two doses of any approved vaccine 
+may have  a sense of taste and smell
+sarah have  a sense of taste and smell
+
+----------YOUR RULES ----------
+
+1. If X does not have taste or smell, then X has symptoms.
+2. If X has a fever, then X has symptoms.
+3. If X has a cough, then X has symptoms.
+4. If A is negative in the PCR test then A has taken a PCR test
+5. If A has a PCR test then A has taken a test
+6. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.
+7. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, and both of them have a test, then A and B can meet.
+8. If A and B can meet and both of them have NHS Covid pass, and both of them have a negative PCR test, then A and B can go to Spain together.
+
+----------CONVERSATION ----------
+
+Covid Advice System: may and sarah can go to Spain together: True.
+
+Covid Advice System: Do you agree with this conclusion?
+1. Yes, I agree. Exit.
+2. No, I disagree. I want an explanation.
+2.er:
+User: Why do you believe may and sarah can go to Spain together?
+
+Covid Advice System: Because may and sarah can go to Spain together is deduced using RULE 9. If A and B can meet and both of them have NHS Covid pass, and both of them have a negative PCR test, then A and B can go to Spain together.
+---FROM FACTS---
+may and sarah can meet
+may has NHS Covid pass
+sarah has NHS Covid pass
+may has a negative PCR test
+sarah has a negative PCR test
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+2. I do not have this rule used by computer
+3. Why do you believe may and sarah can meet?
+4. Why do you believe may has NHS Covid pass?
+5. Why do you believe sarah has NHS Covid pass?
+6. Why do you believe may has a negative PCR test?
+7. Why do you believe sarah has a negative PCR test?
+User:2.
+
+Covid Advice System: This computer and user both have this rule, please select again.
+Covid Advice System: Please select one of the option:
+1. Exit
+3. Why do you believe may and sarah can meet?
+4. Why do you believe may has NHS Covid pass?
+5. Why do you believe sarah has NHS Covid pass?
+6. Why do you believe may has a negative PCR test?
+7. Why do you believe sarah has a negative PCR test?
+User:4.
+
+User: Why do you believe may has NHS Covid pass?
+
+Covid Advice System: Because may has NHS Covid pass is deduced using RULE 7. If X is vaccinated, then X has an NHS Covid pass.
+---FROM FACTS---
+may is vaccinated
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+2. I do not have this rule used by computer
+3. Why do you believe may and sarah can meet?
+5. Why do you believe sarah has NHS Covid pass?
+6. Why do you believe may has a negative PCR test?
+7. Why do you believe sarah has a negative PCR test?
+8. Why do you believe may is vaccinated?
+User:2.
+----------DISAGREEMENT----------
+
+Covid Advice System: I have found the disagreement. The computer used a rule that the user do not have it.

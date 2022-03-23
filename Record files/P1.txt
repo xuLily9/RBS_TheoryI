@@ -1,0 +1,48 @@
+----------YOUR FACTS ----------
+
+harry is vaccinated
+sara is vaccinated
+sara has the taste and smell
+harry has the taste and smell
+
+----------YOUR RULES ----------
+
+1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.
+2. If X does not have taste or smell, then X has symptoms.
+3. If X has a fever, then X has symptoms.
+4. If X has a cough, then X has symptoms.
+
+----------CONVERSATION ----------
+
+Covid Advice System: sara and harry can meet: False.
+
+Covid Advice System: Do you agree with this conclusion?
+1. Yes, I agree. Exit.
+2. No, I disagree. I want an explanation.
+User:2.
+User: Why do not you believe sara and harry can meet?
+
+Covid Advice System: Why do you believe sara and harry can meet? Please state your reason:
+1. Because it's a user initial fact.
+2. Because it is a new fact deduced by a rule.
+3. Exit.
+User: 2.
+User: Please select a rule number: 
+
+----------YOUR RULES ----------
+
+1. If both A and B are vaccinated, and none of them have been pinged(close contact with someone who has Covid-19), and none of them have symptoms, then A and B can meet.
+2. If X does not have taste or smell, then X has symptoms.
+3. If X has a fever, then X has symptoms.
+4. If X has a cough, then X has symptoms.
+5. Restart to choose another reason
+6. Exit
+User: 1.
+
+Covid Advice System: Why do you believe harry is vaccinated? Please state your reason:
+1. Because it's a user initial fact.
+2. Because it is a new fact deduced by a rule.
+3. Exit.
+User: 1.
+User: Because harry is vaccinated is an initial fact.
+Covid Advice System: I have found the disagreement. User believes harry is vaccinated is an initial fact,but the computer neither believes nor infers it.
