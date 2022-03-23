@@ -31,6 +31,10 @@ fact_description(negative_pcr(X)):-
      nb_getval(fileOutput,Out),
      write(Out,X), write(Out,' is negative in the PCR test'),
      write(X), write(' is negative in the PCR test').
+fact_description(positive_pcr(X)):-
+     nb_getval(fileOutput,Out),
+     write(Out,X), write(Out,' is positive in the PCR test'),
+     write(X), write(' is positive in the PCR test').
 fact_description(pinged(A)):-
      nb_getval(fileOutput,Out),
      write(Out,A), write(Out,' has been in close contact with someone who has Covid-19 '),
