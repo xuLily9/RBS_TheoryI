@@ -114,7 +114,7 @@ dialogue(R):-
     nb_getval(fileOutput,Out),
     write('Covid Advice System: Please select one of the option:\n'),
     write('1. Exit\n'),
-    write('2. I do not have this rule used by computer\n'),
+    write('2. I do not have this rule used by computer or I have a slightly different rule\n'),
     write(Out,'\nCovid Advice System: Please select one of the option:\n'),
     write(Out,'\n1. Exit\n'),
     write(Out,'\n2. I do not have this rule used by computer\n'),
