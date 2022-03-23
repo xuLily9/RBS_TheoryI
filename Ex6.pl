@@ -17,8 +17,8 @@ node(3, positive_pcr(harry),initial_fact,[]).
 node(4, eat_dinner(harry,jack),initial_fact,[]).
 
 rule(1, [fever(X)], symptoms(X)).
-rule(2, [symptoms(X)], get_pcr(X)).
-rule(3, [positive_pcr(Y), eat_dinner(X,Y)], pinged(X)).
+rule(2, [symptoms(X),pinged(X)], get_pcr(X)).
+rule(3, [positive_pcr(Y), eat_dinner(Y,X)], pinged(X)).
 
 fact_description(positive_pcr(X)):-
      nb_getval(fileOutput,Out),
@@ -87,8 +87,8 @@ r_description(1):-
      write('1. If someone has a fever, he/she has symptoms.'),nl.
 r_description(2):-
      nb_getval(fileOutput,Out),
-     write(Out,'2. If someone has symptoms, then he needs to take a pcr test.'),
-     write('2. If someone someone has symptoms, then he needs to take a pcr test.'),nl.
+     write(Out,'2. If someone has symptoms and has been close contact with a person with Covid, then he needs to take a pcr test.'),
+     write('2. If someone someone has symptoms and has been close contact with a person with Covid, then he needs to take a pcr test.'),nl.
 r_description(3):-
      nb_getval(fileOutput,Out),
      write(Out,'3. If A is positive in the PCR test and A and B eat dinner together, then B has been in close contact with someone who has Covid-19.'),
