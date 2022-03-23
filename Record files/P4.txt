@@ -1,0 +1,90 @@
+----------YOUR FACTS ----------
+
+jane vaccinated
+adam vaccinated
+jane is negative in lft test
+adam is negative in PCR test
+jane lives in manchester
+adam lives in leeds
+manchester is in tier1
+leeds is in tier1
+jane have taste and smell
+adam have taste and smell
+beth is positive in PCR test
+
+----------YOUR RULES ----------
+
+1. If someone does not have a sense of taste and smell, then he/she has symptoms.
+2. If someone has a negative LFT test then he/she has taken an LFT test.
+3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.
+4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.
+5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.
+6. If a city is in tier1 then this city allows indoor meetings.
+7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.
+8. If someone is negative in a PCR test then he/she has taken a PCR test.
+9. If someone is negative in a LFT test then he/she has taken an LFT test.
+10. If someone has taken a PCR test then he/she has taken a test.
+11. If someone took an LFT test then he/she has taken a test.
+
+----------CONVERSATION ----------
+
+Covid Advice System: jane and adam can eat lunch together: False.
+
+Covid Advice System: Do you agree with this conclusion?
+1. Yes, I agree. Exit.
+2. No, I disagree. I want an explanation.
+User:2.
+User: Why do not you believe jane and adam can eat lunch together?
+
+Covid Advice System: Why do you believe jane and adam can eat lunch together? Please state your reason:
+1. Because it's a user initial fact.
+2. Because it is a new fact deduced by a rule.
+3. Exit.
+User: 2.
+User: Please select a rule number: 
+
+----------YOUR RULES ----------
+
+1. If someone does not have a sense of taste and smell, then he/she has symptoms.
+2. If someone has a negative LFT test then he/she has taken an LFT test.
+3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.
+4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.
+5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.
+6. If a city is in tier1 then this city allows indoor meetings.
+7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.
+8. If someone is negative in a PCR test then he/she has taken a PCR test.
+9. If someone is negative in a LFT test then he/she has taken an LFT test.
+10. If someone has taken a PCR test then he/she has taken a test.
+11. If someone took an LFT test then he/she has taken a test.
+12. Restart to choose another reason
+13. Exit
+User: 7.
+
+Covid Advice System: This rule is used in deduction. Both computer and user are agree with this rule, please select another rule to find disagreement.
+User: Please select a rule number: 
+
+----------YOUR RULES ----------
+
+1. If someone does not have a sense of taste and smell, then he/she has symptoms.
+2. If someone has a negative LFT test then he/she has taken an LFT test.
+3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.
+4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.
+5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.
+6. If a city is in tier1 then this city allows indoor meetings.
+7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.
+8. If someone is negative in a PCR test then he/she has taken a PCR test.
+9. If someone is negative in a LFT test then he/she has taken an LFT test.
+10. If someone has taken a PCR test then he/she has taken a test.
+11. If someone took an LFT test then he/she has taken a test.
+12. Restart to choose another reason
+13. Exit
+User: 6.
+
+Covid Advice System: I found the disagreement! I do not have this rule6. If a city is in tier1 then this city allows indoor meetings., but the user has it.
+
+----------SELECT A QUESTION OR EXIT----------
+
+Covid Advice System: Please select one of the option:
+1. Exit
+User:1.
+Covid Advice System:Bye
