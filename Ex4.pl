@@ -1,6 +1,6 @@
 /* computer doesn not have a rule but user has*/
-node(1, two_dose_v(jane), initial_fact, []).
-node(2, two_dose_v(adam), initial_fact, []).
+node(1, vaccinated(jane), initial_fact, []).
+node(2, vaccinated(adam), initial_fact, []).
 node(3, negative_lft(jane),initial_fact, []).
 node(4, negative_pcr(adam), initial_fact, []).
 
@@ -19,7 +19,7 @@ rule(2, [negative_lft(X)], pcr(X)).
 rule(3, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
 rule(4, [positive_pcr(X), meet_indoors(X,Y)], pinged(Y)).
 rule(5, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
-rule(6, [tier1(X)], indoor_meetings_allowed(X)).
+%rule(6, [tier1(X)], indoor_meetings_allowed(X)).
 rule(7, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
 rule(8, [negative_pcr(X)], pcr(X)).
 rule(9, [negative_lft(X)], lft(X)).
@@ -29,8 +29,8 @@ rule(11, [lft(X)], test(X)).
 
 
 %% A set of user facts and rules 
-user_fact(1, two_dose_v(jane), initial_fact, []).
-user_fact(2, two_dose_v(adam), initial_fact, []).
+user_fact(1, vaccinated(jane), initial_fact, []).
+user_fact(2, vaccinated(adam), initial_fact, []).
 user_fact(3, negative_lft(jane),initial_fact, []).
 user_fact(4, negative_pcr(adam), initial_fact, []).
 
@@ -42,7 +42,7 @@ user_fact(8, tier1(leeds), initial_fact, []).
 user_fact(9, taste_and_smell(jane),initial_fact, []).
 user_fact(10, taste_and_smell(adam), initial_fact, []).
 user_fact(11, positive_pcr(beth), initial_fact, []).
-user_fact(12, meet_indoors(beth,adam), initial_fact, []).
+%user_fact(12, meet_indoors(beth,adam), initial_fact, []).
 
 conclusion(eat_lunch(jane,adam)).
 
@@ -59,7 +59,7 @@ user_rule(8, [negative_pcr(X)], pcr(X)).
 user_rule(9, [negative_lft(X)], lft(X)).
 user_rule(10, [pcr(X)], test(X)).
 user_rule(11, [lft(X)], test(X)).
-user_rule(12,[two_dose_v(X)], vaccinated(X)).
+%user_rule(12,[two_dose_v(X)], vaccinated(X)).
 
 fact_description(two_dose_v(A)):-
     nb_getval(fileOutput,Out),
