@@ -15,17 +15,17 @@ node(11, positive_pcr(beth), initial_fact, []).
 node(12, meet_indoors(beth,adam), initial_fact, []).
 
 rule(1, [not(taste_and_smell(X))], symptoms(X)).
-rule(2, [negative_lft(X)], pcr(X)).
-rule(3, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
-rule(4, [positive_pcr(X), meet_indoors(X,Y)], pinged(Y)).
-rule(5, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
-%rule(6, [tier1(X)], indoor_meetings_allowed(X)).
-rule(7, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
-rule(8, [negative_pcr(X)], pcr(X)).
-rule(9, [negative_lft(X)], lft(X)).
-rule(10, [pcr(X)], test(X)).
-rule(11, [lft(X)], test(X)).
-%rule(12,[two_dose_v(X)], vaccinated(X)).
+%rule(2, [negative_lft(X)], pcr(X)).
+rule(2, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
+rule(3, [positive_pcr(X), meet_indoors(X,Y)], pinged(Y)).
+rule(4, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
+%rule(5, [tier1(X)], indoor_meetings_allowed(X)).
+rule(5, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
+rule(6, [negative_pcr(X)], pcr(X)).
+rule(7, [negative_lft(X)], lft(X)).
+rule(8, [pcr(X)], test(X)).
+rule(9, [lft(X)], test(X)).
+
 
 
 %% A set of user facts and rules 
@@ -42,23 +42,23 @@ user_fact(8, tier1(leeds), initial_fact, []).
 user_fact(9, taste_and_smell(jane),initial_fact, []).
 user_fact(10, taste_and_smell(adam), initial_fact, []).
 user_fact(11, positive_pcr(beth), initial_fact, []).
-%user_fact(12, meet_indoors(beth,adam), initial_fact, []).
+
 
 conclusion(eat_lunch(jane,adam)).
 
 
 
 user_rule(1, [not(taste_and_smell(X))], symptoms(X)).
-user_rule(2, [negative_lft(X)], pcr(X)).
-user_rule(3, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
-user_rule(4, [positive_pcr(X), meet_indoor(X,Y)], pinged(Y)).
-user_rule(5, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
-user_rule(6, [tier1(X)], indoor_meetings_allowed(X)).
-user_rule(7, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
-user_rule(8, [negative_pcr(X)], pcr(X)).
-user_rule(9, [negative_lft(X)], lft(X)).
-user_rule(10, [pcr(X)], test(X)).
-user_rule(11, [lft(X)], test(X)).
+%user_rule(2, [negative_lft(X)], pcr(X)).
+user_rule(2, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
+user_rule(3, [positive_pcr(X), meet_indoor(X,Y)], pinged(Y)).
+user_rule(4, [residence(X, Y), residence(A, B), indoor_meetings_allowed(Y), indoor_meetings_allowed(B), not(symptoms(X)), not(symptoms(A))],can_meet_indoors(X, A)).
+user_rule(5, [tier1(X)], indoor_meetings_allowed(X)).
+user_rule(6, [not(self_isolate(X)),not(self_isolate(Y)),vaccinated(X),vaccinated(Y),can_meet_indoors(X, Y)], eat_lunch(X,Y)).
+user_rule(7, [negative_pcr(X)], pcr(X)).
+user_rule(8, [negative_lft(X)], lft(X)).
+user_rule(9, [pcr(X)], test(X)).
+user_rule(10, [lft(X)], test(X)).
 %user_rule(12,[two_dose_v(X)], vaccinated(X)).
 
 fact_description(two_dose_v(A)):-
@@ -163,60 +163,52 @@ rule_description(1):-
     write(Out,'1. If someone does not have a sense of taste and smell, then he/she has symptoms.'),
     write('1. If someone does not have a sense of taste and smell, then he/she has symptoms.').
 
+
 rule_description(2):-
     nb_getval(fileOutput,Out),
-    write(Out,'2. If someone has a negative LFT test then he/she has taken and LFT test.'),
-    write('2. If someone has a negative LFT test then he/she has taken an LFT test.').
+     write(Out,'2. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.'),
+    write('2. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.').
 
 rule_description(3):-
     nb_getval(fileOutput,Out),
-     write(Out,'3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.'),
-    write('3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated, and he/she does not take a test then he/she needs to self-isolate.').
+    write(Out,'3. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),
+    write('3. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.').
 
 rule_description(4):-
     nb_getval(fileOutput,Out),
-    write(Out,'4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),
-    write('4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.').
+    write(Out,'4. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.'),
+    write('4. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.').
 
 rule_description(5):-
     nb_getval(fileOutput,Out),
-    write(Out,'5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.'),
-    write('5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.').
+    write(Out,'5. If a city is in tier1 then this city allows indoor meetings.'),
+    write('5. If a city is in tier1 then this city allows indoor meetings.').
 
 rule_description(6):-
     nb_getval(fileOutput,Out),
-    write(Out,'6. If a city is in tier1 then this city allows indoor meetings.'),
-    write('6. If a city is in tier1 then this city allows indoor meetings.').
+    write(Out,'6. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),
+    write('6. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.').
 
 rule_description(7):-
     nb_getval(fileOutput,Out),
-    write(Out,'7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),
-    write('7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.').
+    write(Out,'7. If someone is negative in a PCR test then he/she has taken a PCR test.'),
+    write('7. If someone is negative in a PCR test then he/she has taken a PCR test.').
 
 rule_description(8):-
     nb_getval(fileOutput,Out),
-    write(Out,'8. If someone is negative in a PCR test then he/she has taken a PCR test.'),
-    write('8. If someone is negative in a PCR test then he/she has taken a PCR test.').
+    write(Out,'8. If someone is negative in a LFT test then he/she has taken an LFT test.'),
+    write('8. If someone is negative in a LFT test then he/she has taken an LFT test.').
 
 rule_description(9):-
     nb_getval(fileOutput,Out),
-    write(Out,'9. If someone is negative in a LFT test then he/she has taken an LFT test.'),
-    write('9. If someone is negative in a LFT test then he/she has taken an LFT test.').
+    write(Out,'9. If someone has taken a PCR test then he/she has taken a test.'),
+    write('9. If someone has taken a PCR test then he/she has taken a test.').
 
 rule_description(10):-
     nb_getval(fileOutput,Out),
-    write(Out,'10. If someone has taken a PCR test then he/she has taken a test.'),
-    write('10. If someone has taken a PCR test then he/she has taken a test.').
+    write(Out,'10. If someone took an LFT test then he/she has taken a test.'),
+    write('10. If someone took an LFT test then he/she has taken a test.').
 
-rule_description(11):-
-    nb_getval(fileOutput,Out),
-    write(Out,'11. If someone took an LFT test then he/she has taken a test.'),
-    write('11. If someone took an LFT test then he/she has taken a test.').
-
-rule_description(12):-
-    nb_getval(fileOutput,Out),
-    write(Out,'12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
-    write('12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.').
 
 
 
@@ -228,61 +220,53 @@ r_description(1):-
     write(Out,'1. If someone does not have a sense of taste and smell, then he/she has symptoms.'),
     write('1. If someone does not have a sense of taste and smell, then he/she has symptoms.'),nl.
 
+
 r_description(2):-
     nb_getval(fileOutput,Out),
-    write(Out,'2. If someone has a negative LFT test then he/she has taken an LFT test.'),
-    write('2. If someone has a negative LFT test then he/she has taken an LFT test.'),nl.
+     write(Out,'2. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she does not take a test then he/she needs to self isolate.'),
+    write('2. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she does not take a test then he/she needs to self isolate.'),nl.
 
 r_description(3):-
     nb_getval(fileOutput,Out),
-     write(Out,'3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she does not take a test then he/she needs to self isolate.'),
-    write('3. If someone has been in close contact with someone who has Covid-19 and he/she is vaccinated,and he/she does not take a test then he/she needs to self isolate.'),nl.
+    write(Out,'3. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),
+    write('3. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),nl.
 
 r_description(4):-
-    nb_getval(fileOutput,Out),
-    write(Out,'4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),
-    write('4. If someone meets a person who has a positive PCR test, then he/she has been in close contact with someone who has Covid-19.'),nl.
-
-r_description(5):-
     nb_getval(fileOutput,Out),
     write(Out,'5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.'),
     write('5. If someone lives in a city that allows indoor meetings and another person also lives in a city that allows indoor meetings, and both of them do not have symptoms, then these two people can meet indoors.'),nl.
 
+%r_description(6):-
+   % nb_getval(fileOutput,Out),
+   % write(Out,'6. If a city is in tier1 then this city allows indoor meetings.'),
+   % write('6. If a city is in tier1 then this city allows indoor meetings.'),nl.
+
 r_description(6):-
     nb_getval(fileOutput,Out),
-    write(Out,'6. If a city is in tier1 then this city allows indoor meetings.'),
-    write('6. If a city is in tier1 then this city allows indoor meetings.'),nl.
+    write(Out,'6. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),
+    write('6. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),nl.
 
 r_description(7):-
     nb_getval(fileOutput,Out),
-    write(Out,'7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),
-    write('7. If A and B do not need to self-isolate and they can meet indoors and both of them are vaccinated, then A and B can eat lunch together.'),nl.
+    write(Out,'7. If someone is negative in a PCR test then he/she has taken a PCR test.'),
+    write('7. If someone is negative in a PCR test then he/she has taken a PCR test.'),nl.
 
 r_description(8):-
     nb_getval(fileOutput,Out),
-    write(Out,'8. If someone is negative in a PCR test then he/she has taken a PCR test.'),
-    write('8. If someone is negative in a PCR test then he/she has taken a PCR test.'),nl.
+    write(Out,'8. If someone is negative in a LFT test then he/she has taken an LFT test.'),
+    write('8. If someone is negative in a LFT test then he/she has taken an LFT test.'),nl.
 
 r_description(9):-
     nb_getval(fileOutput,Out),
-    write(Out,'9. If someone is negative in a LFT test then he/she has taken an LFT test.'),
-    write('9. If someone is negative in a LFT test then he/she has taken an LFT test.'),nl.
+    write(Out,'9. If someone has taken a PCR test then he/she has taken a test.'),
+    write('9. If someone has taken a PCR test then he/she has taken a test.'),nl.
+
 
 r_description(10):-
     nb_getval(fileOutput,Out),
-    write(Out,'10. If someone has taken a PCR test then he/she has taken a test.'),
-    write('10. If someone has taken a PCR test then he/she has taken a test.'),nl.
+     write(Out,'10. If someone took an LFT test then he/she has taken a test.'),
+    write('10. If someone took an LFT test then he/she has taken a test.'),nl.
 
-
-r_description(11):-
-    nb_getval(fileOutput,Out),
-     write(Out,'11. If someone took an LFT test then he/she has taken a test.'),
-    write('11. If someone took an LFT test then he/she has taken a test.'),nl.
-
-r_description(12):-
-    nb_getval(fileOutput,Out),
-    write(Out,'12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),
-    write('12. If X is vaccinated with two doses of any approved vaccine, then X is vaccinated.'),nl.
 
 
 
