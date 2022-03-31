@@ -47,7 +47,6 @@ user_fact(12, meet_indoors(beth,adam), initial_fact, []).
 conclusion(eat_lunch(jane,adam)).
 
 
-
 user_rule(1, [not(taste_and_smell(X))], symptoms(X)).
 %user_rule(2, [negative_lft(X)], pcr(X)).
 user_rule(2, [pinged(X), vaccinated(X), not(test(X))], self_isolate(X)).
