@@ -54,8 +54,8 @@ fact_description(not(symptoms(X))):-
      write(X), write(' does nothave any symptoms').
 fact_description(not(pcr(X))):-
      nb_getval(fileOutput,Out),
-     write(Out,X), write(Out,' does nottake a PCR test'),
-     write(X), write(' does nottake a PCR test').
+     write(Out,X), write(Out,' does not take a PCR test'),
+     write(X), write(' does not take a PCR test').
 fact_description(get_pcr(X)):-
      nb_getval(fileOutput,Out),
      write(Out,X), write(Out,' need to get a PCR test'),
