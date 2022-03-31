@@ -42,7 +42,7 @@ user_fact(8, tier1(leeds), initial_fact, []).
 user_fact(9, taste_and_smell(jane),initial_fact, []).
 user_fact(10, taste_and_smell(adam), initial_fact, []).
 user_fact(11, positive_pcr(beth), initial_fact, []).
-
+user_fact(12, meet_indoors(beth,adam), initial_fact, []).
 
 conclusion(eat_lunch(jane,adam)).
 
@@ -71,8 +71,8 @@ fact_description(vaccinated(X)):-
      write(X), write(' vaccinated').
 fact_description(taste_and_smell(X)):-
     nb_getval(fileOutput,Out),
-    write(Out,X), write(Out,' have taste and smell'),
-     write(X), write(' have taste and smell').
+    write(Out,X), write(Out,' has taste and smell'),
+     write(X), write(' has taste and smell').
 fact_description(negative_pcr(X)):-
     nb_getval(fileOutput,Out),
     write(Out,X), write(Out,' is negative in PCR test'),
