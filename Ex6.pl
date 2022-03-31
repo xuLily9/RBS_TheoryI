@@ -40,10 +40,6 @@ fact_description(fever(X)):-
      nb_getval(fileOutput,Out),
      write(Out,X), write(Out,' has fever'),
      write(X), write(' has fever').
-fact_description(vaccinated(A)):-
-     nb_getval(fileOutput,Out),
-     write(Out,A), write(Out,' vaccinated'),
-     write(A), write(' vaccinated').
 fact_description(not(vaccinated(A))):-
      nb_getval(fileOutput,Out),
      write(Out,A), write(Out,' has not vaccinated'),
